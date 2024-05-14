@@ -1,0 +1,9 @@
+
+<div class="pod-description" *ngIf="resourceName">
+  <div class="input-row" *ngFor="let detail of resourceDetails">
+    <label>{{ detail.title }}:</label>
+    <input type="text" [(ngModel)]="detail.description" disabled>
+  </div>
+
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+</div>

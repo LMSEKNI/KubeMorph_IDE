@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "description": "Pod is a collection of containers that can run on a host. This resource is created by clients and scheduled onto hosts.",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "description": "APIVersion defines the versioned schema of this representation of an object.",
+      "default": "v1",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "kind": {
+      "description": "Kind is a string value representing the REST resource this object represents. ",
+      "default": "Pod",
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "Pod"
+      ]
+    },
+    "metadata": {
+      "description": "Standard object's metadata",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "annotations": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "required": ["name"]
+    },
+    "spec": {
+      "description": "Specification of the desired behavior of the pod.",
+      "type": "object",
+      "properties": {
+        "containers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "image": {
+                "type": "string"
+              },
+              "ports": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "containerPort": {
+                      "type": "integer"
+                    },
+                    "protocol": {
+                      "type": "string",
+                      "enum": ["TCP", "UDP"]
+                    }
+                  },
+                  "required": ["containerPort"]
+                }
+              }
+            },
+            "required": ["name", "image"]
+          }
+        }
+      },
+      "required": ["containers"]
+    },
+    "status": {
+      "description": "Most recently observed status of the pod.",
+      "type": "object"
+    }
+  },
+  "required": ["kind", "metadata", "spec"],
+  "x-kubernetes-group-version-kind": [
+    {
+      "group": "",
+      "kind": "Pod",
+      "version": "v1"
+    }
+  ]
+}

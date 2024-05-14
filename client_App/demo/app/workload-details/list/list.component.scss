@@ -1,0 +1,68 @@
+
+.confirmation-chip-list {
+  display: flex;
+  justify-content: center;
+}
+
+.confirmation-label {
+  margin-right: 8px; // Adjust as needed
+}
+
+
+.description-frame {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 60%;
+  height: 100vh;
+  background-color: rgb(20, 180, 180);
+  overflow-y: auto;
+}
+.description{
+  display: flex;
+  flex-direction: column;
+  // justify-content: center; /* Center vertically */
+  align-items:center;
+}
+.iconn{
+  display: flex;
+  flex-direction:initial;
+  // justify-content: center; /* Center vertically */
+  // align-items:center;
+}
+
+  
+.search-container {
+  position: relative;
+  display: inline-block; /* Display as inline-block to align properly */
+}
+  
+  .search-wrapper {
+    position: relative; /* Change to relative */
+    left:20%;
+  }
+  
+  input[type=text] {
+    width: calc(100% - 30px); /* Adjust the width as needed */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .checklist {
+    position: absolute;
+    top: calc(100% ); /* Adjust the positioning */
+    left: 0;
+    width: calc(100% - 30px ); /* Adjust the width to match the input */
+    z-index: 1;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 0 0 4px 4px; /* Adjust border-radius */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    overflow-y: auto;
+  }
+  
+  .search-wrapper:focus-within .checklist {
+    display: block;
+  }
+  

@@ -1,0 +1,156 @@
+<demo></demo>
+
+<mat-chip-list class="confirmation-chip-list" >
+  <mat-chip *ngIf="resourceDeleted && resetOption" >
+    <span class="confirmation-label">{{ ressourceName }} Deleted !</span>
+    <mat-icon matChipRemove (click)="reset()">cancel</mat-icon>
+  </mat-chip>
+</mat-chip-list>
+
+
+<div class="search-container">
+  <div class="search-wrapper">
+    <input type="text" placeholder="Search..." (click)="toggleChecklist()">
+    
+    <div class="checklist" [@openClose]="showChecklist ? 'open' : 'closed'">
+       
+      <div >
+        <div>
+          <label for="showPods">Show Pods</label>
+          <input type="checkbox" id="showPods" name="showPods" (change)="togglePods($event.target.checked)">
+        </div>
+
+        <div>
+          <label for="showNamespaces">Show Namespaces</label>
+          <input  type="checkbox" id="showNamespaces" name="showNamespaces" (change)="toggleNamespaces($event.target.checked)">
+        </div>
+
+        <div>
+          <label for="showDeployments">Show Deployments</label>
+          <input  type="checkbox" id="showDeployments" name="showDeployments" (change)="toggleDeployments($event.target.checked)">
+        </div>
+
+        <div>
+          <label for="showServices">Show Services</label>
+          <input type="checkbox" id="showServices" name="showNamespaces" (change)="toggleServices($event.target.checked)">
+        </div>
+
+        <div>
+          <label for="showReplicasets">Show ReplicaSets</label>
+          <input type="checkbox" id="showReplicasets" name="showReplicasets" (change)="toggleReplicasets($event.target.checked)">
+        </div>
+
+        <div>
+          <label for="showJobs">Show Jobs</label>
+          <input type="checkbox" id="showJobs" name="showJobs" (change)="toggleJobs($event.target.checked)">
+        </div>
+
+        <div>
+          <label for="showNodes">Show Nodes</label>
+          <input type="checkbox" id="showNodes" name="showNodes" (change)="toggleNodes($event.target.checked)">
+        </div>
+
+        <div>
+          <label for="showEndpoints">Show Endpoints</label>
+          <input type="checkbox" id="showEndpoints" name="showEndpoints" (change)="toggleEndpoints($event.target.checked)">
+        </div>
+        <div>
+          <label for="showConfigMaps">Show ConfigMaps</label>
+          <input type="checkbox" id="showConfigMaps" name="showConfigMaps" (change)="toggleConfigMaps($event.target.checked)">
+        </div>
+        <div>
+          <label for="showIngress">Show Ingress</label>
+          <input type="checkbox" id="showIngress" name="showIngress" (change)="toggleIngress($event.target.checked)">
+        </div>
+        <div>
+          <label for="showDeamon">Show DeamonSet</label>
+          <input type="checkbox" id="showDeamon" name="showDeamon" (change)="toggleDeamonset($event.target.checked)">
+        </div>
+        <div>
+          <label for="showPVC">Show PVC</label>
+          <input type="checkbox" id="showPVC" name="showPVC" (change)="togglePVC($event.target.checked)">
+        </div>
+        <div>
+          <label for="showSC">Show SC</label>
+          <input type="checkbox" id="showSC" name="showSC" (change)="toggleSC($event.target.checked)">
+        </div>
+        <div>
+          <label for="showStateful">Show stateful</label>
+          <input type="checkbox" id="showStateful" name="showStateful" (change)="toggleStateful($event.target.checked)">
+        </div>
+        <div>
+          <label for="showPV">Show PV</label>
+          <input type="checkbox" id="showPV" name="showPV" (change)="togglePVs($event.target.checked)">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 
+<div>
+  <label for="showBoth">Show Both</label>
+  <input type="checkbox" id="showBoth" name="showBoth" (change)="toggleBoth($event.target.checked)">
+</div> -->
+
+<!-- <div id="network" style="width: 100%; height: 500px; border: 1px solid lightgray;"></div> -->
+
+
+
+<!-- <div class="top-label" >
+  <span style="color: red;">Service deleted</span>
+</div> -->
+
+<div id="network"
+     (click)="onNodeClick($event)"  
+     style="width: 100%; height: 500px; border: 1px solid lightgray;">
+</div>
+  
+  <!-- <nav class="navbar">
+    <div class="navbar-left">
+      <h1>Details</h1>
+    </div>
+    <div class="navbar-right">
+      <button class="close-icon" (click)="closeFrame()">&times;</button>
+    </div>
+  </nav> -->
+
+  <div class="description-frame" [@frameAnimation]=" !resourceDeleted && isFrameOpen ? 'open' : 'closed'">
+    <div class="iconn flex items-center justify-between">
+      <svg (click)="closeFrame()" class="w-6 h-6 mr-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6"/>
+      </svg>
+
+        <svg (click)="onDelete()"  class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+          <path fill-rule="evenodd" d="M20 10H4v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8ZM9 13v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1Z" clip-rule="evenodd"/>
+          <path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 1 1 0 4H4a2 2 0 0 1-2-2Z"/>   
+        </svg>
+
+    
+    </div>
+    
+    <br>
+    <div class=" description flex justify-center items-center h-full">
+      <app-descc *ngIf="selectedResource" [resourceName]="selectedResource" [resourceType]="selectedType"></app-descc>
+    </div>
+  
+  </div>
+  
+  
+  <ng-template #dialogContentTemplate let-data >
+    <mat-dialog-actions>
+      <button (click)="onclose()" mat-icon-button aria-label="Close" style="position: absolute; top :38%; right: 37%; ">
+        <mat-icon>close</mat-icon>
+      </button>
+      <br style="margin-top: 24px; margin-bottom: 24px;">
+    </mat-dialog-actions>
+    
+    <mat-dialog-content>
+      Are you sure you want to delete {{ressourceName}}?
+    </mat-dialog-content>
+    
+    <mat-dialog-actions align="end">
+      <button mat-button (click)="deleteressource()" style="background-color: rgb(11, 11, 65);">Delete</button>
+      <button mat-button (click)="onclose()" style="background-color: rgb(231, 39, 39);">Cancel</button>
+    </mat-dialog-actions>
+    
+  </ng-template>

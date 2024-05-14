@@ -1,0 +1,42 @@
+<div class="page-header">
+  <mat-toolbar class="mat-elevation-z4 mat-medium" color="primary" style="height: 120px; display: flex; justify-content: space-between; align-items: center;">
+    <div> <!-- Left Content -->
+      <a style="font-family: serif; font-size: x-large;">Add New Resource </a>
+    </div>
+    <div> <!-- Center Content -->
+      <a style="font-family: serif; font-size: xx-large;">KubeMorph</a>
+    </div>
+    <div> <!-- Right Content -->
+      <img src="./assets/images/logo1.png" alt="logo" style="width: 150; height: 110px;">
+    </div>
+  </mat-toolbar>
+
+  <div id="header-content" style="justify-content: space-between;; align-items: center; display: flex;">
+      <button mat-raised-button color="primary" [matMenuTriggerFor]="addResourceMenu">Yaml</button>
+      <mat-menu #addResourceMenu="matMenu">
+        <button mat-menu-item [routerLink]="['/create-dynamicform']">Form</button>
+        <!-- Add more options here if needed -->
+      </mat-menu>
+  </div>
+<body style="align-items: center;">
+
+  <div class="fileContainer" style="align-items: center;">
+    <h3>Upload your File :</h3>
+    <div class="drag-area">
+        <div class="icon">
+            <i class="fas fa-images"></i>
+        </div>
+        <span class="header">Drag & Drop</span>
+        <span class="support">Supports: Yaml files</span>
+    </div>
+    <div>
+        <input type="file" id="fileInputAlt" /> 
+    </div>
+    <div style="margin-bottom: 20px;"></div>
+    <!-- Add success message here -->
+    <div *ngIf="successMessage" style="color: green;">{{ successMessage }}</div>
+    <button id="submitButton" (click)="onSubmit()">Submit</button> 
+</div>
+
+ 
+</body>

@@ -1,0 +1,20 @@
+.pod-description {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .input-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px; /* Adjust as needed */
+  }
+  
+  .input-row label {
+    width: 150px; /* Adjust as needed */
+    margin-right: 10px; /* Adjust as needed */
+  }
+  
+  .input-row input {
+    flex: 1;
+  }
+  

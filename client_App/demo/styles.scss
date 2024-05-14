@@ -1,0 +1,62 @@
+// * { border: 1px solid red !important; }
+@use '@angular/material' as mat;
+@include mat.core();
+$demo-app-primary: mat.define-palette(mat.$blue-grey-palette);
+$demo-app-accent:  mat.define-palette(mat.$amber-palette, A200, A100, A400);
+$demo-app-warn:    mat.define-palette(mat.$red-palette);
+$demo-app-theme:   mat.define-light-theme($demo-app-primary, $demo-app-accent, $demo-app-warn);
+@include mat.all-component-themes($demo-app-theme);
+ 
+$font-family: 'Roboto', 'Noto', 'Helvetica Neue', sans-serif;
+$row-height: 56px;
+ 
+// mat-toolbar {
+//   &.mat-medium {
+//     min-height: $row-height;
+//     mat-toolbar-row { height: $row-height; }
+//   }
+// }
+ 
+ 
+ 
+ 
+ 
+.ace_active-line { background: none !important; }
+ 
+// [ace-editor], .data-good, .data-bad {
+//   border-radius: 3px;
+//   padding: 6px;
+//   border: 1px solid #ccc !important;
+// }
+ 
+[ace-editor] { background-color: rgb(253, 253, 253) !important; }
+ 
+.avoidwrap { display:inline-block; }
+ 
+.data-good { background-color: #dfd; }
+ 
+.data-bad { background-color: #fcc; }
+ 
+.default-cursor:hover { cursor: default; }
+ 
+.check-row { margin-top: 8px; }
+ 
+.cdk-overlay-container .cdk-overlay-pane .mat-menu-panel { max-width: 560px; }
+ 
+.debug { border: 1px solid red !important; }
+ 
+.mat-input-container.mat-form-field { width: 100%; }
+ 
+#resources {
+  background-color: #1683ff; /* Blue color for the button */
+  color: #fff; /* White color for text */
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #00aa9b; /* Choose your desired background color */
+ 
+}
