@@ -1,1 +1,21 @@
-spring.application.name=apiGateway
+server:
+  port: 8222
+eureka:
+  client:
+    register-with-eureka: false
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: monitoring
+          uri:
+            http://localhost:8090
+          predicates:
+            - Path=api/v1/monitoring/**
+  application:
+    name: gateway
+  config:
+    import: optional:configserver:http//localhost:8888
