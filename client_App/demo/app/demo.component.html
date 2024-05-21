@@ -13,21 +13,6 @@
 </div>
 
 <div class="main-content-test">
-  <div class="container" (mouseenter)="showChoices = true" (mouseleave)="showChoices = false">
-    <button class="custom-color" mat-fab>{{ buttonText }}</button>
-    
-    <div *ngIf="showChoices" class="choices">
-      <button mat-icon-button (click)="selectChoice('Form')">
-        <mat-icon class="icon-color">description</mat-icon>
-      </button>
-      <button mat-icon-button (click)="selectChoice('Yml File')">
-        <mat-icon class="icon-color">note_add</mat-icon>
-      </button>
-      <button mat-icon-button (click)="selectChoice('Import Yml File')">
-        <mat-icon class="icon-color">downloading</mat-icon>
-      </button>
-    </div>
-  </div>
 
   <router-outlet></router-outlet>
 

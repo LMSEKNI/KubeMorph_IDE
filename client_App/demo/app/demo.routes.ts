@@ -7,12 +7,8 @@ import { YmlFileComponent } from './addressource/yml-file/yml-file.component';
 import { DynamicFormComponent } from './addressource/dynamic-form/component/dynamic-form.component';
 
 export const routes: Route[] = [
-  { path: '', 
-    component: DemoComponent,
-    children: [    ]  
-  },
+  { path: '' , component: ListComponent},
   { path: 'descressource', component: DesccComponent},
-  { path: 'listressource' , component: ListComponent},
   { path: 'create-ymlfile' , component: YmlFileComponent},
   { path: 'create-dynamicform' , component: DynamicFormComponent},
 

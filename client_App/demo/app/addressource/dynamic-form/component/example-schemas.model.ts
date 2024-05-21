@@ -15,14 +15,15 @@
 * JSONForm (jQuery) examples ('jsf-...') are from
 *   http://ulion.github.io/jsonform/playground/
 */
- 
+
 export const Examples: any = {
   'ng-jsf': {
     name: 'JSON Schema Form examples',
     schemas: [
-      { name: 'Pod',               file: 'ng-jsf-Pod-examples', },
+      { name: 'Pod', file: 'ng-jsf-Pod-examples', },
       { name: 'ConfigMap', file: 'ng-jsf-configMap-examples', },
-      { name: 'Deploymenyt ',                  file: 'ng-jsf-deployment-examples', },
+      { name: 'Deployment ', file: 'ng-jsf-deployment-examples', },
+      { name: 'Namespace ', file: 'ng-jsf-namespace-examples', },
     ]
   },
   'asf': {

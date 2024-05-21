@@ -1,29 +1,16 @@
 {
-  "$schema": "http://json-schema.org/schema#",
-  "description": "Pod is a collection of containers that can run on a host. This resource is created by clients and scheduled onto hosts.",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
     "apiVersion": {
-      "description": "APIVersion defines the versioned schema of this representation of an object.",
-      "default": "v1",
-      "type": [
-        "string",
-        "null"
-      ]
+      "type": "string",
+      "default": "v1"
     },
     "kind": {
-      "description": "Kind is a string value representing the REST resource this object represents. ",
-      "default": "Pod",
-      "type": [
-        "string",
-        "null"
-      ],
-      "enum": [
-        "Pod"
-      ]
+      "type": "string",
+      "default": "Pod"
     },
     "metadata": {
-      "description": "Standard object's metadata",
       "type": "object",
       "properties": {
         "name": {
@@ -34,68 +21,132 @@
         },
         "labels": {
           "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
-        },
-        "annotations": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
+          "properties": {
+            "app": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "app"
+          ]
         }
       },
-      "required": ["name"]
+      "required": [
+        "name",
+        "namespace",
+        "labels"
+      ]
     },
     "spec": {
-      "description": "Specification of the desired behavior of the pod.",
       "type": "object",
       "properties": {
-        "containers": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "name": {
-                "type": "string"
+        "replicas": {
+          "type": "integer"
+        },
+        "selector": {
+          "type": "object",
+          "properties": {
+            "matchLabels": {
+              "type": "object",
+              "properties": {
+                "app": {
+                  "type": "string"
+                }
               },
-              "image": {
-                "type": "string"
-              },
-              "ports": {
-                "type": "array",
-                "items": {
+              "required": [
+                "app"
+              ]
+            }
+          },
+          "required": [
+            "matchLabels"
+          ]
+        },
+        "template": {
+          "type": "object",
+          "properties": {
+            "metadata": {
+              "type": "object",
+              "properties": {
+                "labels": {
                   "type": "object",
                   "properties": {
-                    "containerPort": {
-                      "type": "integer"
-                    },
-                    "protocol": {
-                      "type": "string",
-                      "enum": ["TCP", "UDP"]
+                    "app": {
+                      "type": "string"
                     }
                   },
-                  "required": ["containerPort"]
+                  "required": [
+                    "app"
+                  ]
                 }
-              }
+              },
+              "required": [
+                "labels"
+              ]
             },
-            "required": ["name", "image"]
-          }
+            "spec": {
+              "type": "object",
+              "properties": {
+                "containers": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "image": {
+                          "type": "string"
+                        },
+                        "ports": {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "containerPort": {
+                                  "type": "integer"
+                                }
+                              },
+                              "required": [
+                                "containerPort"
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "image",
+                        "ports"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "containers"
+              ]
+            }
+          },
+          "required": [
+            "metadata",
+            "spec"
+          ]
         }
       },
-      "required": ["containers"]
-    },
-    "status": {
-      "description": "Most recently observed status of the pod.",
-      "type": "object"
+      "required": [
+        "replicas",
+        "selector",
+        "template"
+      ]
     }
   },
-  "required": ["kind", "metadata", "spec"],
-  "x-kubernetes-group-version-kind": [
-    {
-      "group": "",
-      "kind": "Pod",
-      "version": "v1"
-    }
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
   ]
 }

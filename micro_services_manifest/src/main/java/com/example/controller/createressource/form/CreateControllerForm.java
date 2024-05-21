@@ -50,6 +50,10 @@ public class CreateControllerForm {
                 createResource.createDeployment(response);
                 return ResponseEntity.ok("Deployment created successfully ");
             }
+            else if ("Namespace".equals(kind)) {
+                createResource.createNamespace(response);
+                return ResponseEntity.ok("Namespace created successfully ");
+            }
              else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Unsupported resource kind: " + kind);
             }

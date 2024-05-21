@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.kubernetes.client.openapi.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,18 +16,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.AppsV1Api;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
-import io.kubernetes.client.openapi.models.V1ConfigMap;
-import io.kubernetes.client.openapi.models.V1ConfigMapBuilder;
-import io.kubernetes.client.openapi.models.V1Container;
-import io.kubernetes.client.openapi.models.V1ContainerPort;
-import io.kubernetes.client.openapi.models.V1Deployment;
-import io.kubernetes.client.openapi.models.V1DeploymentSpec;
-import io.kubernetes.client.openapi.models.V1LabelSelector;
-import io.kubernetes.client.openapi.models.V1ObjectMeta;
-import io.kubernetes.client.openapi.models.V1Pod;
-import io.kubernetes.client.openapi.models.V1PodBuilder;
-import io.kubernetes.client.openapi.models.V1PodSpec;
-import io.kubernetes.client.openapi.models.V1PodTemplateSpec;
 
 @Service
 public class CreateResourceFormImpl implements CreateRessourceForm {
@@ -92,31 +81,37 @@ public class CreateResourceFormImpl implements CreateRessourceForm {
     public void createConfigMap(String response) throws ApiException, IOException {
         // Configure Kubernetes access
         kubernetesConfigService.configureKubernetesAccess();
-    
+
         // Initialize Kubernetes API client
         CoreV1Api api = new CoreV1Api();
-    
+
         // Parse JSON response
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonNode = mapper.readTree(response);
-    
-        // Extract ConfigMap metadata
+
+        // Extract and validate required fields from the schema
+        String apiVersion = jsonNode.get("apiVersion").asText();
+        String kind = jsonNode.get("kind").asText();
         String name = jsonNode.get("metadata").get("name").asText();
-        String namespace = jsonNode.get("metadata").get("namespace").asText();
-    
+
+        // Extract namespace if it exists, otherwise use default
+        String namespace = jsonNode.get("metadata").has("namespace") ?
+                jsonNode.get("metadata").get("namespace").asText() : "default";
+
         // Extract ConfigMap data, if present
         JsonNode dataNode = jsonNode.get("data");
-    
+
         // Create ConfigMap object
         V1ConfigMap configMap = new V1ConfigMapBuilder()
+                .withApiVersion(apiVersion)
+                .withKind(kind)
                 .withNewMetadata()
-                    .withName(name)
-                    .withNamespace(namespace)
+                .withName(name)
+                .withNamespace(namespace)
                 .endMetadata()
-                .withImmutable(jsonNode.get("immutable").asBoolean())
                 .withData(dataNode != null ? toMap(dataNode) : null)
                 .build();
-    
+
         // Deploy ConfigMap to cluster
         api.createNamespacedConfigMap(namespace, configMap, null, null, null, null);
         System.out.println("ConfigMap deployed successfully: " + name);
@@ -187,5 +182,34 @@ public class CreateResourceFormImpl implements CreateRessourceForm {
     
         System.out.println("Deployment created successfully: " + name);
     }
-    
+    @Override
+    public void createNamespace(String response) throws ApiException, IOException {
+        // Configure Kubernetes access
+        kubernetesConfigService.configureKubernetesAccess();
+
+        // Initialize Kubernetes API client
+        CoreV1Api api = new CoreV1Api();
+
+        // Parse JSON response
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode jsonNode = mapper.readTree(response);
+
+        // Extract and validate required fields from the schema
+        String apiVersion = jsonNode.get("apiVersion").asText();
+        String kind = jsonNode.get("kind").asText();
+        String name = jsonNode.get("metadata").get("name").asText();
+
+        // Create Namespace object
+        V1Namespace namespace = new V1NamespaceBuilder()
+                .withApiVersion(apiVersion)
+                .withKind(kind)
+                .withNewMetadata()
+                .withName(name)
+                .endMetadata()
+                .build();
+
+        // Deploy Namespace to cluster
+        api.createNamespace(namespace, null, null, null, null);
+        System.out.println("Namespace created successfully: " + name);
+    }
 }

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule ,ReactiveFormsModule} from '@angular/forms';
+import { FormsModule , ReactiveFormsModule} from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -33,9 +33,9 @@ import { MatChipsModule } from '@angular/material/chips';
 
 @NgModule({
   declarations: [
-                  DemoComponent, 
-                  DemoRootComponent, 
-                  YmlFileComponent, 
+                  DemoComponent,
+                  DemoRootComponent,
+                  YmlFileComponent,
                   DesccComponent,
                   ListComponent,
                   DynamicFormComponent,
@@ -43,16 +43,15 @@ import { MatChipsModule } from '@angular/material/chips';
                   DynamicFormUpdateComponent,
                   ],
   imports: [
-    
-    BrowserModule, BrowserAnimationsModule, FlexLayoutModule, FormsModule,MatChipsModule,
-    HttpClientModule, MatButtonModule, MatCardModule, MatCheckboxModule,MatDialogModule,
+    BrowserModule, BrowserAnimationsModule, FlexLayoutModule, FormsModule, MatChipsModule,
+    HttpClientModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule,
     MatIconModule, MatMenuModule, MatSelectModule, MatToolbarModule,
     RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' }),
     Bootstrap4FrameworkModule,
     Bootstrap3FrameworkModule,
     MaterialDesignFrameworkModule,
     JsonSchemaFormModule,
-    ReactiveFormsModule,MatSidenavModule
+    ReactiveFormsModule, MatSidenavModule
   ],
   bootstrap: [DemoRootComponent]
 })
