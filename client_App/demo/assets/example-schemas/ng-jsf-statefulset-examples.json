@@ -1,0 +1,253 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "labels": {
+          "type": "object",
+          "properties": {
+            "app": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "app"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "namespace",
+        "labels"
+      ]
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "selector": {
+          "type": "object",
+          "properties": {
+            "matchLabels": {
+              "type": "object",
+              "properties": {
+                "app": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "app"
+              ]
+            }
+          },
+          "required": [
+            "matchLabels"
+          ]
+        },
+        "serviceName": {
+          "type": "string"
+        },
+        "replicas": {
+          "type": "integer"
+        },
+        "minReadySeconds": {
+          "type": "integer"
+        },
+        "template": {
+          "type": "object",
+          "properties": {
+            "metadata": {
+              "type": "object",
+              "properties": {
+                "labels": {
+                  "type": "object",
+                  "properties": {
+                    "app": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "app"
+                  ]
+                }
+              },
+              "required": [
+                "labels"
+              ]
+            },
+            "spec": {
+              "type": "object",
+              "properties": {
+                "terminationGracePeriodSeconds": {
+                  "type": "integer"
+                },
+                "containers": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "image": {
+                          "type": "string"
+                        },
+                        "ports": {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "containerPort": {
+                                  "type": "integer"
+                                },
+                                "name": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "containerPort",
+                                "name"
+                              ]
+                            }
+                          ]
+                        },
+                        "volumeMounts": {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "type": "string"
+                                },
+                                "mountPath": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "name",
+                                "mountPath"
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "image",
+                        "ports",
+                        "volumeMounts"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "terminationGracePeriodSeconds",
+                "containers"
+              ]
+            }
+          },
+          "required": [
+            "metadata",
+            "spec"
+          ]
+        },
+        "volumeClaimTemplates": {
+          "type": "array",
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "metadata": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name"
+                  ]
+                },
+                "spec": {
+                  "type": "object",
+                  "properties": {
+                    "accessModes": {
+                      "type": "array",
+                      "items": [
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "storageClassName": {
+                      "type": "string"
+                    },
+                    "resources": {
+                      "type": "object",
+                      "properties": {
+                        "requests": {
+                          "type": "object",
+                          "properties": {
+                            "storage": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "storage"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "requests"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "accessModes",
+                    "storageClassName",
+                    "resources"
+                  ]
+                }
+              },
+              "required": [
+                "metadata",
+                "spec"
+              ]
+            }
+          ]
+        }
+      },
+      "required": [
+        "selector",
+        "serviceName",
+        "replicas",
+        "minReadySeconds",
+        "template",
+        "volumeClaimTemplates"
+      ]
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ]
+}

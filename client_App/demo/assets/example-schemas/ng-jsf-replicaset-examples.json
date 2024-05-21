@@ -1,0 +1,142 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Kubernetes StatefulSet",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "default": "apps/v1",
+      "const": "apps/v1",
+      "description": "The API version for the Kubernetes StatefulSet"
+    },
+    "kind": {
+      "type": "string",
+      "default": "StatefulSet",
+      "const": "StatefulSet",
+      "description": "The kind of Kubernetes resource (StatefulSet)"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the StatefulSet"
+        },
+        "namespace": {
+          "type": "string",
+          "description": "The namespace of the StatefulSet"
+        },
+        "labels": {
+          "type": "object",
+          "description": "Labels to identify the StatefulSet",
+          "properties": {
+            "app": {
+              "type": "string",
+              "description": "Application identifier label"
+            }
+          },
+          "required": ["app"],
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "required": ["name", "labels"],
+      "additionalProperties": false
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "serviceName": {
+          "type": "string",
+          "description": "The name of the service associated with the StatefulSet"
+        },
+        "replicas": {
+          "type": "integer",
+          "description": "Number of desired replicas"
+        },
+        "selector": {
+          "type": "object",
+          "properties": {
+            "matchLabels": {
+              "type": "object",
+              "description": "A map of {key,value} pairs to match labels of the Pods controlled by the StatefulSet",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          },
+          "required": ["matchLabels"]
+        },
+        "template": {
+          "type": "object",
+          "description": "The object that describes the pod that will be created",
+          "properties": {
+            "metadata": {
+              "type": "object",
+              "description": "Standard object metadata for the pod template",
+              "properties": {
+                "labels": {
+                  "type": "object",
+                  "description": "Labels to identify the Pod",
+                  "properties": {
+                    "app": {
+                      "type": "string",
+                      "description": "Application identifier label"
+                    }
+                  },
+                  "required": ["app"],
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "spec": {
+              "type": "object",
+              "description": "Specification of the desired behavior of the pod",
+              "properties": {
+                "containers": {
+                  "type": "array",
+                  "description": "List of containers belonging to the pod",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "Name of the container specified as a DNS_LABEL"
+                      },
+                      "image": {
+                        "type": "string",
+                        "description": "Docker image name"
+                      },
+                      "ports": {
+                        "type": "array",
+                        "description": "List of ports to expose from the container",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "containerPort": {
+                              "type": "integer",
+                              "description": "Number of port to expose on the container's IP address"
+                            }
+                          },
+                          "required": ["containerPort"]
+                        }
+                      }
+                    },
+                    "required": ["name", "image"]
+                  }
+                }
+              },
+              "required": ["containers"]
+            }
+          }
+        }
+      },
+      "required": ["serviceName", "replicas", "selector", "template"]
+    }
+  },
+  "required": ["apiVersion", "kind", "metadata", "spec"],
+  "additionalProperties": false
+}

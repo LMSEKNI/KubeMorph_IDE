@@ -1,0 +1,99 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+      "apiVersion": {
+        "type": "string"
+      },
+      "kind": {
+        "type": "string"
+      },
+      "metadata": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "spec": {
+        "type": "object",
+        "properties": {
+          "template": {
+            "type": "object",
+            "properties": {
+              "spec": {
+                "type": "object",
+                "properties": {
+                  "containers": {
+                    "type": "array",
+                    "items": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "image": {
+                            "type": "string"
+                          },
+                          "command": {
+                            "type": "array",
+                            "items": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "string"
+                              }
+                            ]
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "image",
+                          "command"
+                        ]
+                      }
+                    ]
+                  },
+                  "restartPolicy": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "containers",
+                  "restartPolicy"
+                ]
+              }
+            },
+            "required": [
+              "spec"
+            ]
+          },
+          "backoffLimit": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "template",
+          "backoffLimit"
+        ]
+      }
+    },
+    "required": [
+      "apiVersion",
+      "kind",
+      "metadata",
+      "spec"
+    ]
+  }
