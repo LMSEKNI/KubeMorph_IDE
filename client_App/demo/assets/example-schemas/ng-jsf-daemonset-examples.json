@@ -3,10 +3,12 @@
   "type": "object",
   "properties": {
     "apiVersion": {
-      "type": "string"
+      "type": "string",
+      "default": "apps/v1"
     },
     "kind": {
-      "type": "string"
+      "type": "string",
+      "default": "DaemonSet"
     },
     "metadata": {
       "type": "object",

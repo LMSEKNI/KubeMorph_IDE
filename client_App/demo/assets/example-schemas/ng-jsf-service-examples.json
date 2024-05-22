@@ -1,77 +1,79 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "title": "Kubernetes Service",
-    "type": "object",
-    "properties": {
-      "apiVersion": {
-        "type": "string",
-        "default": "v1",
-        "description": "The API version for the Kubernetes Service"
-      },
-      "kind": {
-        "default": "Service",
-        "type": "string",
-        "const": "Service",
-        "description": "The kind of Kubernetes resource (Service)"
-      },
-      "metadata": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "The name of the Service"
-          },
-          "namespace": {
-            "type": "string",
-            "description": "The namespace of the Service"
-          },
-          "labels": {
-            "description": "Labels to identify the Service",
-            "type": "string"
-          }
-        },
-        "required": ["name"],
-        "additionalProperties": false
-      },
-      "spec": {
-        "type": "object",
-        "properties": {
-            "containers": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "string"
-                    },
-                    "image": {
-                      "type": "string"
-                    },
-                    "ports": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "containerPort": {
-                            "type": "integer"
-                          },
-                          "protocol": {
-                            "type": "string",
-                            "enum": ["TCP", "UDP"]
-                          }
-                        },
-                        "required": ["containerPort"]
-                      }
-                    }
-                  },
-                  "required": ["name", "image"]
-                }
-              }
-        },
-        "additionalProperties": false
-      }
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "default": "v1"
     },
-    "required": ["apiVersion", "kind", "metadata", "spec"],
-    "additionalProperties": false
-  }
-  
+    "kind": {
+      "type": "string",
+      "default": "Service"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "selector": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "ports": {
+          "type": "array",
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "protocol": {
+                  "type": "string"
+                },
+                "port": {
+                  "type": "integer"
+                },
+                "targetPort": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "protocol",
+                "port",
+                "targetPort"
+              ]
+            }
+          ]
+        }
+      },
+      "required": [
+        "selector",
+        "ports"
+      ]
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ]
+}

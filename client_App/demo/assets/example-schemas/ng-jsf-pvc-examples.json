@@ -1,73 +1,71 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "type": "object",
-    "properties": {
-      "apiVersion": {
-        "type": "string"
-      },
-      "kind": {
-        "type": "string"
-      },
-      "metadata": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "namespace": {
-            "type": "string",
-            "description": "The namespace of the Deployment"
-          }
-        },
-        "required": [
-          "name"
-        ]
-      },
-      "spec": {
-        "type": "object",
-        "properties": {
-          "storageClassName": {
-            "type": "string"
-          },
-          "accessModes": {
-            "type": "array",
-            "items": [
-              {
-                "type": "string"
-              }
-            ]
-          },
-          "resources": {
-            "type": "object",
-            "properties": {
-              "requests": {
-                "type": "object",
-                "properties": {
-                  "storage": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "storage"
-                ]
-              }
-            },
-            "required": [
-              "requests"
-            ]
-          }
-        },
-        "required": [
-          "storageClassName",
-          "accessModes",
-          "resources"
-        ]
-      }
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "default": "v1"
     },
-    "required": [
-      "apiVersion",
-      "kind",
-      "metadata",
-      "spec"
-    ]
-  }
+    "kind": {
+      "type": "string",
+      "default": "PersistentVolumeClaim"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "storageClassName": {
+          "type": "string"
+        },
+        "accessModes": {
+          "type": "array",
+          "items": [
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "resources": {
+          "type": "object",
+          "properties": {
+            "requests": {
+              "type": "object",
+              "properties": {
+                "storage": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "storage"
+              ]
+            }
+          },
+          "required": [
+            "requests"
+          ]
+        }
+      },
+      "required": [
+        "storageClassName",
+        "accessModes",
+        "resources"
+      ]
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ]
+}
