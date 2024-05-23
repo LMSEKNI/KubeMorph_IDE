@@ -29,6 +29,9 @@ import { YmlFileUpdateComponent } from './updateressource/yml-file-update/yml-fi
 import { DynamicFormUpdateComponent } from './updateressource/dynamic-form-update/dynamic-form-update.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatChipsModule } from '@angular/material/chips';
+import { WelcomeInterfaceComponent } from './welcome-interface/welcome-interface.component';
+import { MonitoringConfigComponent } from './monitoring-config/monitoring-config.component';
+import { MonitoringChoiceComponent } from './monitoring-choice/monitoring-choice.component';
 
 
 @NgModule({
@@ -41,6 +44,9 @@ import { MatChipsModule } from '@angular/material/chips';
                   DynamicFormComponent,
                   YmlFileUpdateComponent,
                   DynamicFormUpdateComponent,
+                  WelcomeInterfaceComponent,
+                  MonitoringConfigComponent,
+                  MonitoringChoiceComponent,
                   ],
   imports: [
     
