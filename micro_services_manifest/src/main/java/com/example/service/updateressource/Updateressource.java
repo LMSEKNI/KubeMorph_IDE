@@ -12,4 +12,7 @@ public interface Updateressource {
     // public V1Pod updatePod(String namespace, String podName, V1Pod updatedPod) throws ApiException, IOException ;
     // public V1Deployment updateDeployment(String namespace, String deploymentName, V1Deployment updatedDeployment) throws ApiException, IOException ;
     public void updateResourcePatch(String resourceName, V1Pod updatedResource) throws ApiException, IOException ;
-}
+    //public void updateResource(String response) throws ApiException, IOException ;
+    public V1Pod updatePod(String oldName, String newJson) throws ApiException, IOException ;
+
+    }

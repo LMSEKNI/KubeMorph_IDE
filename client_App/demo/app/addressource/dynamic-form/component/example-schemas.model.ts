@@ -33,6 +33,7 @@ export const Examples: any = {
       { name: 'StorageClass ', file: 'ng-jsf-sc-examples', },
       { name: 'replicaset ', file: 'ng-jsf-replicaset-examples', },
       { name: 'Ingress ', file: 'ng-jsf-ingress-examples', },
+      { name: 'HPA ', file: 'ng-jsf-hpa-examples', },
 
 
     ]

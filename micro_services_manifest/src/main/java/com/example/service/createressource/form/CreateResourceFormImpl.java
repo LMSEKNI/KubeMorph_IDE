@@ -8,6 +8,7 @@ import io.kubernetes.client.custom.Quantity;
 import io.kubernetes.client.openapi.apis.*;
 import io.kubernetes.client.openapi.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.example.KubernetesConfig.KubernetesConfigService;
@@ -32,48 +33,49 @@ public class CreateResourceFormImpl implements CreateRessourceForm {
         CoreV1Api api = new CoreV1Api();
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonNode = mapper.readTree(response);
-    
+
         JsonNode metadataNode = jsonNode.get("metadata");
         if (metadataNode == null) {
             System.out.println("Metadata node is missing in the JSON response.");
             return;
         }
-    
+
         String name = metadataNode.get("name").asText();
         String namespace = metadataNode.get("namespace").asText();
-    
+        V1ObjectMeta metadata = new V1ObjectMetaBuilder()
+                .withName(name)
+                .withNamespace(namespace)
+                .build();
+
         JsonNode specNode = jsonNode.get("spec");
         if (specNode == null) {
             System.out.println("Spec node is missing in the JSON response.");
             return;
         }
-    
+
         JsonNode containersNode = specNode.get("containers");
         if (containersNode == null || containersNode.size() == 0) {
             System.out.println("Containers node is missing or empty in the JSON response.");
             return;
         }
-    
+
         String image = containersNode.get(0).get("image").asText();
-    
-        // Create and Deploy pod to Kubernetes 
-        V1Pod pod = new V1PodBuilder()
-                .withNewMetadata()
-                    .withName(name)
-                    .withNamespace(namespace)
-                .endMetadata()
-                .withNewSpec()
-                    .addNewContainer()
-                        .withName(name)
-                        .withImage(image)
-                        .withNewResources()
-                            .withLimits(new HashMap<>())
-                        .endResources()
-                    .endContainer()
-                .endSpec()
+
+        V1Container container = new V1ContainerBuilder()
+                .withName(name)
+                .withImage(image)
                 .build();
-                
-                api.createNamespacedPod(namespace, pod, null, null, null, null);
+
+        V1PodSpec podSpec = new V1PodSpecBuilder()
+                .addToContainers(container)
+                .build();
+
+        V1Pod pod = new V1PodBuilder()
+                .withMetadata(metadata)
+                .withSpec(podSpec)
+                .build();
+
+        api.createNamespacedPod(namespace, pod, null, null, null, null);
         System.out.println("Pod created successfully: " + name);
     }
     @Override
@@ -1034,6 +1036,69 @@ public class CreateResourceFormImpl implements CreateRessourceForm {
             System.out.println("Ingress created successfully: " + name + " in namespace: " + namespace);
         } catch (ApiException e) {
             System.err.println("Exception when calling NetworkingV1Api#createNamespacedIngress");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            throw e;
+        }
+    }
+    @Override
+    public void createHPA(String response) throws ApiException, IOException {
+        // Configure Kubernetes access
+        kubernetesConfigService.configureKubernetesAccess();
+
+        // Initialize Kubernetes API client
+        AutoscalingV1Api api = new AutoscalingV1Api();
+
+        // Parse JSON response
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode jsonNode = mapper.readTree(response);
+
+        // Extract HPA metadata
+        String name = jsonNode.get("metadata").get("name").asText();
+        String namespace = jsonNode.has("metadata") && jsonNode.get("metadata").has("namespace") ?
+                jsonNode.get("metadata").get("namespace").asText() : "default";
+
+        // Check if the HPA already exists
+        try {
+            api.readNamespacedHorizontalPodAutoscaler(name, namespace, null);
+            System.out.println("HPA with name " + name + " already exists in namespace " + namespace);
+            return; // Exit the function if the HPA already exists
+        } catch (ApiException e) {
+            if (e.getCode() != HttpStatus.NOT_FOUND.value()) {
+                System.err.println("Exception when calling AutoscalingV1Api#readNamespacedHorizontalPodAutoscaler");
+                System.err.println("Status code: " + e.getCode());
+                System.err.println("Reason: " + e.getResponseBody());
+                System.err.println("Response headers: " + e.getResponseHeaders());
+                throw e;
+            }
+        }
+
+        // Extract HPA spec
+        int minReplicas = jsonNode.get("spec").get("minReplicas").asInt();
+        int maxReplicas = jsonNode.get("spec").get("maxReplicas").asInt();
+        int targetCPUUtilizationPercentage = jsonNode.get("spec").get("targetCPUUtilizationPercentage").asInt();
+        String targetDeploymentName = jsonNode.get("spec").get("scaleTargetRef").get("name").asText();
+
+        // Create HPA object
+        V1HorizontalPodAutoscaler hpa = new V1HorizontalPodAutoscaler()
+                .metadata(new V1ObjectMeta().name(name).namespace(namespace))
+                .spec(new V1HorizontalPodAutoscalerSpec()
+                        .minReplicas(minReplicas)
+                        .maxReplicas(maxReplicas)
+                        .scaleTargetRef(new V1CrossVersionObjectReference()
+                                .kind("Deployment")
+                                .name(targetDeploymentName)
+                                .apiVersion("apps/v1"))
+                        .targetCPUUtilizationPercentage(targetCPUUtilizationPercentage)
+                );
+
+        // Create HPA in Kubernetes cluster
+        try {
+            api.createNamespacedHorizontalPodAutoscaler(namespace, hpa, null, null, null, null);
+            System.out.println("HPA created successfully: " + name + " in namespace " + namespace);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AutoscalingV1Api#createNamespacedHorizontalPodAutoscaler");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());

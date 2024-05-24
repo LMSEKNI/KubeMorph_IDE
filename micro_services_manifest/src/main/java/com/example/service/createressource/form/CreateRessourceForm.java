@@ -18,5 +18,6 @@ public interface CreateRessourceForm {
     public void createPersistentVolumeClaim(String response) throws ApiException, IOException ;
     public void createStorageClass(String response) throws ApiException, IOException ;
     public void createReplicaSet(String response) throws ApiException, IOException ;
+    public void createHPA(String response) throws ApiException, IOException ;
 
     }

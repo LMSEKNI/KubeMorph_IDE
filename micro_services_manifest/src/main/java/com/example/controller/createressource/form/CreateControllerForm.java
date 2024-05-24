@@ -90,6 +90,10 @@ public class CreateControllerForm {
                 createResource.createReplicaSet(response);
                 return ResponseEntity.ok("ReplicaSet created successfully ");
             }
+            else if ("HorizontalPodAutoscaler".equals(kind)) {
+                createResource.createHPA(response);
+                return ResponseEntity.ok("HorizontalPodAutoscaler created successfully ");
+            }
              else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Unsupported resource kind: " + kind);
             }
