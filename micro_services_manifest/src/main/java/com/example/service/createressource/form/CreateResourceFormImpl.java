@@ -5,6 +5,7 @@ import java.util.*;
 
 import io.kubernetes.client.custom.IntOrString;
 import io.kubernetes.client.custom.Quantity;
+import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.openapi.apis.*;
 import io.kubernetes.client.openapi.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -180,27 +181,36 @@ public class CreateResourceFormImpl implements CreateRessourceForm {
     
         System.out.println("Deployment created successfully: " + name);
     }
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Override
     public void createNamespace(String response) throws ApiException, IOException {
         // Configure Kubernetes access
-        kubernetesConfigService.configureKubernetesAccess();
-
-        // Initialize Kubernetes API client
-        CoreV1Api api = new CoreV1Api();
+        ApiClient client = kubernetesConfigService.configureKubernetesAccess();
+        CoreV1Api api = new CoreV1Api(client);
 
         // Parse JSON response
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode jsonNode = mapper.readTree(response);
+        JsonNode jsonNode = objectMapper.readTree(response);
 
         // Extract and validate required fields from the schema
         String apiVersion = jsonNode.get("apiVersion").asText();
         String kind = jsonNode.get("kind").asText();
-        String name = jsonNode.get("metadata").get("name").asText();
+        JsonNode metadataNode = jsonNode.get("metadata");
+        String name = metadataNode.get("name").asText();
+        JsonNode labelsNode = metadataNode.get("labels");
+        JsonNode annotationsNode = metadataNode.get("annotations");
+
+        // Ensure the JSON structure meets the required schema
+        if (apiVersion == null || kind == null || name == null ||
+                labelsNode == null || labelsNode.get("env") == null ||
+                annotationsNode == null || annotationsNode.get("description") == null) {
+            throw new IllegalArgumentException("Invalid JSON schema");
+        }
 
         try {
             // Check if namespace already exists
             V1Namespace existingNamespace = api.readNamespace(name, null);
-
             // If the namespace exists, notify and exit
             if (existingNamespace != null) {
                 System.out.println("Namespace already exists: " + name);
@@ -214,14 +224,17 @@ public class CreateResourceFormImpl implements CreateRessourceForm {
             // If it's a 404 error, it means the namespace doesn't exist, so we can proceed
         }
 
+        // Create Metadata object
+        V1ObjectMeta metadata = new V1ObjectMeta()
+                .name(name)
+                .labels(objectMapper.convertValue(labelsNode, Map.class))
+                .annotations(objectMapper.convertValue(annotationsNode, Map.class));
+
         // Create Namespace object
-        V1Namespace namespace = new V1NamespaceBuilder()
-                .withApiVersion(apiVersion)
-                .withKind(kind)
-                .withNewMetadata()
-                .withName(name)
-                .endMetadata()
-                .build();
+        V1Namespace namespace = new V1Namespace()
+                .apiVersion(apiVersion)
+                .kind(kind)
+                .metadata(metadata);
 
         // Deploy Namespace to cluster
         api.createNamespace(namespace, null, null, null, null);
