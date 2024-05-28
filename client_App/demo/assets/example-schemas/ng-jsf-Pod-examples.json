@@ -18,128 +18,62 @@
         },
         "namespace": {
           "type": "string"
-        },
-        "labels": {
+        },"labels": {
           "type": "object",
           "properties": {
             "app": {
               "type": "string"
             }
-          },
-          "required": [
-            "app"
-          ]
+          }
         }
       },
       "required": [
-        "name",
-        "namespace",
-        "labels"
+        "name"
       ]
     },
     "spec": {
       "type": "object",
       "properties": {
-        "replicas": {
-          "type": "integer"
-        },
-        "selector": {
-          "type": "object",
-          "properties": {
-            "matchLabels": {
+        "containers": {
+          "type": "array",
+          "items": [
+            {
               "type": "object",
               "properties": {
-                "app": {
+                "name": {
                   "type": "string"
-                }
-              },
-              "required": [
-                "app"
-              ]
-            }
-          },
-          "required": [
-            "matchLabels"
-          ]
-        },
-        "template": {
-          "type": "object",
-          "properties": {
-            "metadata": {
-              "type": "object",
-              "properties": {
-                "labels": {
-                  "type": "object",
-                  "properties": {
-                    "app": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "app"
-                  ]
-                }
-              },
-              "required": [
-                "labels"
-              ]
-            },
-            "spec": {
-              "type": "object",
-              "properties": {
-                "containers": {
+                },
+                "image": {
+                  "type": "string"
+                },
+                "ports": {
                   "type": "array",
                   "items": [
                     {
                       "type": "object",
                       "properties": {
-                        "name": {
-                          "type": "string"
-                        },
-                        "image": {
-                          "type": "string"
-                        },
-                        "ports": {
-                          "type": "array",
-                          "items": [
-                            {
-                              "type": "object",
-                              "properties": {
-                                "containerPort": {
-                                  "type": "integer"
-                                }
-                              },
-                              "required": [
-                                "containerPort"
-                              ]
-                            }
-                          ]
+                        "containerPort": {
+                          "type": "integer"
                         }
                       },
                       "required": [
-                        "name",
-                        "image",
-                        "ports"
+                        "containerPort"
                       ]
                     }
                   ]
                 }
               },
               "required": [
-                "containers"
+                "name",
+                "image",
+                "ports"
               ]
             }
-          },
-          "required": [
-            "metadata",
-            "spec"
           ]
         }
       },
       "required": [
-        "replicas",
-        "selector",
-        "template"
+        "containers"
       ]
     }
   },

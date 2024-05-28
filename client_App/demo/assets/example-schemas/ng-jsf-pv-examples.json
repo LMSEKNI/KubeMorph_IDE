@@ -1,85 +1,87 @@
 {
-    "$schema": "http://json-schema.org/draft-04/schema#",
-    "type": "object",
-    "properties": {
-      "apiVersion": {
-        "type": "string"
-      },
-      "kind": {
-        "type": "string"
-      },
-      "metadata": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "labels": {
-            "type": "object",
-            "properties": {
-              "type": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "type"
-            ]
-          }
-        },
-        "required": [
-          "name",
-          "labels"
-        ]
-      },
-      "spec": {
-        "type": "object",
-        "properties": {
-          "storageClassName": {
-            "type": "string"
-          },
-          "capacity": {
-            "type": "object",
-            "properties": {
-              "storage": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "storage"
-            ]
-          },
-          "accessModes": {
-            "type": "array",
-            "items": [
-              {
-                "type": "string"
-              }
-            ]
-          },
-          "hostPath": {
-            "type": "object",
-            "properties": {
-              "path": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "path"
-            ]
-          }
-        },
-        "required": [
-          "storageClassName",
-          "capacity",
-          "accessModes",
-          "hostPath"
-        ]
-      }
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "default": "v1"
     },
-    "required": [
-      "apiVersion",
-      "kind",
-      "metadata",
-      "spec"
-    ]
-  }
+    "kind": {
+      "type": "string",
+      "default": "PersistentVolume"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "labels": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "labels"
+      ]
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "storageClassName": {
+          "type": "string"
+        },
+        "capacity": {
+          "type": "object",
+          "properties": {
+            "storage": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "storage"
+          ]
+        },
+        "accessModes": {
+          "type": "array",
+          "items": [
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "hostPath": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path"
+          ]
+        }
+      },
+      "required": [
+        "storageClassName",
+        "capacity",
+        "accessModes",
+        "hostPath"
+      ]
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ]
+}

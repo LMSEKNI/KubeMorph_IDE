@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "default": "storage.k8s.io/v1"
+    },
+    "kind": {
+      "type": "string",
+      "default": "StorageClass"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "provisioner": {
+      "type": "string"
+    },
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "resturl": {
+          "type": "string"
+        },
+        "restuser": {
+          "type": "string"
+        },
+        "secretNamespace": {
+          "type": "string"
+        },
+        "secretName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "resturl",
+        "restuser",
+        "secretNamespace",
+        "secretName"
+      ]
+    },
+    "allowVolumeExpansion": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "provisioner",
+    "parameters",
+    "allowVolumeExpansion"
+  ]
+}

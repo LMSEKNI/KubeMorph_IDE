@@ -143,7 +143,7 @@
         <app-dynamic-form-update></app-dynamic-form-update>
       </ng-container>
       <ng-container *ngIf="selectedComponent === 'yaml'">
-        <app-yml-file-update></app-yml-file-update>
+        <app-yml-file-update [resourceName]="selectedResource" [resourceType]="selectedType" ></app-yml-file-update>
       </ng-container>
     </div>
 

@@ -1,12 +1,14 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
     "apiVersion": {
-      "type": "string"
+      "type": "string",
+      "default": "v1"
     },
     "kind": {
-      "type": "string"
+      "type": "string",
+      "default": "StatefulSet"
     },
     "metadata": {
       "type": "object",
@@ -16,23 +18,11 @@
         },
         "namespace": {
           "type": "string"
-        },
-        "labels": {
-          "type": "object",
-          "properties": {
-            "app": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "app"
-          ]
         }
       },
       "required": [
         "name",
-        "namespace",
-        "labels"
+        "namespace"
       ]
     },
     "spec": {

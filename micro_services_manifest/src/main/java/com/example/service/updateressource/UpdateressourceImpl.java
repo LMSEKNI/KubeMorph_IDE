@@ -1,13 +1,20 @@
 package com.example.service.updateressource;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import io.kubernetes.client.openapi.apis.NetworkingV1Api;
+import io.kubernetes.client.openapi.models.*;
+import io.kubernetes.client.util.generic.options.PatchOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.example.KubernetesConfig.KubernetesConfigService;
@@ -21,13 +28,6 @@ import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.AppsV1Api;
 import io.kubernetes.client.openapi.apis.BatchV1Api;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
-import io.kubernetes.client.openapi.models.V1Container;
-import io.kubernetes.client.openapi.models.V1Deployment;
-import io.kubernetes.client.openapi.models.V1Job;
-import io.kubernetes.client.openapi.models.V1JobBuilder;
-import io.kubernetes.client.openapi.models.V1ObjectMeta;
-import io.kubernetes.client.openapi.models.V1Pod;
-import io.kubernetes.client.openapi.models.V1PodSpec;
 import io.kubernetes.client.util.Config;
 import io.kubernetes.client.util.PatchUtils;
 import io.kubernetes.client.util.Yaml;
@@ -44,172 +44,140 @@ public class UpdateressourceImpl implements Updateressource {
     public UpdateressourceImpl (KubernetesConfigService kubernetesConfigService){
         this.kubernetesConfigService =kubernetesConfigService;
     }
+    private static final Logger logger = LoggerFactory.getLogger(UpdateressourceImpl.class);
 
-  
-    public V1Pod editPod(String ressourcetype, String ressourcename) throws ApiException, IOException {
-        kubernetesConfigService.configureKubernetesAccess();
-        CoreV1Api api = new CoreV1Api();
-    
-        // Retrieve the existing pod
-        V1Pod existingPod = api.readNamespacedPod(ressourcename, "default", null);
-    
-        // Update pod metadata (labels in this example)
-        V1ObjectMeta metadata = existingPod.getMetadata();
-        if (metadata.getLabels() == null) {
-            metadata.setLabels(new HashMap<>());
-        }
-        metadata.getLabels();
-    
-        // Update the pod
-        return api.replaceNamespacedPod(
-                ressourcename,
-                "default",
-                existingPod,
-                null,
-                null,
-                null,
-                null);
-    }
 
-    public V1Pod updateResource(String resourceType, String resourceName, String updatedResourceJson) throws ApiException, IOException {
-        Logger logger = LoggerFactory.getLogger(UpdateController.class);
-        CoreV1Api api = new CoreV1Api();
-        V1Pod updatedPod = api.getApiClient().getJSON().deserialize(updatedResourceJson, V1Pod.class);
-    
-        // Ensure the resourceName matches the name in the JSON payload
-        // String jsonPayloadName = updatedPod.getMetadata().getName();
-        // if (!resourceName.equals(jsonPayloadName)) {
-        //     throw new ApiException(400, "The name of the object (" + jsonPayloadName + ") does not match the name on the URL (" + resourceName + ")");
-        // }
-    
+    @Autowired
+    private ObjectMapper mapper,objectMapper;
+    @Override
+    public V1Pod updatePod(String namespace, String podName, String podJson) throws IOException, ApiException {
+        ApiClient client = kubernetesConfigService.configureKubernetesAccess();
+        logger.info("Received request to update pod in namespace: {} with podName: {} and podJson: {}", namespace, podName, podJson);
+
+        CoreV1Api apiInstance = new CoreV1Api(client);
+
+        V1Pod newPod;
         try {
-            // Use the name from the JSON payload instead of resourceName
-            
-            V1Pod result = api.replaceNamespacedPod(
-                resourceName, // Use the name from the JSON payload
-                "default", // assuming default namespace, you can change as needed
-                updatedPod,
-                null,
-                null,
-                null,
-                null
-            );
+            newPod = objectMapper.readValue(podJson, V1Pod.class);
+
+            // Ensure the new pod JSON has the same name and namespace as the old pod
+            V1ObjectMeta metadata = newPod.getMetadata();
+            if (metadata == null) {
+                metadata = new V1ObjectMeta();
+                newPod.setMetadata(metadata);
+            }
+            metadata.setName(podName);
+            metadata.setNamespace(namespace);
+
+            // Example of additional modifications:
+            // Add or update labels
+            if (metadata.getLabels() != null) {
+                metadata.getLabels().put("new-label-key", "new-label-value");
+            } else {
+                metadata.setLabels(Map.of("new-label-key", "new-label-value"));
+            }
+
+            // Add or update annotations
+            if (metadata.getAnnotations() != null) {
+                metadata.getAnnotations().put("new-annotation-key", "new-annotation-value");
+            } else {
+                metadata.setAnnotations(Map.of("new-annotation-key", "new-annotation-value"));
+            }
+
+            // Only update mutable fields
+            V1Pod currentPod = apiInstance.readNamespacedPod(podName, namespace, null);
+
+            // Preserve immutable fields from the currentPod
+            newPod.getSpec().setVolumes(currentPod.getSpec().getVolumes());
+            for (int i = 0; i < newPod.getSpec().getContainers().size(); i++) {
+                V1Container newContainer = newPod.getSpec().getContainers().get(i);
+                V1Container currentContainer = currentPod.getSpec().getContainers().get(i);
+                newContainer.setVolumeMounts(currentContainer.getVolumeMounts());
+            }
+
+        } catch (IOException e) {
+            logger.error("Failed to parse new pod JSON", e);
+            throw new RuntimeException("Failed to parse new pod JSON", e);
+        }
+
+        try {
+            V1Pod result = apiInstance.replaceNamespacedPod(podName, namespace, newPod, null, null, null, null);
+            logger.info("Pod updated successfully: {}", result.getMetadata().getName());
             return result;
         } catch (ApiException e) {
-            logger.error("Exception when calling CoreV1Api#replaceNamespacedPod");
-            logger.error("Status code: " + e.getCode());
-            logger.error("Reason: " + e.getResponseBody());
-            logger.error("Response headers: " + e.getResponseHeaders());
-            throw e;
+            if (e.getCode() == 422) {
+                // Handle immutable field change by deleting and recreating the pod
+                logger.warn("Attempting to delete and recreate the pod due to immutable field change");
+
+                // Delete the existing pod
+                apiInstance.deleteNamespacedPod(podName, namespace, null, null, null, null, null, null);
+
+                // Recreate the pod
+                V1Pod createdPod = apiInstance.createNamespacedPod(namespace, newPod, null, null, null, null);
+                logger.info("Pod recreated successfully: {}", createdPod.getMetadata().getName());
+                return createdPod;
+            } else {
+                logger.error("Exception when calling CoreV1Api#replaceNamespacedPod", e);
+                logger.error("Status code: {}", e.getCode());
+                logger.error("Reason: {}", e.getResponseBody());
+                logger.error("Response headers: {}", e.getResponseHeaders());
+                throw new RuntimeException("Failed to update pod", e);
+            }
         }
     }
-    
+
     @Override
-    public void updateResourcePatch(String resourceName, V1Pod updatedResource) throws ApiException, IOException {
-        String patchedPodJSON = Yaml.dump(updatedResource);
-        CoreV1Api api = new CoreV1Api();
-        PatchUtils.patch(
-            V1Pod.class,
-            () -> api.patchNamespacedPodCall(
-                resourceName,
-                "default", // assuming default namespace, you can change as needed
-                new V1Patch(patchedPodJSON),
-                null,
-                null,
-                null,
-                patchedPodJSON, true,
-                null
-            ),
-            V1Patch.PATCH_FORMAT_JSON_MERGE_PATCH,
-            api.getApiClient()
-        );
+    public V1Namespace replaceNamespace(String oldNamespaceName, String newNamespaceJson) throws IOException, ApiException {
+        ApiClient client = kubernetesConfigService.configureKubernetesAccess();
+        logger.info("Received request to replace namespace with oldNamespaceName: {} and newNamespaceJson: {}", oldNamespaceName, newNamespaceJson);
+
+        CoreV1Api apiInstance = new CoreV1Api(client);
+
+        V1Namespace newNamespace;
+        try {
+            newNamespace = objectMapper.readValue(newNamespaceJson, V1Namespace.class);
+
+            // Ensure the new namespace JSON has the same name as the old namespace
+            V1ObjectMeta metadata = newNamespace.getMetadata();
+            if (metadata == null) {
+                metadata = new V1ObjectMeta();
+                newNamespace.setMetadata(metadata);
+            }
+            metadata.setName(oldNamespaceName);
+
+            // Example of additional modifications:
+            // Add or update labels
+            if (metadata.getLabels() != null) {
+                metadata.getLabels().put("new-label-key", "new-label-value");
+            } else {
+                metadata.setLabels(Map.of("new-label-key", "new-label-value"));
+            }
+
+            // Add or update annotations
+            if (metadata.getAnnotations() != null) {
+                metadata.getAnnotations().put("new-annotation-key", "new-annotation-value");
+            } else {
+                metadata.setAnnotations(Map.of("new-annotation-key", "new-annotation-value"));
+            }
+
+        } catch (IOException e) {
+            logger.error("Failed to parse new namespace JSON", e);
+            throw new RuntimeException("Failed to parse new namespace JSON", e);
+        }
+
+        try {
+            V1Namespace result = apiInstance.replaceNamespace(oldNamespaceName, newNamespace, null, null, null, null);
+            logger.info("Namespace replaced successfully: {}", result.getMetadata().getName());
+            return result;
+        } catch (ApiException e) {
+            logger.error("Exception when calling CoreV1Api#replaceNamespace", e);
+            logger.error("Status code: {}", e.getCode());
+            logger.error("Reason: {}", e.getResponseBody());
+            logger.error("Response headers: {}", e.getResponseHeaders());
+            throw new RuntimeException("Failed to replace namespace", e);
+        }
     }
 
-    
-    // public V1Pod editPod(String namespace , String nameressource ) throws ApiException, IOException {
-    //     kubernetesConfigService.configureKubernetesAccess();
-    //     CoreV1Api api = new CoreV1Api();
-
-    //     // Retrieve the existing pod
-    //     V1Pod existingPod = api.readNamespacedPod(nameressource, namespace, null);
-
-    //     // Update pod metadata (labels in this example)
-    //     V1ObjectMeta metadata = existingPod.getMetadata();
-    //     if (metadata.getLabels() == null) {
-    //         metadata.setLabels(new HashMap<>());
-    //     }
-    //     metadata.getLabels();
-
-    //     // Update the pod
-    //     return api.replaceNamespacedPod(
-    //             nameressource,
-    //             namespace,
-    //             existingPod,
-    //             null,
-    //             null,
-    //             null,
-    //             null);
-    // }
-
-   
-    // @Override
-    // public String getPodDescription(String namespace, String podName) throws ApiException, IOException {
-    //     ApiClient client = Config.defaultClient();
-    //     CoreV1Api api = new CoreV1Api(client);
-
-    //     V1Pod pod = api.readNamespacedPod(podName, namespace, null);
-    //     return pod.toString();
-    // }
-
-    // @Override
-    // public V1Pod updatePod(String namespace, String podName, V1Pod updatedPod) throws ApiException, IOException {
-    //     kubernetesConfigService.configureKubernetesAccess();
-    //     CoreV1Api api = new CoreV1Api(Config.defaultClient());
-    //     return api.replaceNamespacedPod(podName, namespace, updatedPod, null, null, null, null);
-    // }
-    // @Override
-    // public V1Deployment updateDeployment(String namespace, String deploymentName, V1Deployment updatedDeployment) throws ApiException, IOException {
-    //     kubernetesConfigService.configureKubernetesAccess();
-    //     AppsV1Api api = new AppsV1Api();
-    //     return api.replaceNamespacedDeployment(deploymentName, namespace, updatedDeployment, null, null, null, null);
-    // }
-    
-   
-
-    // public String updatePoddd(String namespace, String podName) throws ApiException, IOException {
-    //     kubernetesConfigService.configureKubernetesAccess();
-    //     CoreV1Api api = new CoreV1Api(Config.defaultClient());
-    //     ObjectMapper mapper = new ObjectMapper();
-
-    //     // Fetch the existing Pod
-    //     V1Pod existingPod;
-
-    //     try {
-    //         existingPod = api.readNamespacedPod(podName, namespace, null);
-    //     } catch (ApiException e) {
-    //         return "Error fetching Pod: " + e.getResponseBody();
-    //     }
-
-    //     // Fetch the description of the Pod
-    //     String podDescription;
-    //     try {
-    //         podDescription = descServiceImpl.getResourceDescriptions(podName, "pod");
-    //         System.out.println("Pod description: " + podDescription);
-    //     } catch (Exception e) {
-    //         return "Error fetching Pod description: " + e.getMessage();
-
-    //     }
-
-
-    //     // Update the Pod in the Kubernetes cluster
-    //     try {
-    //         api.replaceNamespacedPod(podName, namespace, existingPod, null, null, null, null);
-    //         System.out.println("Pod updated successfully: " + podName );
-    //     } catch (ApiException e) {
-    //         return "Error updating Pod: " + e.getResponseBody();
-    //     }
-    //     return podDescription;
-    // }
    
     
 }

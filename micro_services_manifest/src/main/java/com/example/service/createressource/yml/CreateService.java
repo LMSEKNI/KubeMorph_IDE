@@ -20,5 +20,6 @@ public interface CreateService {
     public void createPersistentVolumeFromYaml(String yamlContent) throws IOException, ApiException ;
     public void createPersistentVolumeClaimFromYaml(String yamlContent) throws IOException, ApiException ;
     public void createStorageClassFromYaml(String yamlContent) throws IOException, ApiException ;
+    public void createHPAFromYaml(String yamlContent) throws IOException, ApiException ;
 
-}
+    }
