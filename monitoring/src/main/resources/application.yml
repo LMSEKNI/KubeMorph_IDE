@@ -11,3 +11,9 @@ spring:
     name: monitoring
   config:
     import: optional:configserver:http://localhost:8888
+prometheus:
+  prometheusURL: http://prometheus-server.prometheus:9090
+  alertingRules:
+    ruleName: HighMemoryUsage
+    expression: 'up{job="myjob"} == 0'
+
