@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Kubernetes ConfigMap",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "default": "v1",
+      "type": "string",
+      "const": "v1",
+      "description": "The API version for the Kubernetes ConfigMap"
+    },
+    "kind": {
+      "default": "ConfigMap",
+      "type": "string",
+      "const": "ConfigMap",
+      "description": "The kind of Kubernetes resource (ConfigMap)"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the ConfigMap"
+        },
+        "namespace": {
+          "type": "string",
+          "description": "The namespace of the Deployment"
+        }
+      },
+      "required": ["name"],
+      "additionalProperties": false
+    },
+    "immutable": {
+      "description": "Immutable, if set to true, ensures that data stored in the ConfigMap cannot be updated (only object metadata can be modified). If not set to true, the field can be modified at any time. Defaulted to nil. This is an alpha field enabled by ImmutableEphemeralVolumes feature gate.",
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "binaryData": {
+      "type": "object",
+      "description": "BinaryData contains the binary data.",
+      "properties": {
+        "format": {
+          "type": ["string", "null"],
+          "description": "BinaryData contains the binary data.",
+          "format": "byte"
+        }
+      }
+    },
+    "data": {
+      "type": "object",
+      "description": "Data contains the configuration data. Each key must consist of alphanumeric characters, '-', '_' or '.'. Values with non-UTF-8 byte sequences must use the BinaryData field. The keys stored in Data must not overlap with the keys in the BinaryData field, this is enforced during validation process.",
+      "properties": {
+        "data": {
+          "type": ["string", "null"],
+          "description": "Data contains the configuration data."
+        }
+      }
+    }    
+  },
+  "required": ["apiVersion", "kind", "metadata"],
+  "additionalProperties": false
+}

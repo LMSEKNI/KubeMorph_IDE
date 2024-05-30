@@ -6,10 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 
 
-public class MicroServicesKubeApplication  {
+public class ManifestManagment  {
 
     public static void main(String[] args) {
-        SpringApplication.run(MicroServicesKubeApplication.class, args);
+        SpringApplication.run(ManifestManagment.class, args);
     }
 
 }

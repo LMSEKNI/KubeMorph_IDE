@@ -1,53 +1,47 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Kubernetes Deployment",
   "type": "object",
   "properties": {
     "apiVersion": {
-      "default":"apps/v1" ,
       "type": "string",
-      "const": "apps/v1",
-      "description": "The API version for the Kubernetes Deployment"
+      "default": "apps/v1"
     },
     "kind": {
-      "default":"Deployment" ,
       "type": "string",
-      "const": "Deployment",
-      "description": "The kind of Kubernetes resource (Deployment)"
+      "default": "Deployment"
     },
     "metadata": {
       "type": "object",
       "properties": {
         "name": {
-          "type": "string",
-          "description": "The name of the Deployment"
+          "type": "string"
         },
         "namespace": {
-          "type": "string",
-          "description": "The namespace of the Deployment"
+          "type": "string"
         },
         "labels": {
           "type": "object",
           "properties": {
             "app": {
-              "type": "string",
-              "description": "The label identifying the application"
+              "type": "string"
             }
           },
-          "required": ["app"],
-          "additionalProperties": false
+          "required": [
+            "app"
+          ]
         }
       },
-      "required": ["name", "labels","namespace"],
-      "additionalProperties": false
+      "required": [
+        "name",
+        "namespace",
+        "labels"
+      ]
     },
     "spec": {
       "type": "object",
       "properties": {
         "replicas": {
-          "type": "integer",
-          "minimum": 1,
-          "description": "The number of replicas of the Deployment"
+          "type": "integer"
         },
         "selector": {
           "type": "object",
@@ -56,16 +50,17 @@
               "type": "object",
               "properties": {
                 "app": {
-                  "type": "string",
-                  "description": "The label selector for pods"
+                  "type": "string"
                 }
               },
-              "required": ["app"],
-              "additionalProperties": false
+              "required": [
+                "app"
+              ]
             }
           },
-          "required": ["matchLabels"],
-          "additionalProperties": false
+          "required": [
+            "matchLabels"
+          ]
         },
         "template": {
           "type": "object",
@@ -77,65 +72,81 @@
                   "type": "object",
                   "properties": {
                     "app": {
-                      "type": "string",
-                      "description": "The label for the pod template"
+                      "type": "string"
                     }
                   },
-                  "required": ["app"],
-                  "additionalProperties": false
+                  "required": [
+                    "app"
+                  ]
                 }
               },
-              "required": ["labels"],
-              "additionalProperties": false
+              "required": [
+                "labels"
+              ]
             },
             "spec": {
               "type": "object",
               "properties": {
                 "containers": {
                   "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "name": {
-                        "type": "string",
-                        "description": "The name of the container"
-                      },
-                      "image": {
-                        "type": "string",
-                        "description": "The Docker image for the container"
-                      },
-                      "ports": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "containerPort": {
-                              "type": "integer",
-                              "description": "The port on the container"
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "image": {
+                          "type": "string"
+                        },
+                        "ports": {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "containerPort": {
+                                  "type": "integer"
+                                }
+                              },
+                              "required": [
+                                "containerPort"
+                              ]
                             }
-                          },
-                          "required": ["containerPort"],
-                          "additionalProperties": false
+                          ]
                         }
-                      }
-                    },
-                    "required": ["name", "image", "ports"],
-                    "additionalProperties": false
-                  }
+                      },
+                      "required": [
+                        "name",
+                        "image",
+                        "ports"
+                      ]
+                    }
+                  ]
                 }
               },
-              "required": ["containers"],
-              "additionalProperties": false
+              "required": [
+                "containers"
+              ]
             }
           },
-          "required": ["metadata", "spec"],
-          "additionalProperties": false
+          "required": [
+            "metadata",
+            "spec"
+          ]
         }
       },
-      "required": ["replicas", "selector", "template"],
-      "additionalProperties": false
+      "required": [
+        "replicas",
+        "selector",
+        "template"
+      ]
     }
   },
-  "required": ["apiVersion", "kind", "metadata", "spec"],
-  "additionalProperties": false
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ]
 }

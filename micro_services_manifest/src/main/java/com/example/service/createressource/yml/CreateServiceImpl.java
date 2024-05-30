@@ -7,26 +7,8 @@ import io.kubernetes.client.custom.IntOrString;
 import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.Configuration;
-import io.kubernetes.client.openapi.apis.AppsV1Api;
-import io.kubernetes.client.openapi.apis.BatchV1Api;
-import io.kubernetes.client.openapi.apis.CoreV1Api;
-import io.kubernetes.client.openapi.apis.NetworkingV1Api;
-import io.kubernetes.client.openapi.apis.StorageV1Api;
-import io.kubernetes.client.openapi.models.V1ConfigMap;
-import io.kubernetes.client.openapi.models.V1DaemonSet;
-import io.kubernetes.client.openapi.models.V1Deployment;
-import io.kubernetes.client.openapi.models.V1Endpoints;
-import io.kubernetes.client.openapi.models.V1Ingress;
-import io.kubernetes.client.openapi.models.V1Job;
-import io.kubernetes.client.openapi.models.V1Node;
-import io.kubernetes.client.openapi.models.V1PersistentVolume;
-import io.kubernetes.client.openapi.models.V1PersistentVolumeClaim;
-import io.kubernetes.client.openapi.models.V1Pod;
-import io.kubernetes.client.openapi.models.V1ReplicaSet;
-import io.kubernetes.client.openapi.models.V1Service;
-import io.kubernetes.client.openapi.models.V1ServiceBuilder;
-import io.kubernetes.client.openapi.models.V1StatefulSet;
-import io.kubernetes.client.openapi.models.V1StorageClass;
+import io.kubernetes.client.openapi.apis.*;
+import io.kubernetes.client.openapi.models.*;
 import io.kubernetes.client.util.ClientBuilder;
 import io.kubernetes.client.util.KubeConfig;
 import io.kubernetes.client.util.Yaml;
@@ -45,7 +27,20 @@ public class CreateServiceImpl implements CreateService {
     public CreateServiceImpl(KubernetesConfigService kubernetesConfigService) {
         this.kubernetesConfigService = kubernetesConfigService;
     }
+    @Override
+    public void createHPAFromYaml(String yamlContent) throws IOException, ApiException {
+        kubernetesConfigService.configureKubernetesAccess();
+        AutoscalingV1Api api = new AutoscalingV1Api();
 
+        V1HorizontalPodAutoscaler yamlHPA = (V1HorizontalPodAutoscaler) Yaml.load(yamlContent);
+        if (yamlHPA.getMetadata() != null && yamlHPA.getMetadata().getNamespace() != null) {
+            String namespace = yamlHPA.getMetadata().getNamespace();
+            api.createNamespacedHorizontalPodAutoscaler(namespace, yamlHPA, null,null, null, null);
+            System.out.println("The HPA is created successfully!");
+        } else {
+            System.out.println("Namespace not found in YAML content");
+        }
+    }
     //Pod Creation
     
     @Override

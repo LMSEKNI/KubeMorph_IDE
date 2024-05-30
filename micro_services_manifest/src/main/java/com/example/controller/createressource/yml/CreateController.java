@@ -95,7 +95,11 @@ public class CreateController {
             else if ("StorageClass".equals(kind)) {
                 CreateService.createStorageClassFromYaml(yamlContent);
                 return ResponseEntity.ok("StorageClass created successfully from YAML");
-            } 
+            }
+            else if ("HorizontalPodAutoscaler".equals(kind)) {
+                CreateService.createHPAFromYaml(yamlContent);
+                return ResponseEntity.ok("HPA created successfully from YAML");
+            }
             else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Unsupported resource kind: " + kind);
             }

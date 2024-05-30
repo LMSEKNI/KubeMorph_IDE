@@ -11,7 +11,7 @@ export class DesccComponent implements OnInit {
   @Input() resourceType: string | null = null;
 
   resourceDetails: { title: string, description: string }[] = [];
-  errorMessage: string = '';
+  errorMessage = '';
   isFrameOpen: boolean = false;
 
   constructor(private descServiceService: DesccService) { }

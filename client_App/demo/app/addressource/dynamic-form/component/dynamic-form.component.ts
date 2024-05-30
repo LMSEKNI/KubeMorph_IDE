@@ -30,7 +30,7 @@ export class DynamicFormComponent implements OnInit {
     form: true,
     output: true
   };
- 
+
   formActive = false;
   jsonFormSchema: string;
   jsonFormValid = false;
@@ -55,14 +55,14 @@ export class DynamicFormComponent implements OnInit {
     autoScrollEditorIntoView: true,
   };
   @ViewChild(MatMenuTrigger, { static: true }) menuTrigger: MatMenuTrigger;
- 
+
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
     private CreateResourceService: CreateressourceformService // Inject the CreateResourceService
   ) { }
   showRouteSelection: boolean = false;
- 
+
   toggleRouteSelection() {
     this.showRouteSelection = !this.showRouteSelection;
   }
@@ -74,7 +74,7 @@ export class DynamicFormComponent implements OnInit {
           this.selectedSet = params['set'];
           this.selectedSetName = ({
             'ng-jsf': '',
- 
+
           })[this.selectedSet];
         }
         if (params['example']) {
@@ -89,7 +89,6 @@ export class DynamicFormComponent implements OnInit {
       }
     );
   }
- 
   onSubmit(data: any) {
     // Send the form data to the backend service
     this.CreateResourceService.createResource(data).subscribe(
@@ -101,27 +100,27 @@ export class DynamicFormComponent implements OnInit {
       }
     );
   }
- 
+
   get prettySubmittedFormData() {
     return JSON.stringify(this.submittedFormData, null, 2);
   }
- 
+
   onChanges(data: any) {
     this.liveFormData = data;
   }
- 
+
   get prettyLiveFormData() {
     return JSON.stringify(this.liveFormData, null, 2);
   }
- 
+
   isValid(isValid: boolean): void {
     this.formIsValid = isValid;
   }
- 
+
   validationErrors(data: any): void {
     this.formValidationErrors = data;
   }
- 
+
   get prettyValidationErrors() {
     if (!this.formValidationErrors) { return null; }
     const errorArray = [];
@@ -141,7 +140,7 @@ export class DynamicFormComponent implements OnInit {
     }
     return errorArray.join('<br>');
   }
- 
+
   loadSelectedExample(
     selectedSet: string = this.selectedSet,
     selectedSetName: string = this.selectedSetName,
@@ -168,18 +167,18 @@ export class DynamicFormComponent implements OnInit {
         this.generateForm(this.jsonFormSchema);
       });
   }
- 
+
   //loadSelectedLanguage() {
   // window.location.href = `${window.location.pathname}?set=${this.selectedSet}&example=${this.selectedExample}&framework=${this.selectedFramework}&language=${this.selectedLanguage}`;
   // }
- 
+
   generateForm(newFormString: string) {
     if (!newFormString) { return; }
     this.jsonFormStatusMessage = 'Loading form...';
     this.formActive = false;
     this.liveFormData = {};
     this.submittedFormData = null;
- 
+
     try {
       this.jsonFormObject = JSON.parse(newFormString);
       this.jsonFormValid = true;
@@ -200,11 +199,11 @@ export class DynamicFormComponent implements OnInit {
     }
     this.formActive = true;
   }
- 
+
   toggleVisible(item: string) {
     this.visible[item] = !this.visible[item];
   }
- 
+
   toggleFormOption(option: string) {
     if (option === 'feedback') {
       this.jsonFormOptions.defautWidgetOptions.feedback =

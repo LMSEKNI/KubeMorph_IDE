@@ -10,10 +10,8 @@ import {MonitoringConfigComponent} from './monitoring-config/monitoring-config.c
 import {MonitoringChoiceComponent} from './monitoring-choice/monitoring-choice.component';
 
 export const routes: Route[] = [
-  { path: '', component: DemoComponent,
-    children: []},
+  { path: '' , component: ListComponent},
   { path: 'descressource', component: DesccComponent},
-  { path: 'listressource' , component: ListComponent},
   { path: 'create-ymlfile' , component: YmlFileComponent},
   { path: 'create-dynamicform' , component: DynamicFormComponent},
   { path: 'welcome' , component: WelcomeInterfaceComponent},

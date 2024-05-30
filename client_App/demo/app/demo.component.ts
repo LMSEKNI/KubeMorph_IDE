@@ -27,23 +27,17 @@ import { JsonPointer } from '@ajsf/core';
 })
 export class DemoComponent {
 
-  constructor(private router: Router) { } 
-  
+  constructor(private router: Router) { }
   buttonText = '+';
   showChoices = false;
   selectedChoice: string | null = null;
-
- 
   selectChoice(choice: string) {
     this.selectedChoice = choice;
     console.log('Selected choice:', choice);
-    
     if (choice === 'Yml File') {
-      this.router.navigate(['/create-ymlfile']); 
+      this.router.navigate(['/create-ymlfile']);
     }if (choice === 'Form') {
       this.router.navigate(['/create-dynamicform']);
     }
-
-
-    }
+  }
 }
