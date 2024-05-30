@@ -1,0 +1,63 @@
+<div class="demo-page-header">
+  <mat-toolbar class="mat-elevation-z4 mat-medium" color="primary" style="height: 120px; display: flex; justify-content: space-between; align-items: center;">
+    <div> <!-- Left Content -->
+      <a style="font-family: serif; font-size: x-large;">Welcome </a>
+    </div>
+    <div> <!-- Center Content -->
+      <a style="font-family: serif; font-size: xx-large;">KubeMorph</a>
+    </div>
+    <div> <!-- Right Content -->
+      <img src="./assets/images/logo1.png" alt="logo" style="width: 150; height: 110px;">
+    </div>
+  </mat-toolbar>
+
+  <div class="character-welcome-container">
+    <div class="character-welcome">
+      <div class="character-text">
+        <div class="speech-bubble">
+          <h1>HELLO, I will take it from here!</h1>
+          <p>I will need you to help me prepare your cluster to collect metrics, we can configure it to enable
+            <strong>metrics-server for that we need to execute some commands in your cluster:</strong></p>
+          <div class="guide">
+            <h2>Step-by-Step Guide</h2>
+
+            <h3>1. Clone the Metrics-Server Repository</h3>
+            <p>First, you need to clone the official metrics-server repository to get the necessary deployment files.</p>
+            <pre><code>git clone https://github.com/kubernetes-sigs/metrics-server.git
+ cd metrics-server</code></pre>
+
+            <h3>2. Deploy the Metrics-Server</h3>
+            <p>Kubernetes provides a default deployment configuration that you can use directly.</p>
+            <pre><code>kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml</code></pre>
+
+            <h3>3. Verify Installation</h3>
+            <p>Ensure that the metrics-server pods are running correctly.</p>
+            <pre><code>kubectl get pods -n kube-system</code></pre>
+            <p>Look for <code>metrics-server</code> in the list. You should see one or more metrics-server pods running.</p>
+
+            <h3>4. Modify Deployment (Optional)</h3>
+            <p>If you're running a custom Kubernetes cluster or facing issues like TLS certificate errors, you might need to modify the deployment configuration. Edit the <code>components.yaml</code> to add the following arguments under the <code>containers.args</code> section of the <code>metrics-server</code> deployment:</p>
+            <pre><code>- --kubelet-insecure-tls
+- --kubelet-preferred-address-types=InternalIP,Hostname,InternalDNS,ExternalDNS,ExternalIP</code></pre>
+            <p>Apply the modified configuration:</p>
+            <pre><code>kubectl apply -f components.yaml</code></pre>
+
+            <h2>If you are Using Minikube</h2>
+
+            <h4>Deploy Metrics Server </h4>
+            <p>By default, the metrics server is not installed in the Minikube environment. You can deploy the metrics server by running the following command:</p>
+            <pre><code>minikube addons enable metrics-server</code></pre>
+
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+      <div class="character-image">
+        <img src="./assets/images/a2.png" alt="Welcoming Character">
+      </div>
+    <button class="button" mat-raised-button color="primary" routerLink="/listressource">Next</button>
+    </div>
+  </div>
+

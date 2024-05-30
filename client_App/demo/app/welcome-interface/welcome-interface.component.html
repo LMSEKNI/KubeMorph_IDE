@@ -1,0 +1,36 @@
+<div class="demo-page-header">
+  <mat-toolbar class="mat-elevation-z4 mat-medium" color="primary" style="height: 120px; display: flex; justify-content: space-between; align-items: center;">
+    <div> <!-- Left Content -->
+      <a style="font-family: serif; font-size: x-large;">Welcome </a>
+    </div>
+    <div> <!-- Center Content -->
+      <a style="font-family: serif; font-size: xx-large;">KubeMorph</a>
+    </div>
+    <div> <!-- Right Content -->
+      <img src="./assets/images/logo1.png" alt="logo" style="width: 150; height: 110px;">
+    </div>
+  </mat-toolbar>
+
+  <div class="character-welcome-container">
+    <div class="character-welcome">
+      <div class="character-image">
+        <img src="./assets/images/a1.png" alt="Welcoming Character">
+      </div>
+      <div class="character-text">
+        <div class="speech-bubble">
+          <h1>Welcome to the KubeMorph IDE!</h1>
+          <p>I am here to set you up so you can use the IDE, I will be taking you through an overview of the IDE. <strong>ARE YOU READY?</strong></p>
+          <p>The KubeMorph IDE is a human-based IDE for Kubernetes, designed to make it easier for developers and DevOps engineers to manage and deploy their applications on Kubernetes clusters. With its intuitive interface and powerful features, you'll be able to streamline your Kubernetes workflows and focus on what really matters - building great software.</p>
+            <ul>
+              <li>I will take you through a quick configuration step</li>
+              <li>I need to personalize your experience as much as possible</li>
+              <li>LET'S GO !</li>
+            </ul>
+
+
+          <button class="get-started-btn" [routerLink]="['/config']">Get Started</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
