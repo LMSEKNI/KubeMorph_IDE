@@ -29,6 +29,7 @@ import { YmlFileUpdateComponent } from './updateressource/yml-file-update/yml-fi
 import { DynamicFormUpdateComponent } from './updateressource/dynamic-form-update/dynamic-form-update.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatChipsModule } from '@angular/material/chips';
+import { ExecTerminalComponent } from './exec-terminal/exec-terminal.component';
 
 
 @NgModule({
@@ -41,6 +42,7 @@ import { MatChipsModule } from '@angular/material/chips';
                   DynamicFormComponent,
                   YmlFileUpdateComponent,
                   DynamicFormUpdateComponent,
+                  ExecTerminalComponent,
                   ],
   imports: [
     BrowserModule, BrowserAnimationsModule, FlexLayoutModule, FormsModule, MatChipsModule,

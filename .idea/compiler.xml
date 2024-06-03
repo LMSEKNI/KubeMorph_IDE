@@ -10,16 +10,22 @@
         <module name="runtimeManagement" />
         <module name="micro_services_kube" />
         <module name="discovry" />
+        <module name="Helm" />
         <module name="gateway" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="Helm" target="17" />
+      <module name="apiGateway" target="17" />
+      <module name="configServer" target="17" />
+      <module name="discovery" target="1.5" />
+      <module name="monitoring" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Helm" options="-parameters" />
       <module name="config-server" options="-parameters" />
+      <module name="discovery" options="" />
       <module name="discovry" options="-parameters" />
       <module name="gateway" options="-parameters" />
       <module name="micro_services_kube" options="-parameters" />
