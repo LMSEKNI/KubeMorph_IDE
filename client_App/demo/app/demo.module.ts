@@ -30,8 +30,10 @@ import { DynamicFormUpdateComponent } from './updateressource/dynamic-form-updat
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatChipsModule } from '@angular/material/chips';
 import { WelcomeInterfaceComponent } from './welcome-interface/welcome-interface.component';
-import { MonitoringConfigComponent } from './monitoring-config/monitoring-config.component';
-import { MonitoringChoiceComponent } from './monitoring-choice/monitoring-choice.component';
+import { MonitoringConfigComponent } from './monitoring-validate/monitoring-config.component';
+import { MonitoringChoiceComponent } from './monitoring-metrics/monitoring-choice.component';
+import { MonitoringPrometheusComponent } from './monitoring-prometheus/monitoring-prometheus.component';
+import { PopupComponent } from './welcome-interface/popUp/popup/popup.component';
 
 
 @NgModule({
@@ -47,6 +49,8 @@ import { MonitoringChoiceComponent } from './monitoring-choice/monitoring-choice
                   WelcomeInterfaceComponent,
                   MonitoringConfigComponent,
                   MonitoringChoiceComponent,
+                  MonitoringPrometheusComponent,
+                  PopupComponent,
                   ],
   imports: [
     BrowserModule, BrowserAnimationsModule, FlexLayoutModule, FormsModule, MatChipsModule,

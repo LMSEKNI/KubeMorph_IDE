@@ -34,7 +34,8 @@ public class MetricsController {
     }
 
     @GetMapping("/prometheus")
-    public String getPrometheusMetrics() throws ApiException {
-        return prometheusMetricsService.getMetrics();
+    public void getPrometheusMetrics() throws ApiException {
+        prometheusMetricsService.setupMonitoringStack();
+
     }
 }

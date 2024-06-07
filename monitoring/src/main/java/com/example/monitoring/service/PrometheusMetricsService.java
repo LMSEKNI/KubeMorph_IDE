@@ -5,15 +5,14 @@ import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.Configuration;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
+import io.kubernetes.client.openapi.models.V1Service;
 import io.kubernetes.client.util.Config;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,7 +22,6 @@ public class PrometheusMetricsService {
 
     private final CoreV1Api api;
     private final PrometheusConfiguration prometheusConfig;
-    private final RestTemplate restTemplate;
 
     @Autowired
     public PrometheusMetricsService(PrometheusConfiguration prometheusConfig) throws IOException {
@@ -31,25 +29,38 @@ public class PrometheusMetricsService {
         Configuration.setDefaultApiClient(client);
         this.api = new CoreV1Api();
         this.prometheusConfig = prometheusConfig;
-        this.restTemplate = new RestTemplate();
     }
 
-    public String getMetrics() {
-        String url = prometheusConfig.getPrometheusURL() + "/api/v1/query";
-        String query = "up"; // Example query
-        String queryUrl = url + "?query=" + query;
-
+    public void setupMonitoringStack() {
         try {
-            ResponseEntity<String> response = restTemplate.getForEntity(queryUrl, String.class);
-            if (response.getStatusCode() == HttpStatus.OK) {
-                return response.getBody();
-            } else {
-                logger.log(Level.SEVERE, "Failed to get metrics: HTTP " + response.getStatusCode());
-                return "Error: Failed to get metrics from Prometheus";
-            }
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Exception while fetching metrics", e);
-            return "Error: Exception while fetching metrics from Prometheus";
+            //Add the Dashboard configmap
+            runCommand("kubectl create configmap -n monitoring grafana-dashboard-configmap --from-file=monitoring/src/main/resources/grafanaDashboard.json");
+            // Install Prometheus with custom values
+            runCommand("helm install -n monitoring prometheus prometheus-community/prometheus -f monitoring/src/main/resources/prometheus-values.yaml");
+            // Install Grafana with custom values
+            runCommand("helm install -n monitoring grafana grafana/grafana -f monitoring/src/main/resources/values.yaml");
+
+        } catch (IOException | InterruptedException e) {
+            logger.log(Level.SEVERE, "Error while setting up monitoring stack", e);
         }
     }
+
+    private String runCommand(String command) throws IOException, InterruptedException {
+        ProcessBuilder processBuilder = new ProcessBuilder("bash", "-c", command);
+        processBuilder.redirectErrorStream(true);
+        Process process = processBuilder.start();
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        StringBuilder output = new StringBuilder();
+        String line;
+
+        while ((line = reader.readLine()) != null) {
+            output.append(line).append("\n");
+        }
+
+        process.waitFor();
+        return output.toString();
+    }
+
+
 }

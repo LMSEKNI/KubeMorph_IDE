@@ -92,3 +92,32 @@
 .dropdown-menu button:hover {
   background: #f0f0f0;
 }
+.custom-color.existing-button {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+}
+
+.configure-button {
+  position: fixed;
+  bottom: 16px;
+  right: 1800px;
+  background-color: #ff9607; /* You can change the color as needed */
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.button-logo {
+  width: 55px;  /* Adjust size as needed */
+  height: 40px; /* Adjust size as needed */
+}
+
+.configure-button:hover {
+  background-color: #8a7203;
+}
+

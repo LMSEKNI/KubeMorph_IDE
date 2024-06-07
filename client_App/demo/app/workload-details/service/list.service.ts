@@ -7,11 +7,11 @@ import { Observable } from 'rxjs';
 })
 export class ListtService {
 
-  private baseUrl = 'http://localhost:8080/api/list'; 
+  private baseUrl = 'http://localhost:8080/api/list';
 
   constructor(private http: HttpClient) { }
 
-  
+
   getAllPods(): Observable<string[]> {
     return this.http.get<string[]>(`${this.baseUrl}/pods`);
   }
@@ -58,4 +58,5 @@ export class ListtService {
   getAllPersistentVolumes(): Observable<string[]> {
     return this.http.get<string[]>(`${this.baseUrl}/persistentvolume`);
   }
+
 }

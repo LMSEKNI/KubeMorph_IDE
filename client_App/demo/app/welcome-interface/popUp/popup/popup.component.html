@@ -1,0 +1,32 @@
+<div class="demo-page-header">
+  <mat-toolbar class="mat-elevation-z4 mat-medium" color="primary" style="height: 120px; display: flex; justify-content: space-between; align-items: center;">
+    <div> <!-- Left Content -->
+      <a style="font-family: serif; font-size: x-large;">Welcome </a>
+    </div>
+    <div> <!-- Center Content -->
+      <a style="font-family: serif; font-size: xx-large;">KubeMorph</a>
+    </div>
+    <div> <!-- Right Content -->
+      <img src="./assets/images/logo1.png" alt="logo" style="width:150px; height: 110px;">
+    </div>
+  </mat-toolbar>
+
+  <div class="character-welcome-container">
+    <div class="character-welcome">
+      <div class="character-image">
+        <img src="./assets/images/a1.png" alt="Welcoming Character">
+      </div>
+      <div class="character-text">
+        <div class="speech-bubble">
+          <h1>Do you want to monitor your resources?</h1>
+          <p>In order to be able to monitor you resources we will suggest two approaches for you <strong>ARE YOU IN?</strong></p>
+        </div>
+        <div class="speech-bubble-footer">
+          <button class="yes-button" routerLink="/prometheus">YES, i will need Prometheus and Grafana</button>
+          <button class="yes-button" routerLink="/config-monitoring">YES, i will need Kube_Metrics</button>
+          <button class="no-button" routerLink="/">No,I don't need monitoring</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

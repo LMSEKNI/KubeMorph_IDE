@@ -582,4 +582,8 @@ export class ListComponent implements OnInit {
     toggleChecklist() {
       this.showChecklist = !this.showChecklist;
     }
-  }
+
+
+
+
+}
