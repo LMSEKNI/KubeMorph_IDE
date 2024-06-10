@@ -1,116 +1,113 @@
 import {AfterViewInit, Component, NgZone, OnDestroy, OnInit} from '@angular/core';
-import { Terminal } from 'xterm';
 import {Subscription} from 'rxjs';
 import { ExecServiceService} from './service/exec-service.service';
+import {Terminal} from 'xterm';
+import * as xterm from 'xterm';
+import {FormBuilder, FormGroup} from '@angular/forms';
 @Component({
   selector: 'app-exec-terminal',
   templateUrl: './exec-terminal.component.html',
   styleUrls: ['./exec-terminal.component.scss']
 })
-export class ExecTerminalComponent implements OnInit, AfterViewInit, OnDestroy {
-
-  terminal: Terminal;
+export class ExecTerminalComponent implements OnInit, OnDestroy {
+  execForm: FormGroup;
+  private terminal: Terminal;
+  private commandQueue: string[] = [];
+  private commandInProgress = false;
   private outputSubscription: Subscription;
-  private errorSubscription: Subscription;
 
-  constructor(
-    private zone: NgZone,
-    // private ExecServiceService: KubernetesDataService
-
-  ) { }
-
-  ngOnInit() {
-    // Additional initialization logic if needed
+  constructor(private fb: FormBuilder, private execService: ExecServiceService) {
+    this.execForm = this.fb.group({
+      namespace: ['default'],
+      podName: ['my-grafana-d49f7477-qxcr5'],
+      containerName: ['grafana'],
+      command: ['']
+    });
   }
 
-  ngAfterViewInit(): void {
-    requestAnimationFrame(() => {
-      setTimeout(() => {
-        if (!this.terminal) {
-          this.initTerminal();
-        }
-      });
+  ngOnInit(): void {
+    this.terminal = new Terminal({
+      cursorBlink: true,
+      theme: {
+        background: '#000000',
+        foreground: '#ffffff'
+      }
     });
+    this.terminal.open(document.getElementById('terminal'));
+
+    this.terminal.onData(e => this.handleTerminalInput(e)); // Attach listener for user input
   }
 
   ngOnDestroy(): void {
-    // Cleanup resources when component is destroyed
+    this.terminal.dispose();
     if (this.outputSubscription) {
       this.outputSubscription.unsubscribe();
     }
-    if (this.errorSubscription) {
-      this.errorSubscription.unsubscribe();
-    }
-    if (this.terminal) {
-      this.terminal.dispose(); // Dispose the terminal instance
-      const element = document.getElementById('terminal');
-      if (element) {
-        element.innerHTML = ''; // Remove any associated DOM elements
+  }
+
+  executeCommand(): void {
+    const { namespace, podName, containerName, command } = this.execForm.value;
+    this.sendCommand(namespace, podName, containerName, command);
+  }
+
+  private handleTerminalInput(data: string): void {
+    if (data === '\r') { // Enter key
+      const fullCommand = this.commandQueue.join('');
+      this.commandQueue = [];
+      this.execForm.get('command').setValue(''); // Clear the form command field
+      this.sendCommand(
+        this.execForm.value.namespace,
+        this.execForm.value.podName,
+        this.execForm.value.containerName,
+        fullCommand
+      );
+    } else if (data === '\u007F' || data === '\u0008') { // Handle backspace
+      if (this.commandQueue.length > 0) {
+        this.terminal.write('\b \b'); // Clear the character from terminal visually
+        this.commandQueue.pop();
       }
-    }
-  }
-
-  public initTerminal(): void {
-    this.terminal = new Terminal({
-      cursorBlink: true,
-      cursorStyle: 'block',
-      drawBoldTextInBrightColors: true,
-      cursorInactiveStyle: 'underline',
-    });
-
-    const element = document.getElementById('terminal');
-    if (element) {
-      this.terminal.open(element);
-      this.fetchCachedSessionData();
-      this.setupTerminalInput();
-      this.setupTerminalOutput();
-      this.setupTerminalError();
-      // tslint:disable-next-line:max-line-length
-      this.sendKubernetesShellRequest('your-pod', 'your-namespace'); // Replace with actual pod and namespace
     } else {
-      console.error('Element not found:', 'terminal');
+      this.terminal.write(data); // Echo the input in the terminal
+      this.commandQueue.push(data);
     }
   }
 
-  private setupTerminalInput(): void {
-    this.terminal.onData(data => {
-      // Handle terminal input...
-      // tslint:disable-next-line:max-line-length
-      // this.kubernetesDataService.sendInput(data, 'your-pod', 'your-namespace'); // Replace with actual pod and namespace
-    });
-  }
-
-  private setupTerminalOutput(): void {
-    // tslint:disable-next-line:max-line-length
-    /*this.outputSubscription = this.kubernetesDataService.listenForOutput('your-podyour-namespace') // Adjust as needed
-      .subscribe(output => {
-        console.log('Received terminal output:', output);
-        this.zone.run(() => {
-          this.terminal.write(output);
+  private sendCommand(namespace: string, podName: string, containerName: string, command: string): void {
+    if (this.commandInProgress) {
+      this.terminal.write('\r\nCommand in progress. Please wait...\r\n');
+      return;
+    }
+    this.commandInProgress = true;
+    this.outputSubscription = this.execService.executeCommand(namespace, podName, containerName, command).subscribe(
+      (response) => {
+        // @ts-ignore
+        const lines = response.split('\n'); // Split response into lines
+        lines.forEach(line => {
+          this.terminal.write('\r\n'+ line); // Write each line to the terminal
         });
-      });*/
-  }
 
-  private setupTerminalError(): void {
-    /*this.errorSubscription = this.kubernetesDataService.listenForError()
-      .subscribe(error => {
-        this.zone.run(() => {
-          this.terminal.writeln(`Error: ${error}`);
+        //this.terminal.write('\n' + response + '\n');
+        this.commandInProgress = false;
+      },
+      (error: any ) => {
+        this.terminal.write('\r\nError: ' + error.message + '\r\n');
+        this.commandInProgress = false;
+      }
+    );
+  }
+  getPodLogs(): void {
+    const { namespace, podName } = this.execForm.value;
+    this.execService.getPodLogs(namespace, podName).subscribe(
+      (response) => {
+        const lines = response.split('\n');
+        lines.forEach(line => {
+          this.terminal.write('\r\n' + line);
         });
-      });*/
+      },
+      (error) => {
+        this.terminal.write('\r\nError: ' + error.message + '\r\n');
+      }
+    );
   }
 
-  private fetchCachedSessionData(): void {
-    // tslint:disable-next-line:max-line-length
-    /*this.kubernetesDataService.getCachedSessionData('your-namespace', 'your-pod') // Replace with actual pod and namespace
-      .subscribe(serializedData => {
-        const sessionData = JSON.parse(serializedData);
-        console.log('log data: ', serializedData);
-        this.terminal.write(sessionData);
-      });*/
-  }
-
-  private sendKubernetesShellRequest(pod: string, namespace: string): void {
-    // this.kubernetesDataService.startShell(namespace, pod);
-  }
 }

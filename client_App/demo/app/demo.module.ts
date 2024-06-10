@@ -20,7 +20,7 @@ import { Bootstrap4FrameworkModule } from '@ajsf/bootstrap4';
 import { Bootstrap3FrameworkModule } from '@ajsf/bootstrap3';
 import { MaterialDesignFrameworkModule } from '@ajsf/material';
 import { YmlFileComponent } from './addressource/yml-file/yml-file.component';
-// import { MatDrawerModule } from '@angular/material/drawer';
+import { NgTerminalModule } from 'ng-terminal';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { ListComponent } from './workload-details/list/list.component';
 import { DesccComponent } from './workload-details/descc/descc.component';
@@ -43,6 +43,7 @@ import { ExecTerminalComponent } from './exec-terminal/exec-terminal.component';
                   YmlFileUpdateComponent,
                   DynamicFormUpdateComponent,
                   ExecTerminalComponent,
+
                   ],
   imports: [
     BrowserModule, BrowserAnimationsModule, FlexLayoutModule, FormsModule, MatChipsModule,
@@ -53,7 +54,7 @@ import { ExecTerminalComponent } from './exec-terminal/exec-terminal.component';
     Bootstrap3FrameworkModule,
     MaterialDesignFrameworkModule,
     JsonSchemaFormModule,
-    ReactiveFormsModule, MatSidenavModule
+    ReactiveFormsModule, MatSidenavModule,NgTerminalModule
   ],
   bootstrap: [DemoRootComponent]
 })
