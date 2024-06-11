@@ -107,7 +107,34 @@ export class ListComponent implements OnInit {
     showYaml = false;
     selectedComponent = 'desc';
     selectedChoice: string | null = null;
-    selectChoice(choice: string) {
+    //////
+  public showTerminal = false;
+  public showTerminalContent= false;
+
+  public showLogs = false;
+  public showLogsContent= false;
+
+  toggleTerminal(): void {
+    this.showTerminal = !this.showTerminal;
+    this.showTerminalContent = !this.showTerminalContent;
+    if (this.showTerminal) {
+      this.showLogs = false;
+      this.showLogsContent = false;
+    }
+    this.closeFrame();
+  }
+
+  toggleLog(): void {
+    this.showLogs = !this.showLogs;
+    this.showLogsContent = !this.showLogsContent;
+    if (this.showLogs) {
+      this.showTerminal = false;
+      this.showTerminalContent = false;
+    }
+    this.closeFrame();
+  }
+
+  selectChoice(choice: string) {
       this.selectedChoice = choice;
       console.log('Selected choice:', choice);
       if (choice === 'Yml File') {
@@ -203,7 +230,6 @@ export class ListComponent implements OnInit {
 
   onNodeClick(properties: any): void {
     const selectedNodes = this.network.getSelectedNodes();
-
     if (selectedNodes.length === 0) {
       return;
     }
@@ -214,11 +240,11 @@ export class ListComponent implements OnInit {
         this.selectedResource = node.options.title;
         // const labelParts = node.options.label.split(':');
         // const resourceType = labelParts[0].trim().toLowerCase(); // Extracted resource type
+      console.log("nifhemmmm", node.options.nodes);
 
-
-        const labelParts = node.options.label.split(':');
+      const labelParts = node.options.label.split(':');
         if (labelParts.length !== 2) {
-            console.error('Invalid label format:', node.options.label);
+            console.error('Invalid label format:', node.options.value);
             return;
         }
 

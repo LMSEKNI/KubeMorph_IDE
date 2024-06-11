@@ -1,31 +1,44 @@
-import {AfterViewInit, Component, NgZone, OnDestroy, OnInit} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  NgZone,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import {Subscription} from 'rxjs';
 import { ExecServiceService} from './service/exec-service.service';
 import {Terminal} from 'xterm';
-import * as xterm from 'xterm';
-import {FormBuilder, FormGroup} from '@angular/forms';
+
 @Component({
   selector: 'app-exec-terminal',
   templateUrl: './exec-terminal.component.html',
   styleUrls: ['./exec-terminal.component.scss']
 })
-export class ExecTerminalComponent implements OnInit, OnDestroy {
-  execForm: FormGroup;
-  private terminal: Terminal;
+export class ExecTerminalComponent implements OnInit, OnDestroy,AfterViewInit {
+  @Input() resourceName: string | null = null;
+  @Input() resourceType: string | null = null;
+  @ViewChild('terminalElement', { static: true }) terminalElement!: ElementRef;
+
+  protected terminal: Terminal;
   private commandQueue: string[] = [];
   private commandInProgress = false;
   private outputSubscription: Subscription;
 
-  constructor(private fb: FormBuilder, private execService: ExecServiceService) {
-    this.execForm = this.fb.group({
-      namespace: ['default'],
-      podName: ['my-grafana-d49f7477-qxcr5'],
-      containerName: ['grafana'],
-      command: ['']
-    });
+  constructor(private execService: ExecServiceService) {
+  }
+  ngAfterViewInit(): void {
+    if (this.terminalElement) {
+      this.terminal.open(this.terminalElement.nativeElement);
+    }
+  }
+  ngOnInit(): void {
+    this.initializeTerminal();
   }
 
-  ngOnInit(): void {
+  private initializeTerminal(): void {
     this.terminal = new Terminal({
       cursorBlink: true,
       theme: {
@@ -33,9 +46,9 @@ export class ExecTerminalComponent implements OnInit, OnDestroy {
         foreground: '#ffffff'
       }
     });
-    this.terminal.open(document.getElementById('terminal'));
-
-    this.terminal.onData(e => this.handleTerminalInput(e)); // Attach listener for user input
+    //this.terminal.open(this.terminalElement?.nativeElement);
+    this.displayResourceName();
+    this.terminal.onData(e => this.handleTerminalInput(e));
   }
 
   ngOnDestroy(): void {
@@ -45,69 +58,69 @@ export class ExecTerminalComponent implements OnInit, OnDestroy {
     }
   }
 
-  executeCommand(): void {
-    const { namespace, podName, containerName, command } = this.execForm.value;
-    this.sendCommand(namespace, podName, containerName, command);
+  executeCommand(command: string): void {
+    if (!command) return;
+    //console.log(`Command to execute: ${command}`);
+    this.commandQueue.push(command);
+    this.sendCommand(this.resourceName, command);
   }
 
-  private handleTerminalInput(data: string): void {
+  handleTerminalInput(data: string): void {
     if (data === '\r') { // Enter key
       const fullCommand = this.commandQueue.join('');
       this.commandQueue = [];
-      this.execForm.get('command').setValue(''); // Clear the form command field
-      this.sendCommand(
-        this.execForm.value.namespace,
-        this.execForm.value.podName,
-        this.execForm.value.containerName,
-        fullCommand
-      );
-    } else if (data === '\u007F' || data === '\u0008') { // Handle backspace
+      this.terminal.write('\r\n'); // Move to a new line
+      this.sendCommand(this.resourceName, fullCommand);
+    } else if (data === '\u007F' || data === '\u0008') {
       if (this.commandQueue.length > 0) {
-        this.terminal.write('\b \b'); // Clear the character from terminal visually
+        this.terminal.write('\b \b');
         this.commandQueue.pop();
       }
     } else {
-      this.terminal.write(data); // Echo the input in the terminal
+      this.terminal.write(data);
       this.commandQueue.push(data);
     }
   }
 
-  private sendCommand(namespace: string, podName: string, containerName: string, command: string): void {
+  displayResourceName(): void {
+    if (this.resourceName) {
+      this.terminal.write(`\x1b[32m${this.resourceName}\x1b[0m $ `);
+    }
+  }
+
+  private sendCommand(resourceName: string | null, command: string): void {
+    if (!resourceName) {
+      this.terminal.write('\r\nResource name is required.\r\n');
+      return;
+    }
     if (this.commandInProgress) {
       this.terminal.write('\r\nCommand in progress. Please wait...\r\n');
       return;
     }
-    this.commandInProgress = true;
-    this.outputSubscription = this.execService.executeCommand(namespace, podName, containerName, command).subscribe(
-      (response) => {
-        // @ts-ignore
-        const lines = response.split('\n'); // Split response into lines
-        lines.forEach(line => {
-          this.terminal.write('\r\n'+ line); // Write each line to the terminal
-        });
 
-        //this.terminal.write('\n' + response + '\n');
-        this.commandInProgress = false;
-      },
-      (error: any ) => {
-        this.terminal.write('\r\nError: ' + error.message + '\r\n');
-        this.commandInProgress = false;
-      }
-    );
-  }
-  getPodLogs(): void {
-    const { namespace, podName } = this.execForm.value;
-    this.execService.getPodLogs(namespace, podName).subscribe(
+    console.log(`Sending command: ${command} to resource: ${resourceName}`);
+
+    this.commandInProgress = true;
+    this.outputSubscription = this.execService.executeCommand(resourceName, command).subscribe(
       (response) => {
+        console.log(`Received response: ${response}`);
+        //@ts-ignore
         const lines = response.split('\n');
         lines.forEach(line => {
           this.terminal.write('\r\n' + line);
         });
+        this.commandInProgress = false;
+        this.terminal.write('\r\n');
+        this.displayResourceName();
       },
-      (error) => {
+      (error: any) => {
         this.terminal.write('\r\nError: ' + error.message + '\r\n');
+        this.commandInProgress = false;
+        this.terminal.write('\r\n');  // Move to a new line after error message
+        this.displayResourceName();  // Display resource name prompt
       }
     );
   }
+
 
 }

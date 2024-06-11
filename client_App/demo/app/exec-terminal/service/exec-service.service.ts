@@ -10,11 +10,9 @@ export class ExecServiceService {
   private baseUrl = '/api/runtime';
 
   constructor(private http: Http) { }
-  executeCommand(namespace: string, podName: string, containerName: string, command: string) {
+  executeCommand( podName: string, command: string) {
     const requestBody = {
-      namespace: namespace,
       podName: podName,
-      containerName: containerName,
       command: command
     };
     // @ts-ignore

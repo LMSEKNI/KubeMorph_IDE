@@ -30,6 +30,9 @@ import { DynamicFormUpdateComponent } from './updateressource/dynamic-form-updat
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatChipsModule } from '@angular/material/chips';
 import { ExecTerminalComponent } from './exec-terminal/exec-terminal.component';
+import { LogTerminalComponent } from './log-terminal/log-terminal.component';
+import { TerminalTabManagerComponent } from './terminal-tab-manager/terminal-tab-manager.component';
+import {MatTabsModule} from '@angular/material/tabs';
 
 
 @NgModule({
@@ -43,19 +46,21 @@ import { ExecTerminalComponent } from './exec-terminal/exec-terminal.component';
                   YmlFileUpdateComponent,
                   DynamicFormUpdateComponent,
                   ExecTerminalComponent,
+                  LogTerminalComponent,
+                  TerminalTabManagerComponent,
 
                   ],
-  imports: [
-    BrowserModule, BrowserAnimationsModule, FlexLayoutModule, FormsModule, MatChipsModule,
-    HttpClientModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule,
-    MatIconModule, MatMenuModule, MatSelectModule, MatToolbarModule,
-    RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' }),
-    Bootstrap4FrameworkModule,
-    Bootstrap3FrameworkModule,
-    MaterialDesignFrameworkModule,
-    JsonSchemaFormModule,
-    ReactiveFormsModule, MatSidenavModule,NgTerminalModule
-  ],
+    imports: [
+        BrowserModule, BrowserAnimationsModule, FlexLayoutModule, FormsModule, MatChipsModule,
+        HttpClientModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule,
+        MatIconModule, MatMenuModule, MatSelectModule, MatToolbarModule,
+        RouterModule.forRoot(routes, {relativeLinkResolution: 'legacy'}),
+        Bootstrap4FrameworkModule,
+        Bootstrap3FrameworkModule,
+        MaterialDesignFrameworkModule,
+        JsonSchemaFormModule,
+        ReactiveFormsModule, MatSidenavModule, NgTerminalModule, MatTabsModule
+    ],
   bootstrap: [DemoRootComponent]
 })
 

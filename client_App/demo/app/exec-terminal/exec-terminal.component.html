@@ -1,18 +1,3 @@
-<form [formGroup]="execForm" (ngSubmit)="executeCommand()">
-  <label for="namespace">Namespace:</label>
-  <input id="namespace" formControlName="namespace" type="text">
+<div #terminalElement class="terminal-container"></div>
 
-  <label for="podName">Pod Name:</label>
-  <input id="podName" formControlName="podName" type="text">
-
-  <label for="containerName">Container Name:</label>
-  <input id="containerName" formControlName="containerName" type="text">
-
-  <label for="command">Command:</label>
-  <input id="command" formControlName="command" type="text">
-
-  <button type="submit">Execute</button>
-  <button type="button" (click)="getPodLogs()">Get Pod Logs</button>
-
-</form>
-<div id="terminal" style="width: 100%; height: 400px; background-color: black;"></div>
+<!--<div id="terminal" style="width: 100%; height: 400px; background-color: black;"></div>-->
