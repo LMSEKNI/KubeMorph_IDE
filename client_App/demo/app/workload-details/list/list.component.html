@@ -10,8 +10,7 @@
 
 <div class="search-container">
   <div class="search-wrapper">
-    <input type="text" placeholder="Resources..." (click)="toggleChecklist()">
-
+    <input type="text" placeholder="Search..." (click)="toggleChecklist()">
     <div class="checklist" [@openClose]="showChecklist ? 'open' : 'closed'">
 
       <div >
@@ -85,6 +84,38 @@
       </div>
     </div>
   </div>
+  <div class="icons-container">
+
+    <div class="search-icon">
+      <mat-form-field appearance="fill" class="search-field" [@toggleSearch]="isSearchOpen ? 'open' : 'closed'">
+        <mat-label>Search</mat-label>
+        <input matInput placeholder="Search">
+      <!--  <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearSearch()">
+          <mat-icon>close</mat-icon>
+        </button>-->
+      </mat-form-field>
+      <button mat-icon-button (click)="toggleSearch()">
+        <img src="assets/images/search_24dp_FILL0_wght300_GRAD0_opsz24.svg" alt="Search Icon">
+      </button>
+    </div>
+
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>
+        <span>List Resource</span>
+      </button>
+      <button mat-menu-item disabled>
+        <mat-icon>voicemail</mat-icon>
+        <span>Monotoring</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon>notifications_off</mat-icon>
+        <span>Helm</span>
+      </button>
+    </mat-menu>
+  </div>
 </div>
 <!--
 <div>
@@ -127,6 +158,22 @@
         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
       </svg>
+
+
+
+      <svg (click)="toggleTerminal()" height="24" version="1.1" width="24" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><g transform="translate(0 -1028.4)">
+        <path d="m3 1030.4c-1.1046 0-2 0.9-2 2v7 2 7c0 1.1 0.8954 2 2 2h9 9c1.105 0 2-0.9 2-2v-7-2-7c0-1.1-0.895-2-2-2h-9-9z" fill="#2c3e50"/><path d="m3 1049.4c-1.1046 0-2-0.9-2-2v-7-2-3h22v3 2 7c0 1.1-0.895 2-2 2h-9-9z" fill="#34495e"/>
+        <path d="m4 1032.9v1.1l2 2.4-2 2.3v1.1l3-3.4-3-3.5z" fill="#ecf0f1"/>
+        <path d="m3 2c-1.1046 0-2 0.8954-2 2v7 2 3h22v-3-2-7c0-1.1046-0.895-2-2-2h-9-9z" fill="#34495e" transform="translate(0 1028.4)"/><path d="m4 5.125v1.125l3 1.75-3 1.75v1.125l5-2.875-5-2.875zm5 4.875v1h5v-1h-5z" fill="#ecf0f1" transform="translate(0 1028.4)"/></g>
+      </svg>
+
+      <svg (click)="toggleLog()" height="24" version="1.1" width="24" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><g transform="translate(0 -1028.4)">
+        <path d="m5 1030.4c-1.1046 0-2 0.9-2 2v8 4 6c0 1.1 0.8954 2 2 2h14c1.105 0 2-0.9 2-2v-6-4-4l-6-6h-10z" fill="#95a5a6"/>
+        <path d="m5 1029.4c-1.1046 0-2 0.9-2 2v8 4 6c0 1.1 0.8954 2 2 2h14c1.105 0 2-0.9 2-2v-6-4-4l-6-6h-10z" fill="#bdc3c7"/>
+        <path d="m21 1035.4-6-6v4c0 1.1 0.895 2 2 2h4z" fill="#95a5a6"/>
+        <path d="m6 8v1h12v-1h-12zm0 3v1h12v-1h-12zm0 3v1h12v-1h-12zm0 3v1h12v-1h-12z" fill="#95a5a6" transform="translate(0 1028.4)"/></g>
+      </svg>
+
       <div *ngIf="dropdownOpen" class="dropdown-menu absolute bg-white shadow-lg border mt-2">
         <button (click)="selectOption('form')" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Form</button>
         <button (click)="selectOption('yaml')" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">YAML</button>
@@ -146,46 +193,45 @@
         <app-yml-file-update [resourceName]="selectedResource" [resourceType]="selectedType" ></app-yml-file-update>
       </ng-container>
     </div>
+  </div>
+  <div class="log-container" [@openClose]="showLogsContent ? 'open' : 'closed'">
+    <app-log-terminal *ngIf="showLogs" [resourceName]="selectedResource" [resourceType]="selectedType" ></app-log-terminal>
+  </div>
 
+  <div class="terminal-container" [@openClose]="showTerminalContent ? 'open' : 'closed'">
+    <app-exec-terminal *ngIf="showTerminal" [resourceName]="selectedResource" ></app-exec-terminal>
   </div>
 
 <div class="container" (mouseenter)="showChoices = true" (mouseleave)="showChoices = false">
   <button class="custom-color" mat-fab>{{ buttonText }}</button>
-
-    <div *ngIf="showChoices" class="choices">
-      <button mat-icon-button (click)="selectChoice('Form')">
-        <mat-icon class="icon-color">description</mat-icon>
-      </button>
-      <button mat-icon-button (click)="selectChoice('Yml File')">
-        <mat-icon class="icon-color">note_add</mat-icon>
-      </button>
-      <button mat-icon-button (click)="selectChoice('Import Yml File')">
-        <mat-icon class="icon-color">downloading</mat-icon>
-      </button>
-    </div>
+  <div *ngIf="showChoices" class="choices">
+    <button mat-icon-button (click)="selectChoice('Form')">
+      <mat-icon class="icon-color">description</mat-icon>
+    </button>
+    <button mat-icon-button (click)="selectChoice('Yml File')">
+      <mat-icon class="icon-color">note_add</mat-icon>
+    </button>
+    <button mat-icon-button (click)="selectChoice('Import Yml File')">
+      <mat-icon class="icon-color">downloading</mat-icon>
+    </button>
+  </div>
 </div>
 
-<<!-- monitoring button -->>
+  <ng-template #dialogContentTemplate let-data >
+    <mat-dialog-actions>
+      <button (click)="onclose()" mat-icon-button aria-label="Close" style="position: absolute; top :38%; right: 37%; ">
+        <mat-icon>close</mat-icon>
+      </button>
+      <br style="margin-top: 24px; margin-bottom: 24px;">
+    </mat-dialog-actions>
 
-<button class="configure-button"  [routerLink]="['/config']">
-  <img src="assets/images/monitor.png" alt="Monitor" class="button-logo">
+    <mat-dialog-content>
+      Are you sure you want to delete {{ressourceName}}?
+    </mat-dialog-content>
 
-</button>
+    <mat-dialog-actions align="end">
+      <button mat-button (click)="deleteressource()" style="background-color: rgb(11, 11, 65);">Delete</button>
+      <button mat-button (click)="onclose()" style="background-color: rgb(231, 39, 39);">Cancel</button>
+    </mat-dialog-actions>
 
-<ng-template #dialogContentTemplate let-data>
-  <mat-dialog-actions>
-    <button (click)="onclose()" mat-icon-button aria-label="Close" style="position: absolute; top: 38%; right: 37%;">
-      <mat-icon>close</mat-icon>
-    </button>
-    <br style="margin-top: 24px; margin-bottom: 24px;">
-  </mat-dialog-actions>
-
-  <mat-dialog-content>
-    Are you sure you want to delete {{ressourceName}}?
-  </mat-dialog-content>
-
-  <mat-dialog-actions align="end">
-    <button mat-button (click)="deleteressource()" style="background-color: rgb(11, 11, 65);">Delete</button>
-    <button mat-button (click)="onclose()" style="background-color: rgb(231, 39, 39);">Cancel</button>
-  </mat-dialog-actions>
-</ng-template>
+  </ng-template>

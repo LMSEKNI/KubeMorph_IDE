@@ -42,6 +42,24 @@ import {  ViewChild } from '@angular/core';
       transition('open => closed', [
         animate('0.5s ease-out')
       ])
+    ]),
+    trigger('toggleSearch', [
+      state('open', style({
+        width: '200px', // Adjust width as needed
+        opacity: 1,
+        visibility: 'visible'
+      })),
+      state('closed', style({
+        width: '0',
+        opacity: 0,
+        visibility: 'hidden'
+      })),
+      transition('closed => open', [
+        animate('0.3s ease-in-out')
+      ]),
+      transition('open => closed', [
+        animate('0.3s ease-in-out')
+      ])
     ])
   ]
 })
@@ -107,7 +125,43 @@ export class ListComponent implements OnInit {
     showYaml = false;
     selectedComponent = 'desc';
     selectedChoice: string | null = null;
-    selectChoice(choice: string) {
+    //////
+  public showTerminal = false;
+  public showTerminalContent= false;
+
+  public showLogs = false;
+  public showLogsContent= false;
+  isSearchOpen = false;
+
+  toggleSearch() {
+    this.isSearchOpen = !this.isSearchOpen;
+  }
+
+  clearSearch() {
+    // Implement clear logic if needed
+  }
+
+  toggleTerminal(): void {
+    this.showTerminal = !this.showTerminal;
+    this.showTerminalContent = !this.showTerminalContent;
+    if (this.showTerminal) {
+      this.showLogs = false;
+      this.showLogsContent = false;
+    }
+    this.closeFrame();
+  }
+
+  toggleLog(): void {
+    this.showLogs = !this.showLogs;
+    this.showLogsContent = !this.showLogsContent;
+    if (this.showLogs) {
+      this.showTerminal = false;
+      this.showTerminalContent = false;
+    }
+    this.closeFrame();
+  }
+
+  selectChoice(choice: string) {
       this.selectedChoice = choice;
       console.log('Selected choice:', choice);
       if (choice === 'Yml File') {
@@ -203,7 +257,6 @@ export class ListComponent implements OnInit {
 
   onNodeClick(properties: any): void {
     const selectedNodes = this.network.getSelectedNodes();
-
     if (selectedNodes.length === 0) {
       return;
     }
@@ -214,11 +267,11 @@ export class ListComponent implements OnInit {
         this.selectedResource = node.options.title;
         // const labelParts = node.options.label.split(':');
         // const resourceType = labelParts[0].trim().toLowerCase(); // Extracted resource type
+      console.log("nifhemmmm", node.options.nodes);
 
-
-        const labelParts = node.options.label.split(':');
+      const labelParts = node.options.label.split(':');
         if (labelParts.length !== 2) {
-            console.error('Invalid label format:', node.options.label);
+            console.error('Invalid label format:', node.options.value);
             return;
         }
 

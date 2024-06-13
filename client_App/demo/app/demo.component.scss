@@ -1,95 +1,36 @@
-
-.navbar {
+.mat-toolbar {
+  background-color: #005573; // Customize toolbar background color
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 10px;
-  background-color: #333;
-  color: #fff;
-  background-color: #232d4b;
-}
+  align-items: center;
+  padding: 0 16px; // Optional: Adjust padding as needed
+  height: 64px; // Optional: Adjust height as needed
 
-.logo {
-  order: 2; /* Afficher le logo en deuxième position */
-}
+  // Styles for left side (App Title and Logo)
+  .toolbar-left {
+    display: flex;
+    align-items: center;
 
-.title {
-  order: 1; /* Afficher le titre en première position */
-}
-
-.logo img {
-  width: 100px; /* Ajustez selon vos besoins */
-  height: 50px; /* Ajustez selon vos besoins */
-  margin-right: 10px;
-}
-
-.title h1 {
-  margin: 0;
-}
-
-
-
-
-
-.container {
-  position: fixed; /* Position relative to the viewport */
-  bottom: 20px; /* Adjust as needed */
-  right: 20px; /* Adjust as needed */
-  display: flex;
-  flex-direction: column; /* Arrange items vertically */
-  align-items: flex-end; /* Align items to the right */ 
-}
-
-.choices button {
-  border-radius: 50%; /* Make the button circular */
-  width: 40px; /* Set the width of the button */
-  height: 40px; /* Set the height of the button */
-}
-.custom-color {
-  background-color: #005573; /* Change the background color to blue */
-  color:#d3d3d3; /* Change the text color to white */
-}
-.icon-color{
-  color: #005573;
-}
-
-
-  .choices {
-      position: absolute;
-      top: -140px; /* Adjust as needed */
-      right: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      border-radius: 30%;
-      
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      padding: 10px;
+    img {
+      height: 80px; // Adjust logo height as needed
+      margin-right: 8px; // Optional: Adjust logo margin
     }
-    
 
-.choices p {
-  margin: 0;
+    span {
+      font-size: 1.25rem; // Adjust font size as needed
+      font-weight: bold; // Optional: Adjust font weight
+      color: white; // Customize text color
+    }
+  }
+
+  // Styles for right side (Cluster Active)
+  .toolbar-right {
+    display: flex;
+    align-items: center;
+
+    span {
+      margin-left: 4px; // Optional: Adjust margin between icon and text
+      color: white; // Customize text color
+    }
+  }
 }
-
-.choices button {
-  margin-top: 5px;
-}
-
-
-.main-content {
-  background-image: url('/assets/images/bg.jpg');
-  background-size: cover;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-
-.main-content {
-  height: 100vh; /* Occupe toute la hauteur de la fenêtre du navigateur */
-  display: flex;
-  flex-direction: column;
-}
-
-

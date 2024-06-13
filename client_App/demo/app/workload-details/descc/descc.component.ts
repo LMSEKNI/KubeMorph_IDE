@@ -40,6 +40,7 @@ export class DesccComponent implements OnInit {
       .subscribe(
         (description: string) => {
           this.parseResourceDescription(description);
+          //console.log("descccccccccccc"+ description);
         },
         (error: any) => {
           console.error('Error fetching resource details:', error);
@@ -71,19 +72,11 @@ export class DesccComponent implements OnInit {
 
     if (currentTitle && currentDescription) {
       this.resourceDetails.push({ title: currentTitle, description: currentDescription });
+
     }
-    //console.log('Parsed Resource Details:', this.resourceDetails);
+    //console.log('Parsed Resource Details:', this.resourceDetails );
 
   }
-  // parseResourceDescription(description: string): void {
-  //   const lines = description.split('\n');
-  //   this.resourceDetails = [];
-  //   lines.forEach(line => {
-  //     const [label, value] = line.split(':');
-  //     if (label && value) {
-  //       this.resourceDetails.push({ title: label.trim(), description: value.trim() });
-  //     }
-  //   });
-  // }
+
 
 }

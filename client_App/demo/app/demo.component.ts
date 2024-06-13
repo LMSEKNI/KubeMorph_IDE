@@ -40,4 +40,7 @@ export class DemoComponent {
       this.router.navigate(['/create-dynamicform']);
     }
   }
+  navigateToPage() {
+    this.router.navigate(['']);
+  }
 }

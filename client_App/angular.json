@@ -35,7 +35,8 @@
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "demo/styles.scss",
-              "demo/app/demo.component.scss"
+              "demo/app/demo.component.scss",
+              "node_modules/xterm/css/xterm.css"
             ],
             "scripts": [],
             "vendorChunk": true,
@@ -73,8 +74,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "demo:build"
-            
+            "browserTarget": "demo:build",
+            "proxyConfig": "demo/proxy.conf.json"
           },
           "configurations": {
             "production": {

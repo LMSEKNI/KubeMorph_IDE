@@ -104,9 +104,12 @@
     "brace": "^0.11.1",
     "core-js": "^3.6.5",
     "lodash-es": "~4.17.21",
+    "ng-terminal": "^6.1.1",
     "rxjs": "^7.0.0",
     "vis-data": "^7.1.9",
     "vis-network": "^9.1.9",
+    "xterm": "^5.3.0",
+    "xterm-addon-fit": "^0.8.0",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {

@@ -1,0 +1,14 @@
+<div>
+  <button mat-icon-button (click)="addTerminal()">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
+
+<mat-tab-group (selectedTabChange)="onTabChange($event)">
+  <mat-tab *ngFor="let terminal of terminals; let i = index" [label]="terminal.resourceName">
+    <app-exec-terminal
+      #execTerminal
+      [resourceName]="terminal.resourceName">
+    </app-exec-terminal>
+  </mat-tab>
+</mat-tab-group>
