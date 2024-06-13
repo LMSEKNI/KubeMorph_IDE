@@ -599,15 +599,7 @@ plugins: []
 ##
 datasources: 
   datasources.yaml:
-    apiVersion: 1
-    datasources:
-      - name: prometheus
-        type: prometheus
-        basicAuth: false
-        access: proxy
-        isDefault: true
-        editable: true
-        url: http://prometheus-server.monitoring.svc:80
+
 #  datasources.yaml:
 #    apiVersion: 1
 #    datasources:

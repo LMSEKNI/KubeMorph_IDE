@@ -29,13 +29,13 @@ public class MetricsController {
 
     @GetMapping("/k8s/pods")
     public PodMetricsList getKubernetesPodMetrics() throws ApiException {
-        String namespace = "prometheus";
+        String namespace = "default";
         return kubernetesMetricsService.getPodMetrics(namespace);
     }
 
     @GetMapping("/prometheus")
-    public void getPrometheusMetrics() throws ApiException {
-        prometheusMetricsService.setupMonitoringStack();
+    public String getPrometheusMetrics() throws ApiException {
+       return prometheusMetricsService.setupMonitoringStack();
 
     }
 }

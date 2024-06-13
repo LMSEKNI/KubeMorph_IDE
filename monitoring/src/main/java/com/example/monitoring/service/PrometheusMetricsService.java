@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,17 +22,16 @@ public class PrometheusMetricsService {
     private static final Logger logger = Logger.getLogger(PrometheusMetricsService.class.getName());
 
     private final CoreV1Api api;
-    private final PrometheusConfiguration prometheusConfig;
 
     @Autowired
     public PrometheusMetricsService(PrometheusConfiguration prometheusConfig) throws IOException {
         ApiClient client = Config.defaultClient();
         Configuration.setDefaultApiClient(client);
         this.api = new CoreV1Api();
-        this.prometheusConfig = prometheusConfig;
+
     }
 
-    public void setupMonitoringStack() {
+    public String setupMonitoringStack() {
         try {
             //Add the Dashboard configmap
             runCommand("kubectl create configmap -n monitoring grafana-dashboard-configmap --from-file=monitoring/src/main/resources/grafanaDashboard.json");
@@ -40,9 +40,14 @@ public class PrometheusMetricsService {
             // Install Grafana with custom values
             runCommand("helm install -n monitoring grafana grafana/grafana -f monitoring/src/main/resources/values.yaml");
 
+            return(getGrafanaAdminPassword());
+
+
+
         } catch (IOException | InterruptedException e) {
             logger.log(Level.SEVERE, "Error while setting up monitoring stack", e);
         }
+        return "Error while setting up monitoring stack";
     }
 
     private String runCommand(String command) throws IOException, InterruptedException {
@@ -57,10 +62,13 @@ public class PrometheusMetricsService {
         while ((line = reader.readLine()) != null) {
             output.append(line).append("\n");
         }
-
         process.waitFor();
         return output.toString();
     }
-
+    
+    private String getGrafanaAdminPassword() throws IOException, InterruptedException {
+        String grafanaPassword = runCommand("kubectl get secret --namespace monitoring grafana -o jsonpath=\"{.data.admin-password}\"").trim();
+        return new String(Base64.getDecoder().decode(grafanaPassword));
+    }
 
 }
