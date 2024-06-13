@@ -30,16 +30,30 @@
   // justify-content: center; /* Center vertically */
   // align-items:center;
 }
+.search-container{
+  display: flex;
+  justify-content: space-between;
 
-
-.search-container {
-  position: relative;
-  display: inline-block; /* Display as inline-block to align properly */
 }
 
+.search-icon,.menu-icon {
+  display: flex;
+  align-items: center;
+  //margin-left: 16px; /* Adjust spacing between icons */
+}
+
+.icons-container {
+  display: flex;
+  align-items: center;
+}
+.search-field {
+  flex: 1;
+  margin-right: 16px;
+}
   .search-wrapper {
-    position: relative; /* Change to relative */
-    left:20%;
+    position: relative;
+    padding-top: 10px;
+    //left:20%;
   }
 
   input[type=text] {

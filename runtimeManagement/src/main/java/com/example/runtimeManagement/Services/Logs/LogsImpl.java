@@ -7,6 +7,7 @@ import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.Configuration;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.models.V1Pod;
+import io.kubernetes.client.openapi.models.V1PodList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,114 +30,6 @@ public class LogsImpl implements Logs {
 
     private static final Logger logger = LoggerFactory.getLogger(LogsImpl.class);
 
-
-
-    public String retrieveLogsFromPod3(String namespace, String podName, String containerName) throws ApiException, IOException, UnrecoverableKeyException, CertificateException, KeyStoreException, NoSuchAlgorithmException {
-        // Configure Kubernetes client
-        ApiClient client = kubeconfig.configureKubernetesAccess();
-        CoreV1Api coreApi = new CoreV1Api(client);
-
-        // Fetch the pod object
-        logger.debug("Fetching pod: {} in namespace: {}", podName, namespace);
-        V1Pod pod = coreApi.readNamespacedPod( podName,namespace, null);
-
-        // Instantiate PodLogs and stream logs from the pod
-        PodLogs logs = new PodLogs(client);
-        InputStream is = logs.streamNamespacedPodLog(namespace,podName,containerName);
-
-        // Read the logs into a string
-        StringBuilder logsBuilder = new StringBuilder(100);
-        try {
-            if (logsBuilder != null) {
-                byte[] buffer = new byte[1024];
-                int bytesRead;
-                while ((bytesRead = is.read(buffer)) != -1) {
-                    logsBuilder.append(new String(buffer, 0, bytesRead));
-                }
-            }
-
-        } catch (Exception e) {
-            // Handle any exceptions
-            e.printStackTrace();
-        } finally {
-            // Close the input stream
-            try {
-                is.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        String logsString = logsBuilder.toString();
-
-        logsBuilder.setLength(0);
-
-        return logsString;
-    }
-
-
-
-    public String retrieveLogsFromPod(String namespace, String podName) throws ApiException, UnrecoverableKeyException, CertificateException, IOException, KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
-        // Fetch the pod object
-        ApiClient client = KubernetesConfig.configureKubernetesAccess();
-        CoreV1Api coreApi = new CoreV1Api(client);
-
-        V1Pod pod = coreApi.readNamespacedPod(podName, namespace, null);
-
-        // Instantiate PodLogs
-        PodLogs logs = new PodLogs();
-        InputStream is = logs.streamNamespacedPodLog(pod);
-
-        // Read the logs into a string
-        StringBuilder logsBuilder = new StringBuilder();
-        try {
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = is.read(buffer)) != -1) {
-                logsBuilder.append(new String(buffer, 0, bytesRead));
-            }
-        } catch (Exception e) {
-            // Handle any exceptions
-            e.printStackTrace();
-        } finally {
-            // Close the input stream
-            try {
-                is.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        return logsBuilder.toString();
-    }
-
-    @Override
-    public String getPodLogs(String namespace, String podName) throws Exception {
-        logger.info("Fetching logs for pod: {} in namespace: {}", podName, namespace);
-
-        try {
-            ApiClient client = kubeconfig.configureKubernetesAccess();
-            logger.debug("Kubernetes access configured successfully.");
-
-            //CoreV1Api coreApi = new CoreV1Api();
-            PodLogs logs = new PodLogs(client);
-
-            logger.debug("Attempting to stream logs for pod: {}", podName);
-            InputStream is = logs.streamNamespacedPodLog(namespace, podName, null);
-            String podLogs = new String(is.readAllBytes());
-            logger.info("Successfully fetched logs for pod: {}", podName);
-
-            return podLogs;
-        } catch (ApiException e) {
-            logger.error("API exception occurred while fetching logs for pod: {} in namespace: {}", podName, namespace, e.getResponseBody());
-            throw e;
-        } catch (IOException e) {
-            logger.error("I/O exception occurred while reading logs for pod: {} in namespace: {}", podName, namespace, e);
-            throw e;
-        } catch (Exception e) {
-            logger.error("Unexpected exception occurred while fetching logs for pod: {} in namespace: {}", podName, namespace, e);
-            throw e;
-        }
-    }
     @Override
     public List<V1Pod> getPods(String namespace) throws ApiException, IOException{
         kubeconfig.configureKubernetesAccess();
@@ -144,11 +37,31 @@ public class LogsImpl implements Logs {
 
         return coreApi.listNamespacedPod(namespace, null, null, null, null, null, null, null, null, null, null).getItems();
     }
-
-    public String getPodLogs14(String namespace, String podName) throws ApiException, IOException {
+    @Override
+    public String getPodLogs(String namespace, String podName) throws Exception {
+        return "";
+    }
+    public String getPodLogs14(String podName) throws ApiException, IOException {
         ApiClient client = kubeconfig.configureKubernetesAccess();
         CoreV1Api api = new CoreV1Api(client);
 
+        // Retrieve the list of all pods in all namespaces
+        V1PodList podList = api.listPodForAllNamespaces(null, null, null, null, null, null, null, null, null,null);
+
+        // Find the namespace for the specified pod
+        String namespace = null;
+        for (V1Pod pod : podList.getItems()) {
+            if (pod.getMetadata().getName().equals(podName)) {
+                namespace = pod.getMetadata().getNamespace();
+                break;
+            }
+        }
+
+        if (namespace == null) {
+            throw new ApiException("Pod not found: " + podName);
+        }
+
+        // Retrieve the logs for the specified pod
         String log = api.readNamespacedPodLog(
                 podName,
                 namespace,
@@ -165,5 +78,6 @@ public class LogsImpl implements Logs {
 
         return log;
     }
+
 
 }

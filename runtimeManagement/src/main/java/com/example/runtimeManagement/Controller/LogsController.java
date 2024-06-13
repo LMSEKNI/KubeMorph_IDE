@@ -29,11 +29,10 @@ public class LogsController {
 
     @PostMapping("/podlogs")
     public ResponseEntity<String> getPodLogs(@RequestBody Map<String, String> request) {
-        String namespace = request.get("namespace");
-        String podName = request.get("podName");
 
+        String podName = request.get("podName");
         try {
-            String log = logs.getPodLogs14(namespace, podName); // Ensure this method returns the actual logs
+            String log = logs.getPodLogs14( podName); // Ensure this method returns the actual logs
             return ResponseEntity.ok().body(log); // Return the actual logs content
         } catch (Exception e) {
             e.printStackTrace();
@@ -41,50 +40,8 @@ public class LogsController {
         }
     }
 
-
-
     @GetMapping("/pods")
     public String getPods(@RequestParam String namespace) throws ApiException, IOException{
         return logs.getPods(namespace).toString();
     }
-
-    @GetMapping("/logs")
-    public String getPodLogs(
-            @RequestParam String namespace,
-            @RequestParam String podName,
-            @RequestParam(required = false) String containerName) {
-        try {
-            return logs.getPodLogs(namespace, podName);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Error occurred: " + e.getMessage();
-        }
-    }
-
-
-    @GetMapping("/logs3")
-    public String getPodLogs3(
-            @RequestParam String namespace,
-            @RequestParam String podName,
-            @RequestParam(required = false) String containerName) {
-        try {
-            return logs.retrieveLogsFromPod3(namespace, podName, containerName);
-
-        } catch (ApiException e) {
-            e.printStackTrace();
-            return "Error retrieving logs: " + e.getMessage();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (UnrecoverableKeyException e) {
-            throw new RuntimeException(e);
-        } catch (CertificateException e) {
-            throw new RuntimeException(e);
-        } catch (KeyStoreException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
 }

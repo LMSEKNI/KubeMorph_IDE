@@ -42,6 +42,24 @@ import {  ViewChild } from '@angular/core';
       transition('open => closed', [
         animate('0.5s ease-out')
       ])
+    ]),
+    trigger('toggleSearch', [
+      state('open', style({
+        width: '200px', // Adjust width as needed
+        opacity: 1,
+        visibility: 'visible'
+      })),
+      state('closed', style({
+        width: '0',
+        opacity: 0,
+        visibility: 'hidden'
+      })),
+      transition('closed => open', [
+        animate('0.3s ease-in-out')
+      ]),
+      transition('open => closed', [
+        animate('0.3s ease-in-out')
+      ])
     ])
   ]
 })
@@ -113,6 +131,15 @@ export class ListComponent implements OnInit {
 
   public showLogs = false;
   public showLogsContent= false;
+  isSearchOpen = false;
+
+  toggleSearch() {
+    this.isSearchOpen = !this.isSearchOpen;
+  }
+
+  clearSearch() {
+    // Implement clear logic if needed
+  }
 
   toggleTerminal(): void {
     this.showTerminal = !this.showTerminal;

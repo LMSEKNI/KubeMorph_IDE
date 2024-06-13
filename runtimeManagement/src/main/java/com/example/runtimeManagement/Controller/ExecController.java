@@ -57,14 +57,12 @@ public class ExecController {
     @PostMapping("/podexec")
     public String podexec(@RequestBody Map<String, String> request) {
         {
-            String namespace = request.get("namespace");
             String podName = request.get("podName");
-            String containerName = request.get("containerName");
             String command = request.get("command");
             try {
                 System.out.println("Command executed successfully");
 
-                return execImpl.podexec(namespace, podName, containerName, command);
+                return execImpl.podexec( podName, command);
                 // Read the output of the process
                 // You can implement your own logic to read and process the output here
 

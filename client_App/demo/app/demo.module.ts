@@ -33,6 +33,8 @@ import { ExecTerminalComponent } from './exec-terminal/exec-terminal.component';
 import { LogTerminalComponent } from './log-terminal/log-terminal.component';
 import { TerminalTabManagerComponent } from './terminal-tab-manager/terminal-tab-manager.component';
 import {MatTabsModule} from '@angular/material/tabs';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 
 @NgModule({
@@ -55,8 +57,8 @@ import {MatTabsModule} from '@angular/material/tabs';
         HttpClientModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule,
         MatIconModule, MatMenuModule, MatSelectModule, MatToolbarModule,
         RouterModule.forRoot(routes, {relativeLinkResolution: 'legacy'}),
-        Bootstrap4FrameworkModule,
-        Bootstrap3FrameworkModule,
+        Bootstrap4FrameworkModule,MatFormFieldModule,
+        Bootstrap3FrameworkModule,MatInputModule,
         MaterialDesignFrameworkModule,
         JsonSchemaFormModule,
         ReactiveFormsModule, MatSidenavModule, NgTerminalModule, MatTabsModule

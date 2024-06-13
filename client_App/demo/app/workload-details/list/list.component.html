@@ -9,22 +9,19 @@
 
 
 <div class="search-container">
+
   <div class="search-wrapper">
     <input type="text" placeholder="Search..." (click)="toggleChecklist()">
-
     <div class="checklist" [@openClose]="showChecklist ? 'open' : 'closed'">
-
       <div >
         <div>
           <label for="showPods">Show Pods</label>
           <input type="checkbox" id="showPods" name="showPods" (change)="togglePods($event.target.checked)">
         </div>
-
         <div>
           <label for="showNamespaces">Show Namespaces</label>
           <input  type="checkbox" id="showNamespaces" name="showNamespaces" (change)="toggleNamespaces($event.target.checked)">
         </div>
-
         <div>
           <label for="showDeployments">Show Deployments</label>
           <input  type="checkbox" id="showDeployments" name="showDeployments" (change)="toggleDeployments($event.target.checked)">
@@ -84,6 +81,38 @@
         </div>
       </div>
     </div>
+  </div>
+  <div class="icons-container">
+
+    <div class="search-icon">
+      <mat-form-field appearance="fill" class="search-field" [@toggleSearch]="isSearchOpen ? 'open' : 'closed'">
+        <mat-label>Search</mat-label>
+        <input matInput placeholder="Search">
+      <!--  <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearSearch()">
+          <mat-icon>close</mat-icon>
+        </button>-->
+      </mat-form-field>
+      <button mat-icon-button (click)="toggleSearch()">
+        <img src="assets/images/search_24dp_FILL0_wght300_GRAD0_opsz24.svg" alt="Search Icon">
+      </button>
+    </div>
+
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>
+        <span>List Resource</span>
+      </button>
+      <button mat-menu-item disabled>
+        <mat-icon>voicemail</mat-icon>
+        <span>Monotoring</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon>notifications_off</mat-icon>
+        <span>Helm</span>
+      </button>
+    </mat-menu>
   </div>
 </div>
 <!--
