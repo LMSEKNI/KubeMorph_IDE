@@ -103,11 +103,12 @@
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item>
+      <button mat-menu-item >
+        <mat-icon>home</mat-icon>
         <span>List Resource</span>
       </button>
-      <button mat-menu-item disabled>
-        <mat-icon>voicemail</mat-icon>
+      <button mat-menu-item routerLink="/monitoring">
+        <mat-icon>settings_heart</mat-icon>
         <span>Monotoring</span>
       </button>
       <button mat-menu-item>

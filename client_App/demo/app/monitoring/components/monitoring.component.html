@@ -1,0 +1,17 @@
+<demo></demo>
+
+<div *ngIf="error" class="error">
+  <p>Error: {{ error.message }}</p>
+</div>
+
+<div *ngIf="nodeMetrics">
+  <h2>Node Metrics</h2>
+  <div class="echarts-container" [appEcharts]="nodeChartOptions"></div>
+</div>
+
+<div *ngIf="podMetrics">
+  <h2>Pod Metrics</h2>
+  <div *ngFor="let podChartOption of podChartOptions" class="echarts-container">
+    <div class="echarts-container" [appEcharts]="podChartOption"></div>
+  </div>
+</div>

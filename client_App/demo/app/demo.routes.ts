@@ -12,6 +12,8 @@ import {MonitoringPrometheusComponent} from './monitoring-prometheus/monitoring-
 import { ExecTerminalComponent} from './exec-terminal/exec-terminal.component';
 import { LogTerminalComponent} from './log-terminal/log-terminal.component';
 import { TerminalTabManagerComponent} from './terminal-tab-manager/terminal-tab-manager.component';
+import {MonitoringComponent} from './monitoring/components/monitoring.component';
+
 
 export const routes: Route[] = [
   { path: '' , component: ListComponent},
@@ -25,5 +27,6 @@ export const routes: Route[] = [
   { path: 'config' , component: MonitoringConfigComponent},
   { path: 'config-monitoring' , component: MonitoringChoiceComponent},
   { path: 'prometheus' , component: MonitoringPrometheusComponent},
+  { path: 'monitoring' , component: MonitoringComponent},
 
 ];

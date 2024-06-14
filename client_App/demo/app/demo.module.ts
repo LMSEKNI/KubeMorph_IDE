@@ -40,10 +40,15 @@ import { TerminalTabManagerComponent } from './terminal-tab-manager/terminal-tab
 import {MatTabsModule} from '@angular/material/tabs';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import {NgTerminalModule} from 'ng-terminal';
+import { MonitoringComponent } from './monitoring/components/monitoring.component';
+import {EChartsDirective} from './monitoring/Directives/EChartsDirective';
+
 
 
 @NgModule({
-  declarations: [
+  declarations: [ MonitoringComponent,
+                  EChartsDirective,
                   DemoComponent,
                   DemoRootComponent,
                   YmlFileComponent,
@@ -60,6 +65,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
                   ExecTerminalComponent,
                   LogTerminalComponent,
                   TerminalTabManagerComponent,
+                  MonitoringComponent,
 
                   ],
     imports: [
@@ -67,8 +73,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
         HttpClientModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule,
         MatIconModule, MatMenuModule, MatSelectModule, MatToolbarModule,
         RouterModule.forRoot(routes, {relativeLinkResolution: 'legacy'}),
-        Bootstrap4FrameworkModule,MatFormFieldModule,
-        Bootstrap3FrameworkModule,MatInputModule,
+        Bootstrap4FrameworkModule, MatFormFieldModule,
+        Bootstrap3FrameworkModule, MatInputModule,
         MaterialDesignFrameworkModule,
         JsonSchemaFormModule,
         ReactiveFormsModule, MatSidenavModule, NgTerminalModule, MatTabsModule
