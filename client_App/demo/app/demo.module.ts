@@ -43,11 +43,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import {NgTerminalModule} from 'ng-terminal';
 import { MonitoringComponent } from './monitoring/components/monitoring.component';
 import {EChartsDirective} from './monitoring/Directives/EChartsDirective';
+import { GrafanaDialogComponent } from './monitoring/components/grafana-dialog/grafana-dialog.component';
 
 
 
 @NgModule({
   declarations: [ MonitoringComponent,
+                  GrafanaDialogComponent,
                   EChartsDirective,
                   DemoComponent,
                   DemoRootComponent,
@@ -66,6 +68,7 @@ import {EChartsDirective} from './monitoring/Directives/EChartsDirective';
                   LogTerminalComponent,
                   TerminalTabManagerComponent,
                   MonitoringComponent,
+                  GrafanaDialogComponent,
 
                   ],
     imports: [

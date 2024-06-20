@@ -18,4 +18,13 @@ export class MonitoringService {
   getPodMetrics(): Observable<any> {
     return this.http.get(`${this.baseUrl}/k8s/pods`);
   }
+  getGrafanaUrl(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/grafana-url`, { responseType: 'text' });
+  }
+  getPrometheusMetrics(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/prometheus`);
+  }
+  getGrafanaServiceUrl(): Observable<string> {
+    return this.http.get('http://localhost:8082/api/metrics/grafana', { responseType: 'text' });
+  }
 }

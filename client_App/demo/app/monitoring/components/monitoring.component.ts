@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MonitoringService } from '../services/monitoring.service';
 import {EChartsOption} from 'echarts';
+import {GrafanaDialogComponent} from './grafana-dialog/grafana-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-monitoring',
@@ -14,14 +16,34 @@ export class MonitoringComponent implements OnInit {
   error: any;
   podChartOptions: any[] = [];
   nodeChartOptions: EChartsOption;
+  grafanaUrl: string;
 
-  constructor(private monitoringService: MonitoringService) { }
+  constructor(
+    private monitoringService: MonitoringService,
+    private dialog: MatDialog
+  ) { }
 
   ngOnInit(): void {
     this.fetchNodeMetrics();
     this.fetchPodMetrics();
   }
-
+      redirectToGrafana(): void {
+          this.monitoringService.getPrometheusMetrics().subscribe(
+            data => {
+              console.log('Prometheus Metrics:', data);
+            },
+            err => {
+              console.error('Error fetching Prometheus Metrics:', err);
+            }
+          );
+          const dialogRef = this.dialog.open(GrafanaDialogComponent, {
+            width: '500px',
+            data: {  }
+          });
+          dialogRef.afterClosed().subscribe(result => {
+            console.log('Dialog closed:', result);
+          });
+        }
   fetchNodeMetrics(): void {
     this.monitoringService.getNodeMetrics().subscribe(
       data => {
@@ -142,7 +164,6 @@ export class MonitoringComponent implements OnInit {
     });
     console.log('Pod Chart Options:', this.podChartOptions);
   }
-
   objectKeys(obj: any): string[] {
     return Object.keys(obj);
   }

@@ -38,4 +38,10 @@ public class MetricsController {
        return prometheusMetricsService.setupMonitoringStack();
 
     }
+    @GetMapping("/grafana")
+    public String getGrafanaServiceUrl() throws ApiException {
+        return prometheusMetricsService.getGrafanaServiceUrl();
+
+    }
+    
 }

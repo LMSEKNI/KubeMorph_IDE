@@ -1,5 +1,8 @@
 <demo></demo>
 
+<div class="top-right">
+  <img src="assets/images/grafana-logo.jpg" alt="Grafana" class="grafana-image" (click)="redirectToGrafana()">
+</div>
 <div *ngIf="error" class="error">
   <p>Error: {{ error.message }}</p>
 </div>
@@ -15,3 +18,4 @@
     <div class="echarts-container" [appEcharts]="podChartOption"></div>
   </div>
 </div>
+

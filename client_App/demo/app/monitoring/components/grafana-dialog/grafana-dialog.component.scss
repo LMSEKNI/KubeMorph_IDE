@@ -1,0 +1,17 @@
+.mat-dialog-actions-right {
+  justify-content: space-between; /* Align buttons with space between */
+  margin-top: 20px; /* Optional: Add margin to separate from dialog content */
+}
+
+.mat-button {
+  &.mat-button {
+    &.mat-primary {
+      background-color: #4caf50; /* Green background */
+      color: white; /* White text */
+    }
+
+    &.mat-primary:hover {
+      background-color: #388e3c; /* Darker shade of green on hover */
+    }
+  }
+}
