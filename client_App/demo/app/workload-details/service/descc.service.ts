@@ -7,11 +7,11 @@ import { Observable } from 'rxjs';
 })
 export class DesccService {
 
-  private baseUrl = 'http://localhost:8080/api'; 
+  private baseUrl = 'http://localhost:8080/api';
 
   constructor(private http: HttpClient) { }
 
- 
+
   // getPodDescriptions(podName: string): Observable<string> {
   //   return this.http.get(`${this.baseUrl}/desc/poddesc/${podName}`, { responseType: 'text' });
   // }
@@ -20,5 +20,8 @@ export class DesccService {
   // }
   getResourceDescriptions(resourceType: string,ressourceName :string): Observable<string> {
     return this.http.get(`${this.baseUrl}/desc/${resourceType}/${ressourceName}`, { responseType: 'text' });
+  }
+  getPodDescriptions(resourceType: string,ressourceName :string): Observable<string> {
+    return this.http.get(`${this.baseUrl}/desc/test/${resourceType}/${ressourceName}`, { responseType: 'text' });
   }
 }

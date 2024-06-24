@@ -40,7 +40,7 @@ export class DesccComponent implements OnInit {
       .subscribe(
         (description: string) => {
           this.parseResourceDescription(description);
-          //console.log("descccccccccccc"+ description);
+          console.log("descccccccccccc"+ description);
         },
         (error: any) => {
           console.error('Error fetching resource details:', error);
@@ -50,32 +50,27 @@ export class DesccComponent implements OnInit {
   }
 
   parseResourceDescription(description: string): void {
-    const lines = description.split('\n');
-
     this.resourceDetails = [];
-    let currentTitle = '';
-    let currentDescription = '';
 
-    lines.forEach(line => {
-      const [label, value] = line.split(':');
+    // Split description into main sections
+    const sections = description.split(/\n\s*\n/);
 
-      if (label && value) {
-        if (currentTitle && currentDescription) {
-          this.resourceDetails.push({ title: currentTitle, description: currentDescription });
-        }
-        currentTitle = label.trim();
-        currentDescription = value.trim();
-      } else {
-        currentDescription += '\n' + line.trim();
+    sections.forEach(section => {
+      const lines = section.split('\n');
+      if (lines.length > 0) {
+        const mainTitle = lines[0].trim();
+        const subsections = lines.slice(1); // Exclude the main title line
+
+        this.resourceDetails.push({ title: mainTitle, description: '' });
+
+        subsections.forEach(subsection => {
+          const [label, value] = subsection.split(':');
+          if (label && value) {
+            this.resourceDetails.push({ title: label.trim(), description: value.trim() });
+          }
+        });
       }
     });
-
-    if (currentTitle && currentDescription) {
-      this.resourceDetails.push({ title: currentTitle, description: currentDescription });
-
-    }
-    //console.log('Parsed Resource Details:', this.resourceDetails );
-
   }
 
 

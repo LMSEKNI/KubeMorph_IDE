@@ -28,7 +28,6 @@ import { DynamicFormComponent } from './addressource/dynamic-form/component/dyna
 import { YmlFileUpdateComponent } from './updateressource/yml-file-update/yml-file-update.component';
 import { DynamicFormUpdateComponent } from './updateressource/dynamic-form-update/dynamic-form-update.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatChipsModule } from '@angular/material/chips';
 import { WelcomeInterfaceComponent } from './welcome-interface/welcome-interface.component';
 import { MonitoringConfigComponent } from './monitoring-validate/monitoring-config.component';
 import { MonitoringChoiceComponent } from './monitoring-metrics/monitoring-choice.component';
@@ -40,6 +39,13 @@ import { TerminalTabManagerComponent } from './terminal-tab-manager/terminal-tab
 import {MatTabsModule} from '@angular/material/tabs';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import {NgTerminalModule} from 'ng-terminal';
+import { HelmComponent } from './helm/helm.component';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatChipsModule} from '@angular/material/chips';
+import { HelmDetailsComponent } from './helm/helm-details/helm-details.component';
+import { CharttemplateComponent } from './helm/charttemplate/charttemplate.component';
+import { DeleteComponent } from './workload-details/delete/delete.component';
 
 
 @NgModule({
@@ -60,14 +66,18 @@ import { MatFormFieldModule } from '@angular/material/form-field';
                   ExecTerminalComponent,
                   LogTerminalComponent,
                   TerminalTabManagerComponent,
+                  HelmComponent,
+                  HelmDetailsComponent,
+                  CharttemplateComponent,
+                  DeleteComponent,
 
                   ],
     imports: [
         BrowserModule, BrowserAnimationsModule, FlexLayoutModule, FormsModule, MatChipsModule,
         HttpClientModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule,
         MatIconModule, MatMenuModule, MatSelectModule, MatToolbarModule,
-        RouterModule.forRoot(routes, {relativeLinkResolution: 'legacy'}),
-        Bootstrap4FrameworkModule,MatFormFieldModule,
+        RouterModule.forRoot(routes, {relativeLinkResolution: 'legacy'}),MatCardModule,
+        Bootstrap4FrameworkModule,MatFormFieldModule,MatProgressBarModule,
         Bootstrap3FrameworkModule,MatInputModule,
         MaterialDesignFrameworkModule,
         JsonSchemaFormModule,

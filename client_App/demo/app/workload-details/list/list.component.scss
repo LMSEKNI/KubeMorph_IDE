@@ -1,87 +1,113 @@
+.main-container {
+  transition: transform 0.3s ease; /* Adjust transition property */
 
-.confirmation-chip-list {
+}
+
+.shift-left {
+  transform: translateX(-50%);
+}
+
+.container {
   display: flex;
-  justify-content: center;
+  //transition: width 0.3s ease;
+//  height: 100vh;
 }
 
-.confirmation-label {
-  margin-right: 8px; // Adjust as needed
+.container.frame-open {
+  width: 50%;
 }
-
 
 .description-frame {
-  position: fixed;
   top: 0;
+  position: fixed;
   right: 0;
-  width: 60%;
-  height: 100vh;
-  background-color: rgb(20, 180, 180);
+  width: 50%;
+  background-color: #005573;
   overflow-y: auto;
+  transition: width 0.3s ease;
+  max-height: 100vh;
 }
-.description{
+
+.description-card {
+  margin: 20px;
+  padding: 20px;
+}
+
+.description {
   display: flex;
   flex-direction: column;
-  // justify-content: center; /* Center vertically */
-  align-items:center;
+  align-items: center;
 }
-.iconn{
+
+.dialog-frame {
+  width: 50%;
+  background-color: #f1f1f1;
+  overflow-y: auto;
+  transition: width 0.3s ease;
+}
+
+.log-container,
+.terminal-container {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #fff;
+  transition: transform 0.3s ease;
+}
+
+.open {
+  transform: translateY(0);
+}
+
+.closed {
+  transform: translateY(100%);
+}
+
+.iconn {
   display: flex;
-  flex-direction:initial;
-  // justify-content: center; /* Center vertically */
-  // align-items:center;
+  justify-content: flex-end; /* Align icons to the right */
 }
-.search-container{
+
+.search-container {
   display: flex;
   justify-content: space-between;
 
 }
 
-.search-icon,.menu-icon {
+.search-icon,
+.menu-icon {
   display: flex;
   align-items: center;
-  //margin-left: 16px; /* Adjust spacing between icons */
 }
 
 .icons-container {
   display: flex;
   align-items: center;
 }
+
 .search-field {
   flex: 1;
   margin-right: 16px;
 }
-  .search-wrapper {
-    position: relative;
-    padding-top: 10px;
-    //left:20%;
-  }
 
-  input[type=text] {
-    width: calc(100% - 30px); /* Adjust the width as needed */
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
+.search-wrapper {
+  position: relative;
+  padding-top: 10px;
+}
 
-  .checklist {
-    position: absolute;
-    top: calc(100% ); /* Adjust the positioning */
-    left: 0;
-    width: calc(100% - 30px ); /* Adjust the width to match the input */
-    z-index: 1;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 0 0 4px 4px; /* Adjust border-radius */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    overflow-y: auto;
-  }
+input[type=text] {
+  width: calc(100% - 30px);
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
 
-  .search-wrapper:focus-within .checklist {
-    display: block;
-  }
+.search-wrapper:focus-within .checklist {
+  display: block;
+}
 
 .dropdown-menu {
-  top: 100%; /* Position below the icon */
+  top: 100%;
   left: 0;
   z-index: 10;
   background: white;
@@ -90,7 +116,7 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  width: auto; /* Ensures the width adapts to content */
+  width: auto;
 }
 
 .dropdown-menu button {
@@ -100,38 +126,5 @@
   border: none;
   text-align: left;
   cursor: pointer;
-  white-space: nowrap; /* Prevents text wrapping */
+  white-space: nowrap;
 }
-
-.dropdown-menu button:hover {
-  background: #f0f0f0;
-}
-.custom-color.existing-button {
-  position: fixed;
-  bottom: 16px;
-  right: 16px;
-}
-
-.configure-button {
-  position: fixed;
-  bottom: 16px;
-  right: 1800px;
-  background-color: #ff9607; /* You can change the color as needed */
-  border-radius: 50%;
-  width: 56px;
-  height: 56px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-}
-
-.button-logo {
-  width: 55px;  /* Adjust size as needed */
-  height: 40px; /* Adjust size as needed */
-}
-
-.configure-button:hover {
-  background-color: #8a7203;
-}
-

@@ -1,0 +1,36 @@
+<demo></demo>
+
+<div class="search-container">
+  <img src="/assets/images/artifact.png" alt="Logo" class="logo">
+  <div class="search-bar-wrapper">
+    <mat-form-field appearance="standard" class="search-bar">
+      <input matInput placeholder="Search" >
+      <button mat-icon-button matSuffix>
+        <mat-icon class="icon">search</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+
+
+  <mat-card class="example-card" appearance="outlined" (click)="navigateToDetail()">
+    <div class="header-aligned">
+      <div class="card-header">
+        <img mat-card-sm-image src="/assets/images/promotheus.png" alt="Image" class="card-image">
+        <div class="card-title-group">
+          <mat-card-title>Chart Name</mat-card-title>
+        </div>
+        <div class="column-right">
+          <button mat-button class="card-button">Helm Chart</button>
+          <span class="label">Version</span>
+        </div>
+      </div>
+      <mat-card-content>
+        <div class="content-wrapper">
+          {{ longText }}
+        </div>
+      </mat-card-content>
+    </div>
+  </mat-card>
+
+</div>
+ <router-outlet></router-outlet>

@@ -1,0 +1,23 @@
+h2.mat-dialog-title {
+  display: flex;
+  justify-content: space-between;
+  //align-items: center;
+}
+
+.dialog-title {
+  margin-right: auto;
+}
+
+.close-button {
+  margin-left: auto;
+}
+
+.header-divider {
+  height: 1px;
+  background-color: #e0e0e0;
+  margin: 8px 0;
+}
+
+mat-dialog-actions {
+  justify-content: flex-start;
+}

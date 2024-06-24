@@ -1,7 +1,13 @@
 package com.example.controller.describeressource;
 
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 
+import io.kubernetes.client.openapi.models.V1Pod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +30,16 @@ public class DescController {
     private DescServiceImpl DescService;
 
     @GetMapping("/{resourceType}/{ressourceName}")
-    public ResponseEntity<String> getResourceDescriptions( @PathVariable String ressourceName,@PathVariable String resourceType) throws IOException, ApiException {
-            String description = DescService.getResourceDescriptions( ressourceName, resourceType);
+    public ResponseEntity<String> getResourceDescriptions(@PathVariable String ressourceName, @PathVariable String resourceType) throws IOException, ApiException {
+        String description = DescService.getResourceDescriptions(ressourceName, resourceType);
         return ResponseEntity.ok(description);
     }
 
-      
+    @GetMapping("/test/{resourceType}/{ressourceName}")
+    public String getPod(@PathVariable String ressourceName, @PathVariable String resourceType) throws IOException, ApiException, UnrecoverableKeyException, CertificateException, KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
+        V1Pod descriptionpod = DescService.getPod(resourceType, ressourceName);
+        return descriptionpod.toString();
     }
-    
+
+}
 

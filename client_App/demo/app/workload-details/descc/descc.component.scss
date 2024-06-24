@@ -1,20 +1,22 @@
-.pod-description {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .input-row {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px; /* Adjust as needed */
-  }
-  
-  .input-row label {
-    width: 150px; /* Adjust as needed */
-    margin-right: 10px; /* Adjust as needed */
-  }
-  
-  .input-row input {
-    flex: 1;
-  }
-  
+.description-card {
+  width: 100%;
+  max-width: 600px; /* Adjust width as needed */
+  margin: 20px;
+}
+
+.main-title {
+  font-weight: bold;
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+.sub-title {
+  font-weight: bold;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.input-field {
+  width: 100%;
+  margin-bottom: 10px;
+}

@@ -1,11 +1,17 @@
 package com.example.service.describeressource;
 
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import io.kubernetes.client.openapi.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,40 +27,6 @@ import io.kubernetes.client.openapi.apis.BatchV1Api;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.apis.NetworkingV1Api;
 import io.kubernetes.client.openapi.apis.StorageV1Api;
-import io.kubernetes.client.openapi.models.V1ConfigMap;
-import io.kubernetes.client.openapi.models.V1ConfigMapList;
-import io.kubernetes.client.openapi.models.V1Container;
-import io.kubernetes.client.openapi.models.V1DaemonSet;
-import io.kubernetes.client.openapi.models.V1DaemonSetList;
-import io.kubernetes.client.openapi.models.V1Deployment;
-import io.kubernetes.client.openapi.models.V1DeploymentList;
-import io.kubernetes.client.openapi.models.V1Endpoints;
-import io.kubernetes.client.openapi.models.V1EndpointsList;
-import io.kubernetes.client.openapi.models.V1Ingress;
-import io.kubernetes.client.openapi.models.V1Job;
-import io.kubernetes.client.openapi.models.V1JobList;
-import io.kubernetes.client.openapi.models.V1LoadBalancerStatus;
-import io.kubernetes.client.openapi.models.V1Namespace;
-import io.kubernetes.client.openapi.models.V1Node;
-import io.kubernetes.client.openapi.models.V1NodeAddress;
-import io.kubernetes.client.openapi.models.V1NodeCondition;
-import io.kubernetes.client.openapi.models.V1NodeList;
-import io.kubernetes.client.openapi.models.V1OwnerReference;
-import io.kubernetes.client.openapi.models.V1PersistentVolume;
-import io.kubernetes.client.openapi.models.V1PersistentVolumeClaim;
-import io.kubernetes.client.openapi.models.V1PersistentVolumeClaimTemplate;
-import io.kubernetes.client.openapi.models.V1PersistentVolumeList;
-import io.kubernetes.client.openapi.models.V1Pod;
-import io.kubernetes.client.openapi.models.V1PodList;
-import io.kubernetes.client.openapi.models.V1PodTemplateSpec;
-import io.kubernetes.client.openapi.models.V1ReplicaSet;
-import io.kubernetes.client.openapi.models.V1ReplicaSetList;
-import io.kubernetes.client.openapi.models.V1Service;
-import io.kubernetes.client.openapi.models.V1ServiceList;
-import io.kubernetes.client.openapi.models.V1ServicePort;
-import io.kubernetes.client.openapi.models.V1StatefulSet;
-import io.kubernetes.client.openapi.models.V1StatefulSetList;
-import io.kubernetes.client.openapi.models.V1StorageClass;
 
 @Service
 public class DescServiceImpl<ExtensionsV1beta1Api> implements DescService {
@@ -62,6 +34,26 @@ public class DescServiceImpl<ExtensionsV1beta1Api> implements DescService {
 
     @Autowired
     private KubernetesConfigService KubernetesConfigService;
+
+    public V1Pod getPod(String resourceType, String podName) throws ApiException, IOException, UnrecoverableKeyException, CertificateException, KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
+        ApiClient client = KubernetesConfigService.configureKubernetesAccess();
+        CoreV1Api api = new CoreV1Api(client);
+        V1PodList podList = api.listPodForAllNamespaces(null, null, null, null, null, null, null, null, null, null);
+        String namespace = null;
+        for (V1Pod pod : podList.getItems()) {
+            if (pod.getMetadata().getName().equals(podName)) {
+                namespace = pod.getMetadata().getNamespace();
+                break;
+            }
+        }
+        V1PodList pods = api.listNamespacedPod(namespace, null, null, null, null, null, null, null, null, null,null);
+        for (V1Pod pod : pods.getItems()) {
+            if (pod.getMetadata().getName().equals(podName)) {
+                return pod;
+            }
+        }
+        return null; // Pod not found
+    }
 
     @Override
     public String getResourceDescriptions(String resourceName, String resourceType) throws ApiException, IOException {
@@ -105,7 +97,21 @@ public class DescServiceImpl<ExtensionsV1beta1Api> implements DescService {
         }
     }
 
+    public V1Pod getPod(ApiClient client,  String podName) throws ApiException, IOException, UnrecoverableKeyException, CertificateException, KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
 
+        CoreV1Api api = new CoreV1Api(client);
+        V1PodList podList = api.listPodForAllNamespaces(null, null, null, null, null, null, null, null, null, null);
+
+        String namespace = null;
+        for (V1Pod pod : podList.getItems()) {
+            if (pod.getMetadata().getName().equals(podName)) {
+                namespace = pod.getMetadata().getNamespace();
+                return pod;
+            }
+        }
+
+        return null; // Pod not found
+    }
     private String getPodDescription(ApiClient client, String podName) throws ApiException, IOException {
         CoreV1Api api = new CoreV1Api(client);
     
@@ -127,64 +133,62 @@ public class DescServiceImpl<ExtensionsV1beta1Api> implements DescService {
     
         return generatePodDescription(pod);
     }
-    
 
-    private String generatePodDescription(V1Pod pod) {
+
+    public String generatePodDescription(V1Pod pod) {
         StringBuilder descriptionBuilder = new StringBuilder();
 
-        descriptionBuilder.append("Name: ").append(pod.getMetadata().getName()).append("\n");
-        descriptionBuilder.append("Namespace: ").append(pod.getMetadata().getNamespace()).append("\n");
-        descriptionBuilder.append("Labels: ").append(pod.getMetadata().getLabels()).append("\n");
-        descriptionBuilder.append("Status: ").append(pod.getStatus().getPhase()).append("\n");
-        descriptionBuilder.append("Annotations: ").append(pod.getMetadata().getAnnotations()).append("\n");
-        descriptionBuilder.append("Creation Timestamp: ").append(pod.getMetadata().getCreationTimestamp()).append("\n");
-        descriptionBuilder.append("Owner References: ").append(pod.getMetadata().getOwnerReferences()).append("\n");
+        // API Version and Kind
+        descriptionBuilder.append("API Version: ").append(pod.getApiVersion()).append("\n");
+        descriptionBuilder.append("Kind: ").append(pod.getKind()).append("\n");
 
-        descriptionBuilder.append("Node Name: ").append(pod.getSpec().getNodeName()).append("\n");
-        descriptionBuilder.append("Service Account Name: ").append(pod.getSpec().getServiceAccountName()).append("\n");
-        descriptionBuilder.append("Host Network: ").append(pod.getSpec().getHostNetwork()).append("\n");
-        descriptionBuilder.append("Host PID: ").append(pod.getSpec().getHostPID()).append("\n");
-        descriptionBuilder.append("Host IPC: ").append(pod.getSpec().getHostIPC()).append("\n");
-        descriptionBuilder.append("Containers: \n");
+        // Metadata
+        descriptionBuilder.append("Metadata:\n");
+        descriptionBuilder.append("\tName: ").append(pod.getMetadata().getName()).append("\n");
 
-        // Ajouter plus d'informations au besoin
-        descriptionBuilder.append("Pod IP: ").append(pod.getStatus().getPodIP()).append("\n");
-
-        // Include container details
-            // Containers
-        List<V1Container> containers = pod.getSpec().getContainers();
-        for (V1Container container : containers) {
-            descriptionBuilder.append("\tName: ").append(container.getName()).append("\n");
-            descriptionBuilder.append("\tImage: ").append(container.getImage()).append("\n");
-            descriptionBuilder.append("\tCommand: ").append(container.getCommand()).append("\n");
-            descriptionBuilder.append("\tArgs: ").append(container.getArgs()).append("\n");
-            descriptionBuilder.append("\tWorking Directory: ").append(container.getWorkingDir()).append("\n");
-            descriptionBuilder.append("\tPorts: ").append(container.getPorts()).append("\n");
-            descriptionBuilder.append("\tVolume Mounts: ").append(container.getVolumeMounts()).append("\n");
-            descriptionBuilder.append("\tResources: ").append(container.getResources()).append("\n");
-            descriptionBuilder.append("\tEnvironment Variables: ").append(container.getEnv()).append("\n");
-            descriptionBuilder.append("\n");
+        // Labels
+        Map<String, String> labels = pod.getMetadata().getLabels();
+        if (labels != null && !labels.isEmpty()) {
+            descriptionBuilder.append("\tLabels:\n");
+            for (Map.Entry<String, String> entry : labels.entrySet()) {
+                descriptionBuilder.append("\t\t").append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
+            }
         }
-        descriptionBuilder.append("Status: ").append(pod.getStatus().getPhase()).append("\n");
-        descriptionBuilder.append("Pod IP: ").append(pod.getStatus().getPodIP()).append("\n");
-        descriptionBuilder.append("Pod Host IP: ").append(pod.getStatus().getHostIP()).append("\n");
-        descriptionBuilder.append("Conditions: ").append(pod.getStatus().getConditions()).append("\n");
-        descriptionBuilder.append("Message: ").append(pod.getStatus().getMessage()).append("\n");
-        descriptionBuilder.append("Reason: ").append(pod.getStatus().getReason()).append("\n");
-        descriptionBuilder.append("StartTime: ").append(pod.getStatus().getStartTime()).append("\n");
-        descriptionBuilder.append("Deletion Timestamp: ").append(pod.getMetadata().getDeletionTimestamp()).append("\n");
-        
+
+        descriptionBuilder.append("\tCreation Timestamp: ").append(pod.getMetadata().getCreationTimestamp()).append("\n");
+        descriptionBuilder.append("\tOwner References: ");
         if (pod.getMetadata().getOwnerReferences() != null && !pod.getMetadata().getOwnerReferences().isEmpty()) {
-            descriptionBuilder.append("Controlled By: ");
-            // Iterate through ownerReferences
             for (V1OwnerReference ownerReference : pod.getMetadata().getOwnerReferences()) {
                 descriptionBuilder.append(ownerReference.getKind()).append("/").append(ownerReference.getName());
-                // If there are multiple ownerReferences, separate them with commas
                 if (!ownerReference.equals(pod.getMetadata().getOwnerReferences().get(pod.getMetadata().getOwnerReferences().size() - 1))) {
                     descriptionBuilder.append(", ");
                 }
             }
         }
+        descriptionBuilder.append("\n");
+
+        // Spec
+        descriptionBuilder.append("Spec:\n");
+        descriptionBuilder.append("\tNode Name: ").append(pod.getSpec().getNodeName()).append("\n");
+        descriptionBuilder.append("\tService Account Name: ").append(pod.getSpec().getServiceAccountName()).append("\n");
+
+        // Containers
+        List<V1Container> containers = pod.getSpec().getContainers();
+        descriptionBuilder.append("\tContainers:\n");
+        for (V1Container container : containers) {
+            descriptionBuilder.append("\t\tName: ").append(container.getName()).append("\n");
+            descriptionBuilder.append("\t\tImage: ").append(container.getImage()).append("\n");
+            // Iterate through container ports
+            List<V1ContainerPort> ports = container.getPorts();
+            if (ports != null && !ports.isEmpty()) {
+                for (V1ContainerPort port : ports) {
+                    descriptionBuilder.append("\t\tContainer Port: ").append(port.getContainerPort()).append("\n");
+                    descriptionBuilder.append("\t\tName: ").append(port.getName()).append("\n");
+                }
+            }
+            descriptionBuilder.append("\n");
+        }
+
         return descriptionBuilder.toString();
     }
 
