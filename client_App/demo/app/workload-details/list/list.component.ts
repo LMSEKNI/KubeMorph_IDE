@@ -161,7 +161,7 @@ export class ListComponent implements OnInit {
     }
   openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
     this.dialog.open(DeleteComponent, {
-      width: '250px',
+      width: '400px',
       enterAnimationDuration,
       exitAnimationDuration,
     });

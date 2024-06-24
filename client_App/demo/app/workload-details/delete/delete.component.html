@@ -1,13 +1,13 @@
-<h2 mat-dialog-title>
+<h3 mat-dialog-title>
+  <span class="dialog-title">Delete file</span>
   <button mat-icon-button mat-dialog-close class="close-button">
     <mat-icon>close</mat-icon>
   </button>
-  <span class="dialog-title">Delete file</span>
-</h2>
+</h3>
 <div class="header-divider"></div>
 
 <mat-dialog-content>
-  Would you like to delete cat.jpeg?
+  Would you like to delete {{this.resourceName}}?
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button mat-dialog-close>No</button>
