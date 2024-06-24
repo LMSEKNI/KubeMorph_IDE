@@ -37,22 +37,40 @@
         </mat-menu>
       </div>
 
-      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-        <mat-icon>more_vert</mat-icon>
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item >
+        <mat-icon>home</mat-icon>
+        <span>List Resource</span>
       </button>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item [routerLink]="['']">
-          <span>List Resource</span>
-        </button>
-        <button mat-menu-item disabled>
-          <span>Monitoring</span>
-        </button>
-        <button mat-menu-item>
-          <span>Helm</span>
-        </button>
-      </mat-menu>
-    </div>
+      <button mat-menu-item routerLink="/monitoring">
+        <mat-icon>settings_heart</mat-icon>
+        <span>Monotoring</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon>notifications_off</mat-icon>
+        <span>Helm</span>
+      </button>
+    </mat-menu>
   </div>
+</div>
+<!--
+<div>
+  <label for="showBoth">Show Both</label>
+  <input type="checkbox" id="showBoth" name="showBoth" (change)="toggleBoth($event.target.checked)">
+</div> -->
+
+<!-- <div id="network" style="width: 100%; height: 500px; border: 1px solid lightgray;"></div> -->
+
+
+
+<!-- <div class="top-label" >
+  <span style="color: red;">Service deleted</span>
+</div> -->
+
+
 
   <div id="network" (click)="onNodeClick($event)" style="width: 100%; height: 500px; border: 1px solid lightgray;">
   </div>
@@ -71,6 +89,7 @@
         <button (click)="selectOption('form')" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Form</button>
         <button (click)="selectOption('yaml')" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">YAML</button>
       </div>
+
     </div>
       <ng-container *ngIf="selectedComponent === 'desc'">
         <app-descc *ngIf="selectedResource" [resourceName]="selectedResource" [resourceType]="selectedType"></app-descc>
@@ -79,7 +98,7 @@
         <app-dynamic-form-update></app-dynamic-form-update>
       </ng-container>
       <ng-container *ngIf="selectedComponent === 'yaml'">
-        <app-yml-file-update [resourceName]="selectedResource" [resourceType]="selectedType"></app-yml-file-update>
+        <app-yml-file-update [resourceName]="selectedResource" [resourceType]="selectedType" ></app-yml-file-update>
       </ng-container>
   </div>
   <div class="dialog-frame" *ngIf="isDialogOpen"></div>

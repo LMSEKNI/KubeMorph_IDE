@@ -28,6 +28,7 @@ import { DynamicFormComponent } from './addressource/dynamic-form/component/dyna
 import { YmlFileUpdateComponent } from './updateressource/yml-file-update/yml-file-update.component';
 import { DynamicFormUpdateComponent } from './updateressource/dynamic-form-update/dynamic-form-update.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatChipsModule } from '@angular/material/chips';
 import { WelcomeInterfaceComponent } from './welcome-interface/welcome-interface.component';
 import { MonitoringConfigComponent } from './monitoring-validate/monitoring-config.component';
 import { MonitoringChoiceComponent } from './monitoring-metrics/monitoring-choice.component';
@@ -46,10 +47,17 @@ import {MatChipsModule} from '@angular/material/chips';
 import { HelmDetailsComponent } from './helm/helm-details/helm-details.component';
 import { CharttemplateComponent } from './helm/charttemplate/charttemplate.component';
 import { DeleteComponent } from './workload-details/delete/delete.component';
+import {NgTerminalModule} from 'ng-terminal';
+import { MonitoringComponent } from './monitoring/components/monitoring.component';
+import {EChartsDirective} from './monitoring/Directives/EChartsDirective';
+import { GrafanaDialogComponent } from './monitoring/components/grafana-dialog/grafana-dialog.component';
+
 
 
 @NgModule({
-  declarations: [
+  declarations: [ MonitoringComponent,
+                  GrafanaDialogComponent,
+                  EChartsDirective,
                   DemoComponent,
                   DemoRootComponent,
                   YmlFileComponent,
@@ -70,6 +78,8 @@ import { DeleteComponent } from './workload-details/delete/delete.component';
                   HelmDetailsComponent,
                   CharttemplateComponent,
                   DeleteComponent,
+                  MonitoringComponent,
+                  GrafanaDialogComponent,
 
                   ],
     imports: [

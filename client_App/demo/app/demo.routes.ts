@@ -14,6 +14,8 @@ import { LogTerminalComponent} from './log-terminal/log-terminal.component';
 import { TerminalTabManagerComponent} from './terminal-tab-manager/terminal-tab-manager.component';
 import { HelmComponent} from './helm/helm.component';
 import { HelmDetailsComponent} from './helm/helm-details/helm-details.component';
+import {MonitoringComponent} from './monitoring/components/monitoring.component';
+
 
 export const routes: Route[] = [
   { path: '' , component: ListComponent},
@@ -29,5 +31,6 @@ export const routes: Route[] = [
   { path: 'prometheus' , component: MonitoringPrometheusComponent},
   { path: 'helm' , component: HelmComponent },
   { path: 'helm/helmdetails' , component: HelmDetailsComponent},
+  { path: 'monitoring' , component: MonitoringComponent},
 
 ];

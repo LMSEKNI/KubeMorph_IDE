@@ -19,10 +19,8 @@ public class KubernetesMetricsService {
 
     public KubernetesMetricsService() throws IOException {
         try {
-            // Initialize ApiClient
             this.apiClient = Config.defaultClient();
         } catch (IOException e) {
-            // Handle exception and provide meaningful error message
             throw new RuntimeException("Failed to initialize Kubernetes ApiClient", e);
         }
     }

@@ -106,10 +106,10 @@ export class ListComponent implements OnInit {
     selectedChoice: string | null = null;
     //////
   public showTerminal = false;
-  public showTerminalContent= false;
+  public showTerminalContent = false;
 
   public showLogs = false;
-  public showLogsContent= false;
+  public showLogsContent = false;
   isSearchOpen = false;
 
   toppings = new FormControl('');
