@@ -40,7 +40,7 @@ export class DesccComponent implements OnInit {
       .subscribe(
         (description: string) => {
           this.parseResourceDescription(description);
-          console.log("descccccccccccc"+ description);
+          console.log("description:"+ description);
         },
         (error: any) => {
           console.error('Error fetching resource details:', error);

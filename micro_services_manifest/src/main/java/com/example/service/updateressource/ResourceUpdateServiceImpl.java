@@ -15,8 +15,10 @@ public class ResourceUpdateServiceImpl implements ResourceUpdateService {
 
     private final ApiClient apiClient;
 
+
     public ResourceUpdateServiceImpl() throws IOException {
         this.apiClient = Config.defaultClient();
+
     }
 
     @Override
@@ -82,6 +84,58 @@ public class ResourceUpdateServiceImpl implements ResourceUpdateService {
                 break;
             default:
                 throw new ApiException(400, "Unsupported resource kind: " + kind);
+        }
+    }
+
+    @Override
+    public String getResourceAsJson(String namespace, String kind, String name) throws ApiException {
+        Object resource = getResource(namespace, kind, name);
+        return apiClient.getJSON().serialize(resource);
+    }
+
+    @Override
+    public String getResourceAsYaml(String namespace, String kind, String name) throws ApiException {
+        Object resource = getResource(namespace, kind, name);
+        return Yaml.dump(resource);
+    }
+
+    private Object getResource(String namespace, String kind, String name) throws ApiException {
+        CoreV1Api coreV1Api = new CoreV1Api(apiClient);
+        AppsV1Api appsV1Api = new AppsV1Api(apiClient);
+        BatchV1Api batchV1Api = new BatchV1Api(apiClient);
+        StorageV1Api storageV1Api = new StorageV1Api(apiClient);
+        NetworkingV1Api networkingV1Api = new NetworkingV1Api(apiClient);
+
+        switch (kind.toLowerCase()) {
+            case "pod":
+                return coreV1Api.readNamespacedPod(name, namespace, null);
+            case "deployment":
+                return appsV1Api.readNamespacedDeployment(name, namespace, null);
+            case "service":
+                return coreV1Api.readNamespacedService(name, namespace, null);
+            case "configmap":
+                return coreV1Api.readNamespacedConfigMap(name, namespace, null);
+            case "secret":
+                return coreV1Api.readNamespacedSecret(name, namespace, null);
+            case "daemonset":
+                return appsV1Api.readNamespacedDaemonSet(name, namespace, null);
+            case "statefulset":
+                return appsV1Api.readNamespacedStatefulSet(name, namespace, null);
+            case "job":
+                return batchV1Api.readNamespacedJob(name, namespace, null);
+            case "persistentvolume":
+                return coreV1Api.readPersistentVolume(name, null);
+            case "persistentvolumeclaim":
+                return coreV1Api.readNamespacedPersistentVolumeClaim(name, namespace, null);
+            case "storageclass":
+                return storageV1Api.readStorageClass(name, null);
+            case "networkpolicy":
+                return networkingV1Api.readNamespacedNetworkPolicy(name, namespace, null);
+            case "serviceaccount":
+                return coreV1Api.readNamespacedServiceAccount(name, namespace, null);
+            default:
+                throw new ApiException(400, "Unsupported resource kind: " + kind);
+
         }
     }
 

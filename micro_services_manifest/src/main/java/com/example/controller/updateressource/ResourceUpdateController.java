@@ -31,4 +31,31 @@ public class ResourceUpdateController {
             return ResponseEntity.status(e.getCode()).body(e.getResponseBody());
         }
     }
+    @GetMapping("/{namespace}/{kind}/{name}/json")
+    public ResponseEntity<?> getResourceAsJson(
+            @PathVariable String namespace,
+            @PathVariable String kind,
+            @PathVariable String name
+    ) {
+        try {
+            String resourceJson = resourceUpdateService.getResourceAsJson(namespace, kind, name);
+            return ResponseEntity.ok(resourceJson);
+        } catch (ApiException e) {
+            return ResponseEntity.status(e.getCode()).body(e.getResponseBody());
+        }
+    }
+
+    @GetMapping("/{namespace}/{kind}/{name}/yaml")
+    public ResponseEntity<?> getResourceAsYaml(
+            @PathVariable String namespace,
+            @PathVariable String kind,
+            @PathVariable String name
+    ) {
+        try {
+            String resourceYaml = resourceUpdateService.getResourceAsYaml(namespace, kind, name);
+            return ResponseEntity.ok(resourceYaml);
+        } catch (ApiException e) {
+            return ResponseEntity.status(e.getCode()).body(e.getResponseBody());
+        }
+    }
 }

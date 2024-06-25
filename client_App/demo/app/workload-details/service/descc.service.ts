@@ -11,17 +11,7 @@ export class DesccService {
 
   constructor(private http: HttpClient) { }
 
-
-  // getPodDescriptions(podName: string): Observable<string> {
-  //   return this.http.get(`${this.baseUrl}/desc/poddesc/${podName}`, { responseType: 'text' });
-  // }
-  // getServiceDescriptions(serviceName: string): Observable<string> {
-  //   return this.http.get(`${this.baseUrl}/desc/servdesc/${serviceName}`, { responseType: 'text' });
-  // }
-  getResourceDescriptions(resourceType: string,ressourceName :string): Observable<string> {
+  getResourceDescriptions(resourceType: string,ressourceName:string): Observable<string> {
     return this.http.get(`${this.baseUrl}/desc/${resourceType}/${ressourceName}`, { responseType: 'text' });
-  }
-  getPodDescriptions(resourceType: string,ressourceName :string): Observable<string> {
-    return this.http.get(`${this.baseUrl}/desc/test/${resourceType}/${ressourceName}`, { responseType: 'text' });
   }
 }

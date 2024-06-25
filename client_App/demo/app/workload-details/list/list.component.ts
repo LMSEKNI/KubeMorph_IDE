@@ -75,7 +75,7 @@ export class ListComponent implements OnInit {
 
     resetOption = true;
     showChecklist = false;
-    ///////////////////new list selection
+    /////////////////// new list selection
     selectedResources = new FormControl([]);
 
     resourceList: string[] = [
@@ -98,6 +98,7 @@ export class ListComponent implements OnInit {
     selectedResource: string | null = null;
     ressourceName: string[];
     resourceType: string[];
+    namespace: string;
     selectedType: string;
     isFrameOpen = false;
     showCheckboxes = false;
@@ -539,36 +540,48 @@ export class ListComponent implements OnInit {
     this.isFrameOpen = true;
 
     selectedNodes.forEach((nodeId: string) => {
-        const node = this.network.body.nodes[nodeId];
-        this.selectedResource = node.options.title;
-        // const labelParts = node.options.label.split(':');
-        // const resourceType = labelParts[0].trim().toLowerCase(); // Extracted resource type
-      console.log("nifhemmmm", node.options.nodes);
+      const node = this.network.body.nodes[nodeId];
+      this.selectedResource = node.options.title;
 
       const labelParts = node.options.label.split(':');
-        if (labelParts.length !== 2) {
-            console.error('Invalid label format:', node.options.value);
-            return;
-        }
+      if (labelParts.length !== 2) {
+        console.error('Invalid label format:', node.options.value);
+        return;
+      }
 
-        const resourceType = labelParts[0].trim().toLowerCase(); // Extracted resource type
-        const resourceName = labelParts[1].trim(); // Extracted resource name
+      const resourceType = labelParts[0].trim().toLowerCase(); // Extracted resource type
+      const resourceName = labelParts[1].trim(); // Extracted resource name
 
-        this.selectedType = resourceType;
+      this.selectedType = resourceType;
 
-        console.log('Resource Type:', resourceType);
-        console.log('Resource Name:', resourceName);
-        this.DescService.getResourceDescriptions(resourceType, resourceName)
+      console.log('Resource Type:', resourceType);
+      console.log('Resource Name:', resourceName);
+      this.DescService.getResourceDescriptions(resourceType, resourceName)
         .subscribe(
-            (description: string) => {
-                console.log('Resource Description:', description);
-            },
-            (error) => {
-                console.error('Error fetching resource description:', error);
+          (description: string) => {
+            console.log('Resource Description:', description);
+             this.namespace = this.parseResourceNamespace(description);
+
+            // Log the namespace if it's available
+            if (this.namespace) {
+              console.log('Namespace:', this.namespace);
+            } else {
+              console.log('Namespace not found in the description');
             }
+          },
+          (error) => {
+            console.error('Error fetching resource description:', error);
+          }
         );
     });
-    }
+  }
+
+  parseResourceNamespace(description: string): string | null {
+    const namespacePattern = /Namespace:\s*(\S+)/i;
+    const match = description.match(namespacePattern);
+    return match ? match[1] : null;
+  }
+
     toggleCheckboxList(): void {
       this.showCheckboxes = !this.showCheckboxes;
     }
@@ -583,6 +596,8 @@ export class ListComponent implements OnInit {
     toggleChecklist() {
       this.showChecklist = !this.showChecklist;
     }
+
+
 
 
 

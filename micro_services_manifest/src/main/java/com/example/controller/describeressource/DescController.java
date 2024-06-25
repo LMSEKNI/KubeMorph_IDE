@@ -35,11 +35,6 @@ public class DescController {
         return ResponseEntity.ok(description);
     }
 
-    @GetMapping("/test/{resourceType}/{ressourceName}")
-    public String getPod(@PathVariable String ressourceName, @PathVariable String resourceType) throws IOException, ApiException, UnrecoverableKeyException, CertificateException, KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
-        V1Pod descriptionpod = DescService.getPod(resourceType, ressourceName);
-        return descriptionpod.toString();
-    }
 
 }
 

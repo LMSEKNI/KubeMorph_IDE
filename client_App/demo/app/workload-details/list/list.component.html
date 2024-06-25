@@ -89,16 +89,15 @@
         <button (click)="selectOption('form')" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Form</button>
         <button (click)="selectOption('yaml')" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">YAML</button>
       </div>
-
     </div>
       <ng-container *ngIf="selectedComponent === 'desc'">
         <app-descc *ngIf="selectedResource" [resourceName]="selectedResource" [resourceType]="selectedType"></app-descc>
       </ng-container>
       <ng-container *ngIf="selectedComponent === 'form'">
-        <app-dynamic-form-update></app-dynamic-form-update>
+        <app-dynamic-form-update [namespace]="namespace"  [resourceName]="selectedResource" [resourceType]="selectedType" ></app-dynamic-form-update>
       </ng-container>
       <ng-container *ngIf="selectedComponent === 'yaml'">
-        <app-yml-file-update [resourceName]="selectedResource" [resourceType]="selectedType" ></app-yml-file-update>
+        <app-yml-file-update  [namespace]="namespace"  [resourceName]="selectedResource" [resourceType]="selectedType" ></app-yml-file-update>
       </ng-container>
   </div>
   <div class="dialog-frame" *ngIf="isDialogOpen"></div>

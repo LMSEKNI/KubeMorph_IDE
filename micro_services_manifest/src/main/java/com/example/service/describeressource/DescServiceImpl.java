@@ -138,6 +138,11 @@ public class DescServiceImpl<ExtensionsV1beta1Api> implements DescService {
     public String generatePodDescription(V1Pod pod) {
         StringBuilder descriptionBuilder = new StringBuilder();
 
+        descriptionBuilder.append("Name: ").append(pod.getMetadata().getName()).append("\n");
+        descriptionBuilder.append("Namespace: ").append(pod.getMetadata().getNamespace()).append("\n");
+        descriptionBuilder.append("Labels: ").append(pod.getMetadata().getLabels()).append("\n");
+        descriptionBuilder.append("Status: ").append(pod.getStatus().getPhase()).append("\n");
+
         // API Version and Kind
         descriptionBuilder.append("API Version: ").append(pod.getApiVersion()).append("\n");
         descriptionBuilder.append("Kind: ").append(pod.getKind()).append("\n");
@@ -218,7 +223,6 @@ public class DescServiceImpl<ExtensionsV1beta1Api> implements DescService {
         descriptionBuilder.append("Name: ").append(service.getMetadata().getName()).append("\n");
         descriptionBuilder.append("Namespace: ").append(service.getMetadata().getNamespace()).append("\n");
         descriptionBuilder.append("Labels: ").append(service.getMetadata().getLabels()).append("\n");
-        descriptionBuilder.append("Status: ").append(service.getStatus()).append("\n");
         descriptionBuilder.append("Annotations: ").append(service.getMetadata().getAnnotations()).append("\n");
         descriptionBuilder.append("Creation Timestamp: ").append(service.getMetadata().getCreationTimestamp()).append("\n");
         descriptionBuilder.append("Owner References: ").append(service.getMetadata().getOwnerReferences()).append("\n");
@@ -233,7 +237,6 @@ public class DescServiceImpl<ExtensionsV1beta1Api> implements DescService {
         if (!ports.isEmpty()) {
             descriptionBuilder.append("Ports:").append("\n");
             for (V1ServicePort port : ports) {
-                descriptionBuilder.append("\tName: ").append(port.getName()).append("\n");
                 descriptionBuilder.append("\tProtocol: ").append(port.getProtocol()).append("\n");
                 descriptionBuilder.append("\tPort: ").append(port.getPort()).append("\n");
                 descriptionBuilder.append("\tTarget Port: ").append(port.getTargetPort()).append("\n");
@@ -252,15 +255,7 @@ public class DescServiceImpl<ExtensionsV1beta1Api> implements DescService {
         if (externalIPs != null && !externalIPs.isEmpty()) {
             descriptionBuilder.append("External IPs: ").append(externalIPs).append("\n");
         }
-    
-        // Load Balancer details
-        V1LoadBalancerStatus loadBalancer = service.getStatus().getLoadBalancer();
-        if (loadBalancer != null) {
-            descriptionBuilder.append("Load Balancer: ").append(loadBalancer).append("\n");
-        }
-    
-        
-    
+
         return descriptionBuilder.toString();
     }
     
@@ -659,6 +654,7 @@ public class DescServiceImpl<ExtensionsV1beta1Api> implements DescService {
         descriptionBuilder.append("Name: ").append(namespace.getMetadata().getName()).append("\n");
         descriptionBuilder.append("Labels: ").append(namespace.getMetadata().getLabels()).append("\n");
         descriptionBuilder.append("Annotations: ").append(namespace.getMetadata().getAnnotations()).append("\n");
+        descriptionBuilder.append("Status: ").append(namespace.getStatus().getPhase()).append("\n");
         // Append more information as needed
     
         return descriptionBuilder.toString();
