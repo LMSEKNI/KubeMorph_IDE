@@ -1,7 +1,7 @@
 .description-card {
   width: 100%;
-  max-width: 600px; /* Adjust width as needed */
   margin: 20px;
+  box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
 }
 
 .main-title {
@@ -20,3 +20,26 @@
   width: 100%;
   margin-bottom: 10px;
 }
+.pod-description {
+  position: relative;
+}
+
+.slider-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 300px;
+  z-index: 1;
+}
+
+.description-card {
+  width: 100%;
+  margin: 20px;
+  box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
+}
+
+.error {
+  color: red;
+  margin-top: 10px;
+}
+

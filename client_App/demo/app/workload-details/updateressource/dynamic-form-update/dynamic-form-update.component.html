@@ -3,11 +3,20 @@
     <mat-card-title>Update Resource (Form)</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <mat-form-field appearance="fill" class="yaml-editor">
-      <mat-label>Edit Resource YAML</mat-label>
-      <textarea matInput [(ngModel)]="editedResourceJson" rows="20" ></textarea>
-    </mat-form-field>
-    <button mat-raised-button color="primary" (click)="saveUpdates()">Save Updates</button>
+    <mat-card-title>Json Description:</mat-card-title>
+    <ngx-json-viewer [json]="resourceJson"></ngx-json-viewer>
+    <mat-card-title>Update using this Form </mat-card-title>
+    <form [formGroup]="dynamicForm" (ngSubmit)="onSubmit()" style="margin-top: 20px;">
+      <ng-container *ngFor="let field of formFields">
+        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+          <label style="width: 200px; font-weight: bold;">{{ field.label }}</label>
+          <mat-form-field appearance="fill" style="flex: 1;" *ngIf="field.type === 'string' || field.type === 'number'">
+            <input matInput [formControlName]="field.key">
+          </mat-form-field>
+        </div>
+      </ng-container>
+      <button mat-raised-button color="primary" type="submit">Save Updates</button>
+    </form>
   </mat-card-content>
   <mat-card-footer>
     <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>

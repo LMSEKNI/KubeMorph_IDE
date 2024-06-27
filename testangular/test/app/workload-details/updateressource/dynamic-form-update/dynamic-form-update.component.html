@@ -1,0 +1,13 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Update Resource (Form)</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <jsonforms-outlet></jsonforms-outlet>
+    <button mat-raised-button color="primary" (click)="onSubmit()">Save Updates</button>
+  </mat-card-content>
+  <mat-card-footer>
+    <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+    <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
+  </mat-card-footer>
+</mat-card>

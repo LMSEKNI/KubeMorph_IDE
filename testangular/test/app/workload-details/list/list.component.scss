@@ -1,0 +1,130 @@
+.main-container {
+  transition: transform 0.3s ease; /* Adjust transition property */
+
+}
+
+.shift-left {
+  transform: translateX(-50%);
+}
+
+.container {
+  display: flex;
+  //transition: width 0.3s ease;
+//  height: 100vh;
+}
+
+.container.frame-open {
+  width: 50%;
+}
+
+.description-frame {
+  top: 0;
+  position: fixed;
+  right: 0;
+  width: 50%;
+  background-color: #005573;
+  overflow-y: auto;
+  transition: width 0.3s ease;
+  max-height: 100vh;
+}
+
+.description-card {
+  margin: 20px;
+  padding: 20px;
+}
+
+.description {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dialog-frame {
+  width: 50%;
+  background-color: #f1f1f1;
+  overflow-y: auto;
+  transition: width 0.3s ease;
+}
+
+.log-container,
+.terminal-container {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #fff;
+  transition: transform 0.3s ease;
+}
+
+.open {
+  transform: translateY(0);
+}
+
+.closed {
+  transform: translateY(100%);
+}
+
+.iconn {
+  display: flex;
+  justify-content: flex-end; /* Align icons to the right */
+}
+
+.search-container {
+  display: flex;
+  justify-content: space-between;
+
+}
+
+.search-icon,
+.menu-icon {
+  display: flex;
+  align-items: center;
+}
+
+.icons-container {
+  display: flex;
+  align-items: center;
+}
+
+.search-field {
+  flex: 1;
+  margin-right: 16px;
+}
+
+.search-wrapper {
+  position: relative;
+  padding-top: 10px;
+}
+
+input[type=text] {
+  width: calc(100% - 30px);
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.search-wrapper:focus-within .checklist {
+  display: block;
+}
+
+.dropdown-menu {
+  top: 100%;
+  left: 0;
+  z-index: 10;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  width: auto;
+}
+
+.dropdown-menu button {
+  display: block;
+  padding: 8px;
+  background: white;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  white-space: nowrap;
+}

@@ -1,0 +1,22 @@
+// * { border: 1px solid red !important; }
+@use '@angular/material' as mat;
+@include mat.core();
+$demo-app-primary: mat.define-palette(mat.$blue-grey-palette);
+$demo-app-accent:  mat.define-palette(mat.$amber-palette, A200, A100, A400);
+$demo-app-warn:    mat.define-palette(mat.$red-palette);
+$demo-app-theme:   mat.define-light-theme($demo-app-primary, $demo-app-accent, $demo-app-warn);
+@include mat.all-component-themes($demo-app-theme);
+
+$font-family: 'Roboto';
+
+
+
+body {
+  color: #1683ff;
+  font-family: Roboto;
+  background-color: white; /* Choose your desired background color */
+
+}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

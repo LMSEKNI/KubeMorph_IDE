@@ -20,9 +20,9 @@ export class UpdateressourceService {
   getResourceAsYaml(namespace: string, kind: string, name: string): Observable<string> {
     return this.http.get(`${this.baseUrl}/${namespace}/${kind}/${name}/yaml`, { responseType: 'text' });
   }
-
-  updateResource(namespace: string, resourceType: string, resourceName: string, updatedResource: string): Observable<string> {
+  updateResource(namespace: string, resourceType: string, resourceName: string, updatedResource: any): Observable<string> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.put(`${this.baseUrl}/${namespace}/${resourceType}/${resourceName}`, updatedResource, { headers, responseType: 'text' });
   }
+
 }

@@ -1,0 +1,135 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "default": "apps/v1"
+    },
+    "kind": {
+      "type": "string",
+      "default": "ReplicaSet"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "labels": {
+          "type": "object",
+          "properties": {
+            "app": {
+              "type": "string"
+            },
+            "tier": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "app",
+            "tier"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "labels"
+      ]
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "replicas": {
+          "type": "integer"
+        },
+        "selector": {
+          "type": "object",
+          "properties": {
+            "matchLabels": {
+              "type": "object",
+              "properties": {
+                "tier": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "tier"
+              ]
+            }
+          },
+          "required": [
+            "matchLabels"
+          ]
+        },
+        "template": {
+          "type": "object",
+          "properties": {
+            "metadata": {
+              "type": "object",
+              "properties": {
+                "labels": {
+                  "type": "object",
+                  "properties": {
+                    "tier": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "tier"
+                  ]
+                }
+              },
+              "required": [
+                "labels"
+              ]
+            },
+            "spec": {
+              "type": "object",
+              "properties": {
+                "containers": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "image": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "image"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "containers"
+              ]
+            }
+          },
+          "required": [
+            "metadata",
+            "spec"
+          ]
+        }
+      },
+      "required": [
+        "replicas",
+        "selector",
+        "template"
+      ]
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ]
+}

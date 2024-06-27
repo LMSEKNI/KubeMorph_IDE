@@ -1,12 +1,7 @@
 <div class="pod-description" *ngIf="resourceName">
   <mat-card class="description-card">
     <mat-card-content>
-      <div *ngFor="let detail of resourceDetails">
-        <mat-card-header>
-          <mat-card-title>{{ detail.title }}</mat-card-title>
-          <mat-card-subtitle>{{ detail.description }}</mat-card-subtitle>
-        </mat-card-header>
-      </div>
+      <ngx-json-viewer [json]="resourceJson"></ngx-json-viewer>
       <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
     </mat-card-content>
   </mat-card>

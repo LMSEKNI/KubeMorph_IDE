@@ -10,16 +10,13 @@ export class DesccComponent implements OnInit {
   @Input() resourceName: string | null = null;
   @Input() resourceType: string | null = null;
 
-  resourceDetails: { title: string, description: string }[] = [];
+  resourceJson: any;
   errorMessage = '';
   isFrameOpen: boolean = false;
 
   constructor(private descServiceService: DesccService) { }
 
   ngOnInit(): void {
-    console.log('ngOnInit called');
-    console.log(this.resourceName);
-    console.log(this.resourceType);
     if (this.resourceName && this.resourceType) {
       this.getResourceDetails();
     }
@@ -30,7 +27,7 @@ export class DesccComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.resourceName && changes.resourceName.currentValue  ) {
+    if (changes.resourceName && changes.resourceName.currentValue) {
       this.getResourceDetails();
     }
   }
@@ -39,8 +36,7 @@ export class DesccComponent implements OnInit {
     this.descServiceService.getResourceDescriptions(this.resourceType, this.resourceName)
       .subscribe(
         (description: string) => {
-          this.parseResourceDescription(description);
-          console.log("description:"+ description);
+          this.resourceJson = this.parseDescription(description);
         },
         (error: any) => {
           console.error('Error fetching resource details:', error);
@@ -49,29 +45,32 @@ export class DesccComponent implements OnInit {
       );
   }
 
-  parseResourceDescription(description: string): void {
-    this.resourceDetails = [];
+  parseDescription(description: string): any {
+    const lines = description.split('\n');
+    const result = {};
+    let currentLevel = result;
+    const levels = [result];
 
-    // Split description into main sections
-    const sections = description.split(/\n\s*\n/);
+    lines.forEach(line => {
+      const indentLevel = line.search(/\S|$/);
+      const trimmedLine = line.trim();
+      const [key, ...rest] = trimmedLine.split(':');
+      const value = rest.join(':').trim();
 
-    sections.forEach(section => {
-      const lines = section.split('\n');
-      if (lines.length > 0) {
-        const mainTitle = lines[0].trim();
-        const subsections = lines.slice(1); // Exclude the main title line
+      while (indentLevel < levels.length - 1) {
+        levels.pop();
+        currentLevel = levels[levels.length - 1];
+      }
 
-        this.resourceDetails.push({ title: mainTitle, description: '' });
-
-        subsections.forEach(subsection => {
-          const [label, value] = subsection.split(':');
-          if (label && value) {
-            this.resourceDetails.push({ title: label.trim(), description: value.trim() });
-          }
-        });
+      if (value) {
+        currentLevel[key.trim()] = value;
+      } else {
+        currentLevel[key.trim()] = {};
+        levels.push(currentLevel[key.trim()]);
+        currentLevel = currentLevel[key.trim()];
       }
     });
+
+    return result;
   }
-
-
 }

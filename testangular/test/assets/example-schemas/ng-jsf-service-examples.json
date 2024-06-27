@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "default": "v1"
+    },
+    "kind": {
+      "type": "string",
+      "default": "Service"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "selector": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "ports": {
+          "type": "array",
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "protocol": {
+                  "type": "string"
+                },
+                "port": {
+                  "type": "integer"
+                },
+                "targetPort": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "protocol",
+                "port",
+                "targetPort"
+              ]
+            }
+          ]
+        }
+      },
+      "required": [
+        "selector",
+        "ports"
+      ]
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ]
+}

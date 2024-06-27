@@ -1,0 +1,136 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "default": "networking.k8s.io/v1"
+    },
+    "kind": {
+      "type": "string",
+      "default": "Ingress"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "defaultBackend": {
+          "type": "object",
+          "properties": {
+            "resource": {
+              "type": "object",
+              "properties": {
+                "apiGroup": {
+                  "type": "string"
+                },
+                "kind": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "apiGroup",
+                "kind",
+                "name"
+              ]
+            }
+          },
+          "required": [
+            "resource"
+          ]
+        },
+        "rules": {
+          "type": "array",
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "http": {
+                  "type": "object",
+                  "properties": {
+                    "paths": {
+                      "type": "array",
+                      "items": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "path": {
+                              "type": "string"
+                            },
+                            "pathType": {
+                              "type": "string"
+                            },
+                            "backend": {
+                              "type": "object",
+                              "properties": {
+                                "resource": {
+                                  "type": "object",
+                                  "properties": {
+                                    "apiGroup": {
+                                      "type": "string"
+                                    },
+                                    "kind": {
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "apiGroup",
+                                    "kind",
+                                    "name"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "resource"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "path",
+                            "pathType",
+                            "backend"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "paths"
+                  ]
+                }
+              },
+              "required": [
+                "http"
+              ]
+            }
+          ]
+        }
+      },
+      "required": [
+        "defaultBackend",
+        "rules"
+      ]
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ]
+}

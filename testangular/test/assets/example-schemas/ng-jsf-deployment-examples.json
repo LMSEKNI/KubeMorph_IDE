@@ -1,0 +1,152 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "default": "apps/v1"
+    },
+    "kind": {
+      "type": "string",
+      "default": "Deployment"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "labels": {
+          "type": "object",
+          "properties": {
+            "app": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "app"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "namespace",
+        "labels"
+      ]
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "replicas": {
+          "type": "integer"
+        },
+        "selector": {
+          "type": "object",
+          "properties": {
+            "matchLabels": {
+              "type": "object",
+              "properties": {
+                "app": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "app"
+              ]
+            }
+          },
+          "required": [
+            "matchLabels"
+          ]
+        },
+        "template": {
+          "type": "object",
+          "properties": {
+            "metadata": {
+              "type": "object",
+              "properties": {
+                "labels": {
+                  "type": "object",
+                  "properties": {
+                    "app": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "app"
+                  ]
+                }
+              },
+              "required": [
+                "labels"
+              ]
+            },
+            "spec": {
+              "type": "object",
+              "properties": {
+                "containers": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "image": {
+                          "type": "string"
+                        },
+                        "ports": {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "containerPort": {
+                                  "type": "integer"
+                                }
+                              },
+                              "required": [
+                                "containerPort"
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "image",
+                        "ports"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "containers"
+              ]
+            }
+          },
+          "required": [
+            "metadata",
+            "spec"
+          ]
+        }
+      },
+      "required": [
+        "replicas",
+        "selector",
+        "template"
+      ]
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ]
+}

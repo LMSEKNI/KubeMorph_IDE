@@ -20,7 +20,6 @@ import { Bootstrap4FrameworkModule } from '@ajsf/bootstrap4';
 import { Bootstrap3FrameworkModule } from '@ajsf/bootstrap3';
 import { MaterialDesignFrameworkModule } from '@ajsf/material';
 import { YmlFileComponent } from './addressource/yml-file/yml-file.component';
-// import { MatDrawerModule } from '@angular/material/drawer';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { ListComponent } from './workload-details/list/list.component';
 import { DesccComponent } from './workload-details/descc/descc.component';
@@ -49,6 +48,10 @@ import {NgTerminalModule} from 'ng-terminal';
 import { MonitoringComponent } from './monitoring/components/monitoring.component';
 import {EChartsDirective} from './monitoring/Directives/EChartsDirective';
 import { GrafanaDialogComponent } from './monitoring/components/grafana-dialog/grafana-dialog.component';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
+import { AngularSplitModule } from 'angular-split';
+import { MessageDialogComponent } from './workload-details/updateressource/dynamic-form-update/message-dialog/message-dialog.component';
+
 
 
 
@@ -78,6 +81,8 @@ import { GrafanaDialogComponent } from './monitoring/components/grafana-dialog/g
                   DeleteComponent,
                   MonitoringComponent,
                   GrafanaDialogComponent,
+                  MessageDialogComponent,
+
 
                   ],
     imports: [
@@ -89,7 +94,10 @@ import { GrafanaDialogComponent } from './monitoring/components/grafana-dialog/g
         Bootstrap3FrameworkModule,MatInputModule,
         MaterialDesignFrameworkModule,
         JsonSchemaFormModule,
-        ReactiveFormsModule, MatSidenavModule, NgTerminalModule, MatTabsModule
+        ReactiveFormsModule, MatSidenavModule, NgTerminalModule, MatTabsModule,
+        NgxJsonViewerModule,
+        AngularSplitModule,
+
     ],
   bootstrap: [DemoRootComponent]
 })

@@ -15,7 +15,7 @@
       <div class="search-icon">
         <mat-form-field appearance="fill" class="search-field" [@toggleSearch]="isSearchOpen ? 'open' : 'closed'">
           <mat-label>Search</mat-label>
-          <input matInput placeholder="Search" >
+          <input matInput placeholder="Search">
         </mat-form-field>
         <button mat-icon-button (click)="toggleSearch()">
           <img src="assets/images/search_24dp_FILL0_wght300_GRAD0_opsz24.svg" alt="Search Icon">
@@ -37,45 +37,29 @@
         </mat-menu>
       </div>
 
-    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-      <mat-icon>more_vert</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item >
-        <mat-icon>home</mat-icon>
-        <span>List Resource</span>
+      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+        <mat-icon>more_vert</mat-icon>
       </button>
-      <button mat-menu-item routerLink="/monitoring">
-        <mat-icon>settings_heart</mat-icon>
-        <span>Monotoring</span>
-      </button>
-      <button mat-menu-item>
-        <mat-icon>notifications_off</mat-icon>
-        <span>Helm</span>
-      </button>
-    </mat-menu>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>
+          <mat-icon>home</mat-icon>
+          <span>List Resource</span>
+        </button>
+        <button mat-menu-item routerLink="/monitoring">
+          <mat-icon>settings_heart</mat-icon>
+          <span>Monitoring</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>notifications_off</mat-icon>
+          <span>Helm</span>
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+
+  <div id="network" (click)="onNodeClick($event)" class="network-container">
   </div>
 </div>
-<!--
-<div>
-  <label for="showBoth">Show Both</label>
-  <input type="checkbox" id="showBoth" name="showBoth" (change)="toggleBoth($event.target.checked)">
-</div> -->
-
-<!-- <div id="network" style="width: 100%; height: 500px; border: 1px solid lightgray;"></div> -->
-
-
-
-<!-- <div class="top-label" >
-  <span style="color: red;">Service deleted</span>
-</div> -->
-
-
-
-  <div id="network" (click)="onNodeClick($event)" style="width: 100%; height: 500px; border: 1px solid lightgray;">
-  </div>
-</div>
-
 
 <div class="container" [class.frame-open]="isFrameOpen">
   <div class="description-frame" [@frameAnimation]="isFrameOpen ? 'open' : 'closed'">
@@ -90,15 +74,15 @@
         <button (click)="selectOption('yaml')" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">YAML</button>
       </div>
     </div>
-      <ng-container *ngIf="selectedComponent === 'desc'">
-        <app-descc *ngIf="selectedResource" [resourceName]="selectedResource" [resourceType]="selectedType"></app-descc>
-      </ng-container>
-      <ng-container *ngIf="selectedComponent === 'form'">
-        <app-dynamic-form-update [namespace]="namespace"  [resourceName]="selectedResource" [resourceType]="selectedType" ></app-dynamic-form-update>
-      </ng-container>
-      <ng-container *ngIf="selectedComponent === 'yaml'">
-        <app-yml-file-update  [namespace]="namespace"  [resourceName]="selectedResource" [resourceType]="selectedType" ></app-yml-file-update>
-      </ng-container>
+    <ng-container *ngIf="selectedComponent === 'desc'">
+      <app-descc *ngIf="selectedResource" [resourceName]="selectedResource" [resourceType]="selectedType"></app-descc>
+    </ng-container>
+    <ng-container *ngIf="selectedComponent === 'form'">
+      <app-dynamic-form-update [namespace]="namespace" [resourceName]="selectedResource" [resourceType]="selectedType"></app-dynamic-form-update>
+    </ng-container>
+    <ng-container *ngIf="selectedComponent === 'yaml'">
+      <app-yml-file-update [namespace]="namespace" [resourceName]="selectedResource" [resourceType]="selectedType"></app-yml-file-update>
+    </ng-container>
   </div>
   <div class="dialog-frame" *ngIf="isDialogOpen"></div>
 </div>
@@ -113,14 +97,14 @@
 
 <ng-template #dialogContentTemplate let-data>
   <mat-dialog-actions>
-    <button (click)="onclose()" mat-icon-button aria-label="Close" style="position: absolute; top :38%; right: 37%;">
+    <button (click)="onclose()" mat-icon-button aria-label="Close" style="position: absolute; top: 38%; right: 37%;">
       <mat-icon>close</mat-icon>
     </button>
     <br style="margin-top: 24px; margin-bottom: 24px;">
   </mat-dialog-actions>
 
   <mat-dialog-content>
-    Are you sure you want to delete {{ressourceName}}?
+    Are you sure you want to delete {{ ressourceName }}?
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">

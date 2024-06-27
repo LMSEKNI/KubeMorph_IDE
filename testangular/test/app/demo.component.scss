@@ -1,0 +1,38 @@
+.mat-toolbar {
+  background-color: #005573; // Customize toolbar background color
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px; // Optional: Adjust padding as needed
+  height: 64px; // Optional: Adjust height as needed
+
+  // Styles for left side (App Title and Logo)
+  .toolbar-left {
+    display: flex;
+    align-items: center;
+
+    img {
+      height: 80px; // Adjust logo height as needed
+      margin-right: 8px; // Optional: Adjust logo margin
+    }
+
+    span {
+      font-size: 1.25rem; // Adjust font size as needed
+      font-weight: bold; // Optional: Adjust font weight
+      color: white; // Customize text color
+    }
+  }
+  .mat-form-field{
+    color: white;
+  }
+  // Styles for right side (Cluster Active)
+  .toolbar-right {
+    display: flex;
+    align-items: center;
+
+    span {
+      margin-left: 4px; // Optional: Adjust margin between icon and text
+      color: white; // Customize text color
+    }
+  }
+}

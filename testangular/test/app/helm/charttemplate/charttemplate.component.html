@@ -1,0 +1,27 @@
+  <div class="alll">
+    <div class="dialog-header">
+      <img src="assets/images/promotheus.png" alt="Chart Image" class="chart-image">
+      <h2 mat-dialog-title>Chart Name</h2>
+    </div>
+    <div class="header-divider"></div>
+    <mat-dialog-content class="mat-typography">
+
+    <div class="content-wrapper">
+      <mat-card-title>Add repository</mat-card-title>
+      <pre><code>helm repo add prometheus-community https://prometheus-community.github.io/helm-charts</code></pre>
+      <br>
+    </div>
+
+    <div class="content-wrapper">
+      <mat-card-title>Install chart</mat-card-title>
+      <pre><code>helm install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 60.3.0</code></pre>
+      <br>
+    </div>
+
+  </mat-dialog-content>
+    <div class="header-divider"></div>
+
+    <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>X CLOSE</button>
+  </mat-dialog-actions>
+  </div>
