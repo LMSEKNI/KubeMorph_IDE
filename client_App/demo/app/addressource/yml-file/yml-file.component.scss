@@ -1,20 +1,20 @@
-
 @use '@angular/material' as mat;
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500&display=swap');
 @include mat.core();
 $demo-app-primary: mat.define-palette(mat.$blue-grey-palette);
-$demo-app-accent:  mat.define-palette(mat.$amber-palette, A200, A100, A400);
-$demo-app-warn:    mat.define-palette(mat.$red-palette);
-$demo-app-theme:   mat.define-light-theme($demo-app-primary, $demo-app-accent, $demo-app-warn);
+$demo-app-accent: mat.define-palette(mat.$amber-palette, A200, A100, A400);
+$demo-app-warn: mat.define-palette(mat.$red-palette);
+$demo-app-theme: mat.define-light-theme($demo-app-primary, $demo-app-accent, $demo-app-warn);
 @include mat.all-component-themes($demo-app-theme);
 
-$font-family: 'Roboto', 'Noto', 'Helvetica Neue', sans-serif;
+$font-family: 'Poppins', sans-serif;
 $row-height: 56px;
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+  font-family: $font-family;
 }
 
 .container {
@@ -45,25 +45,22 @@ $row-height: 56px;
 .fileContainer .header {
   font-size: 20px;
   font-weight: 500;
-  width: 50px;
-  height: 300px;
   color: #34495e;
 }
 
 #submitButton {
-  background-color: #1683ff; 
-  color: #fff; 
+  background-color: #1683ff;
+  color: #fff;
   border: none;
-  padding: 12px 24px; 
-  border-radius: 50%; 
+  padding: 12px 24px;
+  border-radius: 50%;
   cursor: pointer;
-  transition: background-color 0.3s ease; 
+  transition: background-color 0.3s ease;
 }
 
 #submitButton:hover {
-  background-color: #11bb44; 
+  background-color: #11bb44;
 }
-
 
 .fileContainer .support {
   font-size: 12px;
@@ -71,18 +68,96 @@ $row-height: 56px;
   margin: 10px 0 15px 0;
 }
 
-.fileContainer button:hover {
-  background-color: #0e5ba3;
-}
-#fileInputAlt{
+#fileInputAlt {
   color: gray;
-  margin:10px 0 15px 0 ;
-
+  margin: 10px 0 15px 0;
 }
-#header-content{
-  background-color: mat.get-color-from-palette($demo-app-primary, lighter);
-    font-family: $font-family;
-    line-height: 1.4em;
-    padding: 12px;
-  
+
+#custom-toolbar {
+  color: black;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background: #f5f5f5;
+  height: 100px;
+}
+
+.header-content {
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  width: 100%;
+}
+
+.left-button {
+  margin-right: auto;
+}
+
+.icons-container {
+  display: flex;
+  align-items: center;
+}
+
+.menu-label {
+  margin: 0 16px;
+}
+
+.mat-card {
+  margin: 16px 0;
+  padding: 16px;
+}
+
+.default-cursor {
+  cursor: pointer;
+}
+
+.json-schema-form {
+  padding: 16px 0;
+}
+
+.data-good {
+  color: green;
+}
+
+.data-bad {
+  color: red;
+}
+
+.search-icon {
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
+}
+
+.search-field {
+  width: 200px;
+  transition: width 0.3s ease;
+}
+
+.search-field[hidden] {
+  width: 0;
+}
+
+.add-icon {
+  margin-right: 16px;
+}
+
+.drag-area {
+  border: 2px dashed #ccc;
+  padding: 20px;
+  margin-bottom: 10px;
+}
+
+.icon {
+  font-size: 48px;
+  color: #005573;
+}
+
+.header {
+  font-size: 24px;
+}
+
+.support {
+  font-size: 14px;
+  color: #777;
 }

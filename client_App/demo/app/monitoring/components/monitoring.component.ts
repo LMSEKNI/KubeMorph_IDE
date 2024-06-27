@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MonitoringService } from '../services/monitoring.service';
-import {EChartsOption} from 'echarts';
-import {GrafanaDialogComponent} from './grafana-dialog/grafana-dialog.component';
+import { EChartsOption } from 'echarts';
+import { GrafanaDialogComponent } from './grafana-dialog/grafana-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
@@ -27,23 +27,46 @@ export class MonitoringComponent implements OnInit {
     this.fetchNodeMetrics();
     this.fetchPodMetrics();
   }
-      redirectToGrafana(): void {
-          this.monitoringService.getPrometheusMetrics().subscribe(
-            data => {
-              console.log('Prometheus Metrics:', data);
+
+  redirectToGrafana(): void {
+    const dialogRef = this.dialog.open(GrafanaDialogComponent, {
+      width: '500px',
+      disableClose: true,
+      data: { isLoading: true }
+    });
+
+    this.monitoringService.getPrometheusMetrics().subscribe(
+      response => {
+        console.log('Monitoring stack setup response:', response);
+        dialogRef.componentInstance.isLoading = false;
+
+        if (response.includes('Monitoring stack created')) {
+          this.monitoringService.getGrafanaAdminPassword().subscribe(
+            password => {
+              console.log('Grafana Admin Password:', password);
+              dialogRef.componentInstance.grafanaPassword = password;
             },
             err => {
-              console.error('Error fetching Prometheus Metrics:', err);
+              console.error('Error fetching Grafana Admin Password:', err);
+              dialogRef.componentInstance.errorMessage = 'Error fetching Grafana Admin Password';
             }
           );
-          const dialogRef = this.dialog.open(GrafanaDialogComponent, {
-            width: '500px',
-            data: {  }
-          });
-          dialogRef.afterClosed().subscribe(result => {
-            console.log('Dialog closed:', result);
-          });
+        } else {
+          dialogRef.componentInstance.errorMessage = 'Failed to create monitoring stack';
         }
+      },
+      err => {
+        console.error('Error setting up monitoring stack:', err);
+        dialogRef.componentInstance.isLoading = false;
+        dialogRef.componentInstance.errorMessage = 'Error setting up monitoring stack';
+      }
+    );
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Dialog closed:', result);
+    });
+  }
+
   fetchNodeMetrics(): void {
     this.monitoringService.getNodeMetrics().subscribe(
       data => {
@@ -65,6 +88,7 @@ export class MonitoringComponent implements OnInit {
       err => this.error = err
     );
   }
+
   generateNodeChart(): void {
     const nodeNames = this.nodeMetrics.items.map(item => item.metadata.name);
     const cpuUsage = this.nodeMetrics.items.map(item => item.usage.cpu.number);
@@ -164,6 +188,7 @@ export class MonitoringComponent implements OnInit {
     });
     console.log('Pod Chart Options:', this.podChartOptions);
   }
+
   objectKeys(obj: any): string[] {
     return Object.keys(obj);
   }

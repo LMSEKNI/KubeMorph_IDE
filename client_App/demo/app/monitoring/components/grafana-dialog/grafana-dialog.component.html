@@ -1,9 +1,26 @@
 <h2 mat-dialog-title>Grafana Dashboard</h2>
 <div mat-dialog-content>
-  <p>We implemented a Prometheus and Grafana stack in order to display further details of your cluster. Click on Grafana to access the Grafana interface.</p>
+  <p *ngIf="isLoading">
+    <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
+    Setting up the monitoring stack. Please wait...
+  </p>
+  <div *ngIf="!isLoading && grafanaPassword">
+    <p>
+      <span  class="bold-text colored-text1" >Monitoring stack setup complete.</span>
+    </p>
+    <br>
+    <br>
+    <p>
+      <span class="bold-text colored-text">This is your grafana account Username:</span> admin
+      <br>
+      <span class="bold-text colored-text">This is your grafana account Password:</span> {{ grafanaPassword }}
+    </p>
+  </div>
+  <p *ngIf="!isLoading && errorMessage">
+    {{ errorMessage }}
+  </p>
 </div>
 <div mat-dialog-actions class="mat-dialog-actions-right">
   <button mat-button (click)="closeDialog()">Close</button>
-  <button mat-button color="primary" (click)="navigateToExternalUrl()">Grafana</button>
-
+  <button mat-button color="primary" (click)="navigateToExternalUrl()" [disabled]="isLoading || !grafanaPassword">Grafana</button>
 </div>

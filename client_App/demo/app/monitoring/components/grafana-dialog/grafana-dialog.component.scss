@@ -1,17 +1,24 @@
 .mat-dialog-actions-right {
-  justify-content: space-between; /* Align buttons with space between */
-  margin-top: 20px; /* Optional: Add margin to separate from dialog content */
+  display: flex;
+  justify-content: flex-end;
 }
 
-.mat-button {
-  &.mat-button {
-    &.mat-primary {
-      background-color: #4caf50; /* Green background */
-      color: white; /* White text */
-    }
+.mat-button.mat-primary {
+  background-color: #4caf50;
+  color: white;
+}
 
-    &.mat-primary:hover {
-      background-color: #388e3c; /* Darker shade of green on hover */
-    }
-  }
+.mat-button.mat-primary:hover {
+  background-color: #388e3c;
+}
+
+.bold-text {
+  font-weight: bold;
+}
+
+.colored-text {
+  color: #005573;
+}
+.colored-text1 {
+  color: #117b02;
 }

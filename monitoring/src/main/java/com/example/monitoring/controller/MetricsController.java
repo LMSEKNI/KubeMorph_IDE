@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/api/metrics")
 public class MetricsController {
@@ -42,6 +44,10 @@ public class MetricsController {
     public String getGrafanaServiceUrl() throws ApiException {
         return prometheusMetricsService.getGrafanaServiceUrl();
 
+    }
+    @GetMapping("/grafanaPwd")
+    public String getGrafanaServicePassword() throws ApiException, IOException, InterruptedException {
+        return  prometheusMetricsService.getGrafanaAdminPassword();
     }
     
 }

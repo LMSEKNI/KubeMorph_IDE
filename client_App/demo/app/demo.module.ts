@@ -51,6 +51,7 @@ import { GrafanaDialogComponent } from './monitoring/components/grafana-dialog/g
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { AngularSplitModule } from 'angular-split';
 import { MessageDialogComponent } from './workload-details/updateressource/dynamic-form-update/message-dialog/message-dialog.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
 
@@ -85,20 +86,21 @@ import { MessageDialogComponent } from './workload-details/updateressource/dynam
 
 
                   ],
-    imports: [
-        BrowserModule, BrowserAnimationsModule, FlexLayoutModule, FormsModule, MatChipsModule,
-        HttpClientModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule,
-        MatIconModule, MatMenuModule, MatSelectModule, MatToolbarModule,
-        RouterModule.forRoot(routes, {relativeLinkResolution: 'legacy'}),MatCardModule,
-        Bootstrap4FrameworkModule,MatFormFieldModule,MatProgressBarModule,
-        Bootstrap3FrameworkModule,MatInputModule,
-        MaterialDesignFrameworkModule,
-        JsonSchemaFormModule,
-        ReactiveFormsModule, MatSidenavModule, NgTerminalModule, MatTabsModule,
-        NgxJsonViewerModule,
-        AngularSplitModule,
+  imports: [
+    BrowserModule, BrowserAnimationsModule, FlexLayoutModule, FormsModule, MatChipsModule,
+    HttpClientModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule,
+    MatIconModule, MatMenuModule, MatSelectModule, MatToolbarModule,
+    RouterModule.forRoot(routes, {relativeLinkResolution: 'legacy'}),
+    Bootstrap4FrameworkModule,
+    Bootstrap3FrameworkModule,
+    MatInputModule, MatFormFieldModule, MatProgressBarModule, MatCardModule,
+    MaterialDesignFrameworkModule,
+    JsonSchemaFormModule,
+    ReactiveFormsModule, MatSidenavModule, NgTerminalModule, MatTabsModule,
+    NgxJsonViewerModule,
+    AngularSplitModule, MatProgressSpinnerModule,
 
-    ],
+  ],
   bootstrap: [DemoRootComponent]
 })
 

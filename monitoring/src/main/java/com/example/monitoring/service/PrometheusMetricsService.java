@@ -37,23 +37,19 @@ public class PrometheusMetricsService {
 
     public String setupMonitoringStack() {
         try {
-
             runCommand("kubectl create namespace monitoring ");
-            //Add the Dashboard configmap
+            // Add the Dashboard configmap
             runCommand("kubectl create configmap -n monitoring grafana-dashboard-configmap --from-file=/home/msakni/Desktop/KubeMorph_IDE/monitoring/src/main/resources/grafanaDashboard.json");
             // Install Prometheus with custom values
             runCommand("helm install -n monitoring prometheus prometheus-community/prometheus -f monitoring/src/main/resources/prometheus-values.yaml");
             // Install Grafana with custom values
             runCommand("helm install -n monitoring grafana grafana/grafana -f /home/msakni/Desktop/KubeMorph_IDE/monitoring/src/main/resources/grafana/values.yaml");
 
-            return(getGrafanaAdminPassword());
-
-
-
+            return "Monitoring stack created";
         } catch (IOException | InterruptedException e) {
             logger.log(Level.SEVERE, "Error while setting up monitoring stack", e);
+            return "Error while setting up monitoring stack";
         }
-        return "Error while setting up monitoring stack";
     }
 
     public String getGrafanaServiceUrl() throws ApiException {
@@ -124,7 +120,7 @@ public class PrometheusMetricsService {
         return output.toString();
     }
     
-    private String getGrafanaAdminPassword() throws IOException, InterruptedException {
+    public String getGrafanaAdminPassword() throws IOException, InterruptedException {
         String grafanaPassword = runCommand("kubectl get secret --namespace monitoring grafana -o jsonpath=\"{.data.admin-password}\"").trim();
         return new String(Base64.getDecoder().decode(grafanaPassword));
     }

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CreateressourceService } from './service/createressource.service';
+import {Examples} from '../dynamic-form/component/example-schemas.model';
+
 
 @Component({
   selector: 'app-yml-file',
@@ -15,13 +17,13 @@ export class YmlFileComponent {
     const fileInput = document.getElementById('fileInputAlt') as HTMLInputElement;
     const file = fileInput.files[0];
     if (file) {
-      this.sendYamlToBackend(file); 
+      this.sendYamlToBackend(file);
     }
   }
 
   private sendYamlToBackend(file: File) {
     const formData = new FormData();
-    formData.append('yamlFile', file); 
+    formData.append('yamlFile', file);
 
     this.createressourceService.addResource(formData).subscribe(
       response => {
@@ -33,5 +35,6 @@ export class YmlFileComponent {
       }
     );
   }
+
 
 }

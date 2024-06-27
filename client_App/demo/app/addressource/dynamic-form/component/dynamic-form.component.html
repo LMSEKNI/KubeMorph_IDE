@@ -1,55 +1,53 @@
-<div class="demo-page-header">
-  <mat-toolbar class="mat-elevation-z4 mat-medium" color="primary" style="height: 120px; display: flex; justify-content: space-between; align-items: center;">
-    <div> <!-- Left Content -->
-      <a style="font-family: serif; font-size: x-large;">Add New Resource </a>
-    </div>
-    <div> <!-- Center Content -->
-      <a style="font-family: serif; font-size: xx-large;">KubeMorph</a>
-    </div>
-    <div> <!-- Right Content -->
-      <img src="./assets/images/logo1.png" alt="logo" style="width: 150; height: 110px;">
-    </div>
-  </mat-toolbar>
- 
- 
- 
-  <div class="header-content" style="justify-content: space-between;; align-items: center; display: flex;">
-    <button mat-raised-button color="primary" [matMenuTriggerFor]="addResourceMenu">Form </button>
+<demo></demo>
+<mat-toolbar id="custom-toolbar">
+  <div class="header-content">
+    <button mat-raised-button color="primary" [matMenuTriggerFor]="addResourceMenu" class="left-button">Form</button>
     <mat-menu #addResourceMenu="matMenu">
-      <button mat-menu-item [routerLink]="['/addResource/yaml']">Yaml</button>
+      <button mat-menu-item [routerLink]="['/create-ymlfile']">Yaml</button>
       <!-- Add more options here if needed -->
     </mat-menu>
     <span class="menu-label">Current Resource:</span>
-    <button mat-raised-button
-      color="primary"
-      id="resources"
-      [matMenuTriggerFor]="exampleMenu">
+    <button mat-raised-button color="primary" id="resources" [matMenuTriggerFor]="exampleMenu">
       <mat-icon>menu</mat-icon> {{selectedSetName}} {{selectedExampleName}}
     </button>
     <mat-menu #exampleMenu="matMenu" class="example-menu">
-      <button mat-menu-item class="mat-medium"
-        *ngFor="let example of examples['ng-jsf'].schemas"
-        (click)="loadSelectedExample('ng-jsf', '', example.file, example.name)">
+      <button mat-menu-item class="mat-medium" *ngFor="let example of examples['ng-jsf'].schemas" (click)="loadSelectedExample('ng-jsf', '', example.file, example.name)">
         {{example.name}}
       </button>
- 
-      <button mat-menu-item class="mat-medium"
-      *ngFor="let example of examples['asf'].schemas"
-      (click)="loadSelectedExample('asf', '', example.file, example.name)">
-      {{example.name}}
-    </button>
+      <button mat-menu-item class="mat-medium" *ngFor="let example of examples['asf'].schemas" (click)="loadSelectedExample('asf', '', example.file, example.name)">
+        {{example.name}}
+      </button>
     </mat-menu>
+
+    <div class="icons-container">
+
+      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu" routerLink=" ">
+        <button mat-menu-item routerLink="/">
+          <mat-icon>home</mat-icon>
+          <span>List Resource</span>
+        </button>
+        <button mat-menu-item routerLink="/monitoring">
+          <mat-icon>settings_heart</mat-icon>
+          <span>Monitoring</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>notifications_off</mat-icon>
+          <span>Helm</span>
+        </button>
+      </mat-menu>
+    </div>
   </div>
-</div>
-<div fxLayout="row" fxLayoutAlign="space-around start"
-  fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="flex-start center">
+</mat-toolbar>
+<div fxLayout="row" fxLayoutAlign="space-around start" fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="flex-start center">
   <mat-card fxFlex="0 0 calc(50% - 12px)">
     <h4 class="default-cursor" (click)="toggleVisible('form')">
       {{visible.form ? '▼' : '▶'}} {{ selectedExampleName }}
     </h4>
     <div *ngIf="visible.form" class="json-schema-form" [@expandSection]="true">
       <div *ngIf="!formActive">{{jsonFormStatusMessage}}</div>
- 
       <!-- This is the form! -->
       <json-schema-form
         *ngIf="formActive"
@@ -63,7 +61,6 @@
         (isValid)="isValid($event)"
         (validationErrors)="validationErrors($event)">
       </json-schema-form>
- 
     </div>
     <hr>
     <h4 class="default-cursor" (click)="toggleVisible('output')">
@@ -72,22 +69,16 @@
     <div *ngIf="!visible.output" fxLayout="column" [@expandSection]="true">
       <div>
         Valid?:
-        <strong *ngIf="formIsValid || prettyValidationErrors"
-          [class.text-success]="formIsValid"
-          [class.text-danger]="!formIsValid">
+        <strong *ngIf="formIsValid || prettyValidationErrors" [class.text-success]="formIsValid" [class.text-danger]="!formIsValid">
           {{formIsValid ? 'Yes' : 'No'}}
         </strong>
         <span *ngIf="!formIsValid && !prettyValidationErrors">n/a</span>
         <span *ngIf="prettyValidationErrors">— errors from validationErrors():</span>
-        <div *ngIf="prettyValidationErrors"
-          class="data-bad"
-          [innerHTML]="prettyValidationErrors"></div>
+        <div *ngIf="prettyValidationErrors" class="data-bad" [innerHTML]="prettyValidationErrors"></div>
       </div><br>
       <div>
         Live data — from onChanges():
-        <pre
-          [class.data-good]="!prettyValidationErrors && prettyLiveFormData !== '{}'"
-          [class.data-bad]="prettyValidationErrors">{{prettyLiveFormData}}</pre>
+        <pre [class.data-good]="!prettyValidationErrors && prettyLiveFormData !== '{}'" [class.data-bad]="prettyValidationErrors">{{prettyLiveFormData}}</pre>
       </div><br>
       <div>
         Submitted data — from onSubmit():
@@ -95,5 +86,4 @@
       </div>
     </div>
   </mat-card>
- 
 </div>

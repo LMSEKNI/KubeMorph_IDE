@@ -8,14 +8,13 @@
 </div>
 
 <div *ngIf="nodeMetrics">
-  <h2>Node Metrics</h2>
+  <h2 class="center-text">Node Metrics</h2>
   <div class="echarts-container" [appEcharts]="nodeChartOptions"></div>
 </div>
 
 <div *ngIf="podMetrics">
-  <h2>Pod Metrics</h2>
+  <h2 class="center-text">Pod Metrics</h2>
   <div *ngFor="let podChartOption of podChartOptions" class="echarts-container">
     <div class="echarts-container" [appEcharts]="podChartOption"></div>
   </div>
 </div>
-
