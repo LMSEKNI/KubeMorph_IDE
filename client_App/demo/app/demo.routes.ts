@@ -15,10 +15,12 @@ import { TerminalTabManagerComponent} from './terminal-tab-manager/terminal-tab-
 import { HelmComponent} from './helm/helm.component';
 import { HelmDetailsComponent} from './helm/helm-details/helm-details.component';
 import {MonitoringComponent} from './monitoring/components/monitoring.component';
+import {ListingComponent} from './workload-details/listing/Components/listing.component';
 
 
 export const routes: Route[] = [
   { path: '' , component: ListComponent},
+  { path: 'test' , component: ListingComponent},
   { path: 'descressource', component: DesccComponent},
   { path: 'create-ymlfile' , component: YmlFileComponent},
   { path: 'create-dynamicform' , component: DynamicFormComponent},

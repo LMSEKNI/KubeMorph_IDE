@@ -52,6 +52,7 @@ import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { AngularSplitModule } from 'angular-split';
 import { MessageDialogComponent } from './workload-details/updateressource/dynamic-form-update/message-dialog/message-dialog.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {ListingComponent} from './workload-details/listing/Components/listing.component';
 
 
 
@@ -83,6 +84,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
                   MonitoringComponent,
                   GrafanaDialogComponent,
                   MessageDialogComponent,
+                  ListingComponent
 
 
                   ],
@@ -98,7 +100,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     JsonSchemaFormModule,
     ReactiveFormsModule, MatSidenavModule, NgTerminalModule, MatTabsModule,
     NgxJsonViewerModule,
-    AngularSplitModule, MatProgressSpinnerModule,
+    AngularSplitModule, MatProgressSpinnerModule
 
   ],
   bootstrap: [DemoRootComponent]

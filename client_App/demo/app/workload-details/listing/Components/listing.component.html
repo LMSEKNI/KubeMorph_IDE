@@ -1,0 +1,54 @@
+<demo></demo>
+<div>
+  <div>
+    <button mat-raised-button color="primary" (click)="toggleResourceOptions()">Select Resources</button>
+    <div *ngIf="showResourceOptions" class="resource-options">
+      <div>
+        <mat-checkbox id="pods" value="pods" (change)="onResourceTypeChange($event, 'pods')" checked>Pods</mat-checkbox>
+      </div>
+      <div>
+        <mat-checkbox id="namespaces" value="namespaces" (change)="onResourceTypeChange($event, 'namespaces')">Namespaces</mat-checkbox>
+      </div>
+      <div>
+        <mat-checkbox id="services" value="services" (change)="onResourceTypeChange($event, 'services')">Services</mat-checkbox>
+      </div>
+      <div>
+        <mat-checkbox id="deployments" value="deployments" (change)="onResourceTypeChange($event, 'deployments')">Deployments</mat-checkbox>
+      </div>
+      <div>
+        <mat-checkbox id="replicasets" value="replicasets" (change)="onResourceTypeChange($event, 'replicasets')">ReplicaSets</mat-checkbox>
+      </div>
+      <div>
+        <mat-checkbox id="jobs" value="jobs" (change)="onResourceTypeChange($event, 'jobs')">Jobs</mat-checkbox>
+      </div>
+      <div>
+        <mat-checkbox id="nodes" value="nodes" (change)="onResourceTypeChange($event, 'nodes')">Nodes</mat-checkbox>
+      </div>
+      <div>
+        <mat-checkbox id="endpoints" value="endpoints" (change)="onResourceTypeChange($event, 'endpoints')">Endpoints</mat-checkbox>
+      </div>
+      <div>
+        <mat-checkbox id="configmaps" value="configmaps" (change)="onResourceTypeChange($event, 'configmaps')">ConfigMaps</mat-checkbox>
+      </div>
+      <div>
+        <mat-checkbox id="ingresses" value="ingresses" (change)="onResourceTypeChange($event, 'ingresses')">Ingress</mat-checkbox>
+      </div>
+      <div>
+        <mat-checkbox id="daemonsets" value="daemonsets" (change)="onResourceTypeChange($event, 'daemonsets')">DaemonSets</mat-checkbox>
+      </div>
+      <div>
+        <mat-checkbox id="persistentvolumeclaims" value="persistentvolumeclaims" (change)="onResourceTypeChange($event, 'persistentvolumeclaims')">PersistentVolumeClaims</mat-checkbox>
+      </div>
+      <div>
+        <mat-checkbox id="storageclasses" value="storageclasses" (change)="onResourceTypeChange($event, 'storageclasses')">StorageClasses</mat-checkbox>
+      </div>
+      <div>
+        <mat-checkbox id="statefulsets" value="statefulsets" (change)="onResourceTypeChange($event, 'statefulsets')">StatefulSets</mat-checkbox>
+      </div>
+      <div>
+        <mat-checkbox id="persistentvolumes" value="persistentvolumes" (change)="onResourceTypeChange($event, 'persistentvolumes')">PersistentVolumes</mat-checkbox>
+      </div>
+    </div>
+  </div>
+</div>
+<div #networkContainer style="width: 100%; height: 800px; border: 7px solid lightgray;"></div>

@@ -6,23 +6,23 @@ import java.util.List;
 
 
 import io.kubernetes.client.openapi.ApiException;
+import io.kubernetes.client.openapi.models.*;
 
 public interface ListerService {
-    public List<String> getAllPods() throws FileNotFoundException, IOException, ApiException;
-    public List<String> getAllNamespaces() throws FileNotFoundException, IOException, ApiException;
-    public List<String> getAllServices() throws FileNotFoundException, IOException, ApiException ;
-    public List<String> getAllDeployments() throws IOException, ApiException;
-    public List<String> getAllReplicaSets() throws IOException, ApiException ;
-    public List<String> getAllJobs() throws IOException, ApiException ;
-    public List<String> getAllNodes() throws IOException, ApiException ;
-    public List<String> getAllConfigMaps() throws IOException, ApiException ;
-    public List<String> getAllIngresses() throws IOException, ApiException ;
-    public List<String> getAllEndpoints() throws IOException, ApiException ;
-    public List<String> getAllDaemonSets() throws IOException, ApiException ;
-    public List<String> getAllPersistentVolumeClaims() throws IOException, ApiException ;
-    public List<String> getAllStorageClasses() throws IOException, ApiException ;
-    public List<String> getAllStatefulSets() throws IOException, ApiException ;
-    public List<String> getPodDeploymentConnections() throws ApiException, FileNotFoundException, IOException ;  
-    public List<String> getAllPersistentVolumes() throws ApiException, IOException ;
+    public List<V1Pod> getAllPods() throws FileNotFoundException, IOException, ApiException;
+    public List<V1Namespace> getAllNamespaces() throws FileNotFoundException, IOException, ApiException;
+    public List<V1Service> getAllServices() throws FileNotFoundException, IOException, ApiException ;
+    public List<V1Deployment> getAllDeployments() throws IOException, ApiException;
+    public List<V1ReplicaSet> getAllReplicaSets() throws IOException, ApiException ;
+    public List<V1Job> getAllJobs() throws IOException, ApiException ;
+    public List<V1Node> getAllNodes() throws IOException, ApiException ;
+    public List<V1ConfigMap> getAllConfigMaps() throws IOException, ApiException ;
+    public List<V1Ingress> getAllIngresses() throws IOException, ApiException ;
+    public List<V1Endpoints> getAllEndpoints() throws IOException, ApiException ;
+    public List<V1DaemonSet> getAllDaemonSets() throws IOException, ApiException ;
+    public List<V1PersistentVolumeClaim> getAllPersistentVolumeClaims() throws IOException, ApiException ;
+    public List<V1StorageClass> getAllStorageClasses() throws IOException, ApiException ;
+    public List<V1StatefulSet> getAllStatefulSets() throws IOException, ApiException ;
+    public List<V1PersistentVolume> getAllPersistentVolumes() throws ApiException, IOException ;
     
 }

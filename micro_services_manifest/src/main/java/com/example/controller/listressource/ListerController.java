@@ -1,13 +1,11 @@
 package com.example.controller.listressource;
 
 import io.kubernetes.client.openapi.ApiException;
+import io.kubernetes.client.openapi.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.service.listressource.ListerServiceImpl;
 
@@ -15,110 +13,177 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
-
 @CrossOrigin(origins = "http://localhost:4200")
-
 @RestController
 @RequestMapping("/api/list")
 public class ListerController {
- 
+
     @Autowired
-    private  ListerServiceImpl ListerService;
+    private ListerServiceImpl listerService;
 
-    
     @GetMapping("/pods")
-    public ResponseEntity<List<String>> listPods() throws FileNotFoundException, IOException, ApiException {
-        List<String> pods = ListerService.getAllPods();
-        return new ResponseEntity<>(pods, HttpStatus.OK);   
-    }
-
-    @GetMapping("/namespaces")
-    public ResponseEntity<List<String> >getAllNamespace() throws FileNotFoundException, IOException {
+    public ResponseEntity<List<V1Pod>> listPods() {
         try {
-            List<String> namespaces= ListerService.getAllNamespaces();
-            return new ResponseEntity<>(namespaces, HttpStatus.OK);
-        } catch (ApiException e) {
-            // Handle exceptions
+            List<V1Pod> pods = listerService.getAllPods();
+            return new ResponseEntity<>(pods, HttpStatus.OK);
+        } catch (ApiException | IOException e) {
             e.printStackTrace();
-            return null; // Or return an empty list or handle the error as appropriate
-        }
-    }
-    @GetMapping("/services")
-    public ResponseEntity<List<String>> listServices() {
-        try {
-            List<String> services = ListerService.getAllServices();
-            return new ResponseEntity<>(services, HttpStatus.OK);
-        } catch (IOException | ApiException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @GetMapping("/deployments")
-    public ResponseEntity<List<String>> listDeployments() throws IOException, ApiException {
-        List<String> deploymnts = ListerService.getAllDeployments();
-        return new ResponseEntity<>(deploymnts,HttpStatus.OK);
+
+    @GetMapping("/namespaces")
+    public ResponseEntity<List<V1Namespace>> getAllNamespaces() {
+        try {
+            List<V1Namespace> namespaces = listerService.getAllNamespaces();
+            return new ResponseEntity<>(namespaces, HttpStatus.OK);
+        } catch (ApiException | IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
+
+    @GetMapping("/services")
+    public ResponseEntity<List<V1Service>> listServices() {
+        try {
+            List<V1Service> services = listerService.getAllServices();
+            return new ResponseEntity<>(services, HttpStatus.OK);
+        } catch (ApiException | IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/deployments")
+    public ResponseEntity<List<V1Deployment>> listDeployments() {
+        try {
+            List<V1Deployment> deployments = listerService.getAllDeployments();
+            return new ResponseEntity<>(deployments, HttpStatus.OK);
+        } catch (ApiException | IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/replicasets")
-    public ResponseEntity<List<String>> listReplicaSets() throws IOException, ApiException {
-        List<String> deploymnts = ListerService.getAllReplicaSets();
-        return new ResponseEntity<>(deploymnts,HttpStatus.OK);
+    public ResponseEntity<List<V1ReplicaSet>> listReplicaSets() {
+        try {
+            List<V1ReplicaSet> replicaSets = listerService.getAllReplicaSets();
+            return new ResponseEntity<>(replicaSets, HttpStatus.OK);
+        } catch (ApiException | IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/jobs")
-    public ResponseEntity<List<String>> listJobs() throws IOException, ApiException {
-        List<String> jobs = ListerService.getAllJobs();
-        return new ResponseEntity<>(jobs,HttpStatus.OK);
+    public ResponseEntity<List<V1Job>> listJobs() {
+        try {
+            List<V1Job> jobs = listerService.getAllJobs();
+            return new ResponseEntity<>(jobs, HttpStatus.OK);
+        } catch (ApiException | IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-    @GetMapping("/node")
-    public ResponseEntity<List<String>> listNodes() throws IOException, ApiException {
-        List<String> nodes = ListerService.getAllNodes();
-        return new ResponseEntity<>(nodes,HttpStatus.OK);
+
+    @GetMapping("/nodes")
+    public ResponseEntity<List<V1Node>> listNodes() {
+        try {
+            List<V1Node> nodes = listerService.getAllNodes();
+            return new ResponseEntity<>(nodes, HttpStatus.OK);
+        } catch (ApiException | IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
+
     @GetMapping("/configmaps")
-    public ResponseEntity<List<String>> listConfigMap() throws IOException, ApiException {
-        List<String> configmap = ListerService.getAllConfigMaps();
-        return new ResponseEntity<>(configmap,HttpStatus.OK);
+    public ResponseEntity<List<V1ConfigMap>> listConfigMaps() {
+        try {
+            List<V1ConfigMap> configMaps = listerService.getAllConfigMaps();
+            return new ResponseEntity<>(configMaps, HttpStatus.OK);
+        } catch (ApiException | IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-    @GetMapping("/ingress")
-    public ResponseEntity<List<String>> listIngress() throws IOException, ApiException {
-        List<String> ingress = ListerService.getAllIngresses();
-        return new ResponseEntity<>(ingress,HttpStatus.OK);
+
+    @GetMapping("/ingresses")
+    public ResponseEntity<List<V1Ingress>> listIngresses() {
+        try {
+            List<V1Ingress> ingresses = listerService.getAllIngresses();
+            return new ResponseEntity<>(ingresses, HttpStatus.OK);
+        } catch (ApiException | IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
+
     @GetMapping("/endpoints")
-    public ResponseEntity<List<String>> listEndpoint() throws IOException, ApiException {
-        List<String> endpoint = ListerService.getAllEndpoints();
-        return new ResponseEntity<>(endpoint,HttpStatus.OK);
+    public ResponseEntity<List<V1Endpoints>> listEndpoints() {
+        try {
+            List<V1Endpoints> endpoints = listerService.getAllEndpoints();
+            return new ResponseEntity<>(endpoints, HttpStatus.OK);
+        } catch (ApiException | IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-    @GetMapping("/deamonsets")
-    public ResponseEntity<List<String>> getAllDaemonSets() throws IOException, ApiException {
-        List<String> deamonsets = ListerService.getAllDaemonSets();
-        return new ResponseEntity<>(deamonsets,HttpStatus.OK);
+
+    @GetMapping("/daemonsets")
+    public ResponseEntity<List<V1DaemonSet>> listDaemonSets() {
+        try {
+            List<V1DaemonSet> daemonSets = listerService.getAllDaemonSets();
+            return new ResponseEntity<>(daemonSets, HttpStatus.OK);
+        } catch (ApiException | IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-    @GetMapping("/pvc")
-    public ResponseEntity<List<String>> getAllPersistentVolumeClaims() throws IOException, ApiException {
-        List<String> deamonsets = ListerService.getAllPersistentVolumeClaims();
-        return new ResponseEntity<>(deamonsets,HttpStatus.OK);
+
+    @GetMapping("/persistentvolumeclaims")
+    public ResponseEntity<List<V1PersistentVolumeClaim>> listPersistentVolumeClaims() {
+        try {
+            List<V1PersistentVolumeClaim> pvClaims = listerService.getAllPersistentVolumeClaims();
+            return new ResponseEntity<>(pvClaims, HttpStatus.OK);
+        } catch (ApiException | IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-    @GetMapping("/sc")
-    public ResponseEntity<List<String>> getAllStorageClasses() throws IOException, ApiException {
-        List<String> deamonsets = ListerService.getAllStorageClasses();
-        return new ResponseEntity<>(deamonsets,HttpStatus.OK);
+
+    @GetMapping("/storageclasses")
+    public ResponseEntity<List<V1StorageClass>> listStorageClasses() {
+        try {
+            List<V1StorageClass> storageClasses = listerService.getAllStorageClasses();
+            return new ResponseEntity<>(storageClasses, HttpStatus.OK);
+        } catch (ApiException | IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-    @GetMapping("/stateful")
-    public ResponseEntity<List<String>> getAllStateful() throws IOException, ApiException {
-        List<String> stateful = ListerService.getAllStatefulSets();
-        return new ResponseEntity<>(stateful,HttpStatus.OK);
+
+    @GetMapping("/statefulsets")
+    public ResponseEntity<List<V1StatefulSet>> listStatefulSets() {
+        try {
+            List<V1StatefulSet> statefulSets = listerService.getAllStatefulSets();
+            return new ResponseEntity<>(statefulSets, HttpStatus.OK);
+        } catch (ApiException | IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-    @GetMapping("/persistentvolume")
-    public ResponseEntity<List<String>> getAllPersistentVolumes() throws IOException, ApiException {
-        List<String> persistentvolume = ListerService.getAllPersistentVolumes();
-        return new ResponseEntity<>(persistentvolume,HttpStatus.OK);
+
+    @GetMapping("/persistentvolumes")
+    public ResponseEntity<List<V1PersistentVolume>> listPersistentVolumes() {
+        try {
+            List<V1PersistentVolume> persistentVolumes = listerService.getAllPersistentVolumes();
+            return new ResponseEntity<>(persistentVolumes, HttpStatus.OK);
+        } catch (ApiException | IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-    @GetMapping("/connection")
-    public ResponseEntity<List<String>> getPodDeploymentConnections() throws IOException, ApiException {
-        List<String> connection = ListerService.getPodDeploymentConnections();
-        return new ResponseEntity<>(connection,HttpStatus.OK);
-    }
-    
-    
-    
+
 }
