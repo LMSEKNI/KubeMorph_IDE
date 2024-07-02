@@ -3,8 +3,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 50vh;
   background-color: #00aa9b;
+  padding: 20px;
 
 }
 
@@ -23,8 +23,24 @@
 .search-bar {
   width: 100%;
 }
-.icon{
+
+.icon {
   color: white;
+}
+
+.search-results {
+  background-color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.card-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  box-shadow: black;
 }
 
 .example-card {
@@ -32,44 +48,73 @@
   flex-direction: column;
   width: 100%;
   max-width: 800px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0); /* Initial box-shadow */
+  transition: box-shadow 0.3s ease; /* Smooth transition effect */
+
+  &:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Black box-shadow on hover */
+  }
 }
+
 
 .card-header {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Ensure space between elements */
+  justify-content: space-between;
   width: 100%;
 }
-.card-button {
 
+.card-button {
   height: 30px;
+  color:white;
+  background-color: #005573;
+  width: 100%; /* Ensure buttons take full width */
+  margin-top: 10px; /* Add spacing between buttons */
+  text-align: center; /* Center button text */
+  display: inline-block; /* Ensure inline display for consistent sizing */
+  line-height: 30px; /* Vertically center button text */
 }
-.column-right{
+.spinner {
+  position: absolute; /* Example positioning */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+.column-right {
   margin-left: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  justify-items: center;
+  align-items: flex-end;
 }
 
 .mat-card-content {
   display: flex;
-  justify-content: flex-start; /* Align content to start (left) */
+  justify-content: flex-start;
 }
-.headeralligned{
+
+.header-aligned {
   display: flex;
   flex-direction: column;
 }
+
 .card-title-group {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
 
-.mat-form-field{
+.mat-form-field {
   color: white;
 }
 
+.card-image{
+  height: 40px;
+  width: 40px;
+}
 @media (max-width: 768px) {
   .search-container {
     padding: 10px;
@@ -79,3 +124,4 @@
     max-width: 100%;
   }
 }
+

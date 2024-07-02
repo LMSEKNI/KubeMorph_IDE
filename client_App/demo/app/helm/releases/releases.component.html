@@ -1,0 +1,78 @@
+<demo></demo>
+<div class="header-bar">
+  <button mat-icon-button (click)="goBack()" aria-label="Go Back" >
+    <img src="assets/images/arrow_back_.svg" alt="Go Back Icon">
+  </button>
+  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+    <img src="assets/images/3pt.svg" alt="Go Back Icon">
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item >
+      <mat-icon>home</mat-icon>
+      <span>List Resource</span>
+    </button>
+    <button mat-menu-item routerLink="/monitoring">
+      <mat-icon>settings_heart</mat-icon>
+      <span>Monotoring</span>
+    </button>
+    <button mat-menu-item [matMenuTriggerFor]="helm" #menuTrigger>
+      <mat-icon>notifications_off</mat-icon>
+      <span>Helm</span>
+    </button>
+    <mat-menu #helm="matMenu">
+      <button mat-menu-item routerLink="/helm">Artifact Hub</button>
+      <button mat-menu-item routerLink="/helm-release">Releases </button>
+    </mat-menu>
+  </mat-menu>
+</div>
+<div class="search-container">
+  <img src="/assets/images/logo_release.png" alt="Logo" class="logo">
+
+  <div class="search-bar-wrapper">
+    <mat-form-field appearance="standard" class="search-bar">
+      <input matInput placeholder="Search" #searchInput (input)="filterReleases(searchInput.value)">
+      <button mat-icon-button matSuffix >
+        <mat-icon class="icon">search</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+</div>
+
+<div class="search-results">
+  <mat-progress-spinner *ngIf="loading" class="spinner" mode="indeterminate"></mat-progress-spinner>
+  <div class="card-container" *ngIf="filteredReleases  && filteredReleases.length > 0">
+    <mat-card *ngFor="let release of filteredReleases; let i = index" class="example-card" appearance="outlined" (click)="navigateToDetail(release)">
+      <div class="header-aligned">
+        <div class="card-header">
+          <img mat-card-sm-image [src]="getImage(i)" alt="Image" class="card-image">
+          <div class="card-title-group">
+            <mat-card-title>{{ release.name }}</mat-card-title>
+          </div>
+          <div class="column-right">
+            <button mat-button class="card-button">{{release.status}}</button>
+            <button mat-button class="card-button">Chart {{ release.chart}}</button>
+          </div>
+        </div>
+        <mat-card-content>
+          <div class="content-wrapper">
+            <div class="content-item">
+              <h4>App Version:</h4>
+              <p>{{ release.appVersion }}</p>
+            </div>
+            <div class="content-item">
+              <h4>Last Deployed :</h4>
+              <p>{{ release.lastDeployed}}</p>
+            </div>
+            <div class="content-item">
+              <h4>Namespace :</h4>
+              <p>{{ release.namespace}}</p>
+            </div>
+
+          </div>
+        </mat-card-content>
+      </div>
+    </mat-card>
+  </div>
+</div>
+
+<router-outlet></router-outlet>

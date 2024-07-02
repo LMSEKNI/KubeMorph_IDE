@@ -1,0 +1,14 @@
+<h3 mat-dialog-title>
+  <span class="dialog-title">Delete Release</span>
+  <button mat-icon-button mat-dialog-close class="close-button">
+    <mat-icon>close</mat-icon>
+  </button>
+</h3>
+<div class="header-divider"></div>
+<mat-dialog-content>
+  <span>Would you like to delete </span> <strong>{{data.release}}</strong>?
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close class="no">No</button>
+  <button mat-button mat-dialog-close (click)="deleteRelease()"  cdkFocusInitial class="ok">Ok</button>
+</mat-dialog-actions>

@@ -20,6 +20,7 @@ import { Bootstrap4FrameworkModule } from '@ajsf/bootstrap4';
 import { Bootstrap3FrameworkModule } from '@ajsf/bootstrap3';
 import { MaterialDesignFrameworkModule } from '@ajsf/material';
 import { YmlFileComponent } from './addressource/yml-file/yml-file.component';
+// import { MatDrawerModule } from '@angular/material/drawer';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { ListComponent } from './workload-details/list/list.component';
 import { DesccComponent } from './workload-details/descc/descc.component';
@@ -39,22 +40,28 @@ import { TerminalTabManagerComponent } from './terminal-tab-manager/terminal-tab
 import {MatTabsModule} from '@angular/material/tabs';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import {NgTerminalModule} from 'ng-terminal';
 import { HelmComponent } from './helm/helm.component';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { HelmDetailsComponent } from './helm/helm-details/helm-details.component';
 import { CharttemplateComponent } from './helm/charttemplate/charttemplate.component';
 import { DeleteComponent } from './workload-details/delete/delete.component';
-import {NgTerminalModule} from 'ng-terminal';
 import { MonitoringComponent } from './monitoring/components/monitoring.component';
 import {EChartsDirective} from './monitoring/Directives/EChartsDirective';
 import { GrafanaDialogComponent } from './monitoring/components/grafana-dialog/grafana-dialog.component';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
-import { AngularSplitModule } from 'angular-split';
 import { MessageDialogComponent } from './workload-details/updateressource/dynamic-form-update/message-dialog/message-dialog.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {ListingComponent} from './workload-details/listing/Components/listing.component';
 
 
+import { AngularSplitModule } from 'angular-split';
+import { ReleasesComponent } from './helm/releases/releases.component';
+import { ReleaseDetailsComponent } from './helm/releases/release-details/release-details.component';
+import { DeleteReleaseComponent } from './helm/releases/delete-release/delete-release.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { Charttemplate2Component } from './helm/charttemplate2/charttemplate2.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 @NgModule({
@@ -83,13 +90,17 @@ import {ListingComponent} from './workload-details/listing/Components/listing.co
                   DeleteComponent,
                   MonitoringComponent,
                   GrafanaDialogComponent,
+                  ReleasesComponent,
+                  ReleaseDetailsComponent,
+                  DeleteReleaseComponent,
+                  Charttemplate2Component,
                   MessageDialogComponent,
                   ListingComponent
 
 
                   ],
   imports: [
-    BrowserModule, BrowserAnimationsModule, FlexLayoutModule, FormsModule, MatChipsModule,
+    AngularSplitModule, BrowserModule, BrowserAnimationsModule, FlexLayoutModule, FormsModule, MatChipsModule,
     HttpClientModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule,
     MatIconModule, MatMenuModule, MatSelectModule, MatToolbarModule,
     RouterModule.forRoot(routes, {relativeLinkResolution: 'legacy'}),

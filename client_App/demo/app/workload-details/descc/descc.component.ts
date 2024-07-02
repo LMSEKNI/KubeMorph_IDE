@@ -12,7 +12,7 @@ export class DesccComponent implements OnInit {
 
   resourceJson: any;
   errorMessage = '';
-  isFrameOpen: boolean = false;
+  isFrameOpen = false;
 
   constructor(private descServiceService: DesccService) { }
 
