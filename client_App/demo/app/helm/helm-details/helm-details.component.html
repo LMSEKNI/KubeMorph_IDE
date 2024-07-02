@@ -2,55 +2,89 @@
   <div class="header-left" >
     <img class="artifact" src="assets/images/artifact.png" alt="Logo" >
   </div>
+  <!--search bar-->
   <div class="header-right">
     <mat-form-field appearance="standard" class="search-bar">
-      <input matInput placeholder="Search" >
-      <button mat-icon-button matSuffix>
+      <input matInput placeholder="Search" #searchInput >
+      <button mat-icon-button matSuffix (click)="searchAndNavigate(searchInput.value)">
         <mat-icon class="icon">search</mat-icon>
       </button>
     </mat-form-field>
   </div>
+
 </mat-toolbar>
-<div class="center-container">
+<div class="header-bar">
+  <button mat-icon-button (click)="goBack()" aria-label="Go Back" >
+    <img src="assets/images/arrow_back_.svg" alt="Go Back Icon">
+  </button>
+  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+    <img src="assets/images/3pt.svg" alt="Go Back Icon">
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item >
+      <mat-icon>home</mat-icon>
+      <span>List Resource</span>
+    </button>
+    <button mat-menu-item routerLink="/monitoring">
+      <mat-icon>settings_heart</mat-icon>
+      <span>Monotoring</span>
+    </button>
+    <button mat-menu-item [matMenuTriggerFor]="helm" #menuTrigger>
+      <mat-icon>notifications_off</mat-icon>
+      <span>Helm</span>
+    </button>
+    <mat-menu #helm="matMenu">
+      <button mat-menu-item routerLink="/helm">Artifact Hub</button>
+      <button mat-menu-item routerLink="/helm-release">Releases </button>
+    </mat-menu>
+  </mat-menu>
+</div>
+
+<div class="center-container" *ngIf="chart">
   <mat-card class="detail-card" appearance="outlined">
     <div class="header-aligned">
-      <img mat-card-sm-image src="/assets/images/promotheus.png" alt="Image" class="card-image">
+      <img mat-card-sm-image [src]="image"  alt="Image" class="card-image">
       <div class="card-title-group">
-        <mat-card-title>Chart Name</mat-card-title>
+        <mat-card-title>{{ chart.name }}</mat-card-title>
       </div>
       <div class="butt">
-        <button mat-button class="card-button" (click)="openDialog()">
+        <button mat-button class="card-button" (click)="openDialog(chart.name)">
           <mat-icon>
             <img src="/assets/images/download.svg" alt="Download Icon">
           </mat-icon>
           Helm Chart
         </button>
 
-        <button mat-button class="card-button">
-          <mat-icon>
-            <img src="/assets/images/value.svg" alt="Download Icon">
-          </mat-icon>
-          Default Value
-        </button>
 
         <button mat-button class="card-button">
           <mat-icon>
-            <img src="/assets/images/template.svg" alt="Download Icon">
+            <img src="/assets/images/template.svg" alt="Download Icon" (click)="openDialogTemplate()" >
           </mat-icon>
           Template
         </button>
-
-
       </div>
+
     </div>
     <mat-card-content>
       <div class="content-wrapper">
-        Installs the , a collection of Kubernetes manifests, dashboards, and combined with documentation and scripts to provide easy to operate end-to-end Kubernetes cluster monitoring with using the .
-
-        See the README for details about components, dashboards, and alerts.
-
-        Note: This chart was formerly named prometheus-operator chart, now renamed to more clearly reflect that it installs the kube-prometheus project stack, within which Prometheus Operator is only one component.
+        <div class="content-item">
+          <h4>Description:</h4>
+          <p>{{ chart.description }}</p>
+        </div>
+        <div class="content-item">
+          <h4>Keywords:</h4>
+          <p>{{ chart.keywords }}</p>
+        </div>
+        <div class="content-item">
+          <h4>Chart Version:</h4>
+          <p>{{ chart.chartVersion }}</p>
+        </div>
+        <div class="content-item">
+          <h4>App Version:</h4>
+          <p>{{ chart.appVersion }}</p>
+        </div>
       </div>
+
 
       <div class="content-wrapper">
         <mat-card-title>Install Helm Chart</mat-card-title>

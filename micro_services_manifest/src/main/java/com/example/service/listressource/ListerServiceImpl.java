@@ -33,7 +33,6 @@ import io.kubernetes.client.openapi.models.V1Pod;
 import io.kubernetes.client.openapi.models.V1PodList;
 import io.kubernetes.client.openapi.models.V1ReplicaSet;
 import io.kubernetes.client.openapi.models.V1ReplicaSetList;
-import io.kubernetes.client.openapi.models.V1Service;
 import io.kubernetes.client.openapi.models.V1ServiceList;
 import io.kubernetes.client.openapi.models.V1StatefulSet;
 import io.kubernetes.client.openapi.models.V1StatefulSetList;
@@ -108,19 +107,16 @@ public class ListerServiceImpl implements ListerService{
     }
 
     @Override
-    public List<String> getAllPods() throws FileNotFoundException, IOException, ApiException {
+    public V1PodList getAllPods() throws FileNotFoundException, IOException, ApiException {
 
         KubernetesConfigService.configureKubernetesAccess();
-        
         CoreV1Api api = new CoreV1Api();
-
         V1PodList podList = api.listPodForAllNamespaces(null, null, null, null, null, null, null, null, null, null);
-        
         List<String> podNames = new ArrayList<>();
         for (V1Pod item : podList.getItems()) {
             podNames.add(item.getMetadata().getName());
         }
-        return podNames;
+        return podList;
     }
 
     @Override
@@ -139,36 +135,22 @@ public class ListerServiceImpl implements ListerService{
     }
 
     @Override
-    public List<String> getAllServices() throws FileNotFoundException, IOException, ApiException {
+    public V1ServiceList getAllServices() throws FileNotFoundException, IOException, ApiException {
         KubernetesConfigService.configureKubernetesAccess();
 
         CoreV1Api api = new CoreV1Api();
 
-        V1ServiceList serviceList = api.listServiceForAllNamespaces(null, null, null, null, null, null, null, null, null, null);
-
-        // Extract service names
-        List<String> serviceNames = new ArrayList<>();
-        for (V1Service item : serviceList.getItems()) {
-            serviceNames.add(item.getMetadata().getName());
-        }
-
-        return serviceNames;
+        return api.listServiceForAllNamespaces(null, null, null, null, null, null, null, null, null,null);
     }
-
-    @Override
-    public List<String> getAllDeployments() throws IOException, ApiException {
-        
-        ApiClient client =KubernetesConfigService.configureKubernetesAccess();
-        // CoreV1Api api = new CoreV1Api();
+    public V1DeploymentList listAllDeployments() throws IOException, ApiException {
+        ApiClient client = KubernetesConfigService.configureKubernetesAccess();
         AppsV1Api api = new AppsV1Api(client);
+
         V1DeploymentList deploymentList = api.listDeploymentForAllNamespaces(null, null, null, null, null, null, null, null, null, null);
 
-        List<String> deploymentNames = new ArrayList<>();
-        for (V1Deployment deployment : deploymentList.getItems()) {
-            deploymentNames.add(deployment.getMetadata().getName());
-        }
-        return deploymentNames;
+        return deploymentList;
     }
+
 
     public List<String> getAllReplicaSets() throws IOException, ApiException {
         ApiClient client =KubernetesConfigService.configureKubernetesAccess();

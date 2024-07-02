@@ -15,7 +15,8 @@ import { TerminalTabManagerComponent} from './terminal-tab-manager/terminal-tab-
 import { HelmComponent} from './helm/helm.component';
 import { HelmDetailsComponent} from './helm/helm-details/helm-details.component';
 import {MonitoringComponent} from './monitoring/components/monitoring.component';
-
+import { ReleasesComponent} from './helm/releases/releases.component';
+import { ReleaseDetailsComponent} from './helm/releases/release-details/release-details.component';
 
 export const routes: Route[] = [
   { path: '' , component: ListComponent},
@@ -30,7 +31,9 @@ export const routes: Route[] = [
   { path: 'config-monitoring' , component: MonitoringChoiceComponent},
   { path: 'prometheus' , component: MonitoringPrometheusComponent},
   { path: 'helm' , component: HelmComponent },
-  { path: 'helm/helmdetails' , component: HelmDetailsComponent},
+  { path: 'helm-details' , component: HelmDetailsComponent},
   { path: 'monitoring' , component: MonitoringComponent},
+  { path: 'helm-release' , component: ReleasesComponent},
+  { path: 'release-details' , component: ReleaseDetailsComponent},
 
 ];

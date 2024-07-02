@@ -1,6 +1,14 @@
 package com.example.controller.listressource;
 
+import com.example.KubernetesConfig.KubernetesConfigService;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.openapi.ApiException;
+import io.kubernetes.client.openapi.apis.AppsV1Api;
+import io.kubernetes.client.openapi.models.*;
+import io.kubernetes.client.util.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +21,9 @@ import com.example.service.listressource.ListerServiceImpl;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -27,13 +37,13 @@ public class ListerController {
 
     
     @GetMapping("/pods")
-    public ResponseEntity<List<String>> listPods() throws FileNotFoundException, IOException, ApiException {
-        List<String> pods = ListerService.getAllPods();
+    public ResponseEntity<V1PodList> listPods() throws FileNotFoundException, IOException, ApiException {
+        V1PodList pods = ListerService.getAllPods();
         return new ResponseEntity<>(pods, HttpStatus.OK);   
     }
 
     @GetMapping("/namespaces")
-    public ResponseEntity<List<String> >getAllNamespace() throws FileNotFoundException, IOException {
+    public ResponseEntity<List<String>>getAllNamespace() throws FileNotFoundException, IOException {
         try {
             List<String> namespaces= ListerService.getAllNamespaces();
             return new ResponseEntity<>(namespaces, HttpStatus.OK);
@@ -44,19 +54,67 @@ public class ListerController {
         }
     }
     @GetMapping("/services")
-    public ResponseEntity<List<String>> listServices() {
+    public ResponseEntity<V1ServiceList> listServices() {
         try {
-            List<String> services = ListerService.getAllServices();
+            V1ServiceList services = ListerService.getAllServices();
             return new ResponseEntity<>(services, HttpStatus.OK);
         } catch (IOException | ApiException e) {
+            // Log the exception or handle it accordingly
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @GetMapping("/deployments")
-    public ResponseEntity<List<String>> listDeployments() throws IOException, ApiException {
-        List<String> deploymnts = ListerService.getAllDeployments();
-        return new ResponseEntity<>(deploymnts,HttpStatus.OK);
+    /////////////////////////////////////////////////.::::::::::::::::
+    @Autowired
+    private KubernetesConfigService KubernetesConfigService;
+    @GetMapping("/deploymentss")
+    public ResponseEntity<String> listDeploymentss() throws IOException, ApiException {
+
+            ApiClient client = KubernetesConfigService.configureKubernetesAccess();
+            AppsV1Api api = new AppsV1Api(client);
+
+            // Fetch deployments
+            V1DeploymentList deploymentList = api.listDeploymentForAllNamespaces(null, null, null, null, null, null, null, null, null, null);
+
+            // Construct JSON response
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
+            List<V1Deployment> deployments = deploymentList.getItems();
+            List<Object> items = new ArrayList<>();
+            for (V1Deployment deployment : deployments) {
+                items.add(objectMapper.convertValue(deployment, Object.class));
+            }
+
+            // Create the JSON structure
+            String json = objectMapper.writeValueAsString(new KubernetesDeploymentList(items));
+
+            return ResponseEntity.ok(json);
+
+            // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to retrieve deployments: " + e.getMessage());
+
     }
+
+    // Helper class to wrap deployments in a list object
+    private static class KubernetesDeploymentList {
+        private String apiVersion = "v1";
+        private String kind = "List";
+        private List<Object> items;
+        private KubernetesDeploymentList(List<Object> items) {
+            this.items = items;
+        }
+    }
+   ///////////////:::::::::::::::::::::::::
+    @GetMapping("/deployments")
+    public ResponseEntity<V1DeploymentList> listDeployments() {
+        try {
+            V1DeploymentList deployments = ListerService.listAllDeployments();
+            return new ResponseEntity<>(deployments, HttpStatus.OK);
+        } catch (IOException | ApiException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/replicasets")
     public ResponseEntity<List<String>> listReplicaSets() throws IOException, ApiException {
         List<String> deploymnts = ListerService.getAllReplicaSets();
@@ -64,8 +122,8 @@ public class ListerController {
     }
 
     @GetMapping("/jobs")
-    public ResponseEntity<List<String>> listJobs() throws IOException, ApiException {
-        List<String> jobs = ListerService.getAllJobs();
+    public ResponseEntity<List<String> > listJobs() throws IOException, ApiException {
+        List<String>  jobs = ListerService.getAllJobs();
         return new ResponseEntity<>(jobs,HttpStatus.OK);
     }
     @GetMapping("/node")

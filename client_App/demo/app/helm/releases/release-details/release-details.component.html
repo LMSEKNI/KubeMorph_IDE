@@ -1,0 +1,52 @@
+<mat-toolbar class="header">
+  <div class="header-left" >
+    <img class="artifact" src="assets/images/logo_release.png" alt="Logo" >
+  </div>
+  <!--search bar-->
+  <div class="header-right">
+    <mat-form-field appearance="standard" class="search-bar">
+      <input matInput placeholder="Search" #searchInput>
+      <button mat-icon-button matSuffix (click)="searchAndNavigate(searchInput.value)">
+        <mat-icon class="icon">search</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+
+</mat-toolbar>
+
+
+<div class="center-container" *ngIf="release">
+  <mat-card class="detail-card" appearance="outlined">
+    <div class="header-aligned">
+      <img mat-card-sm-image [src]="image"  alt="Image" class="card-image">
+      <div class="card-title-group">
+        <mat-card-title>{{ release.name }}</mat-card-title>
+      </div>
+      <div class="butt">
+
+        <button mat-button class="card-button">
+          <mat-icon>
+            <img src="/assets/images/rollback.svg" alt="Download Icon" aria-label="Rollback release" (click)="rollbackRelease(release.name)">
+          </mat-icon>
+         RollBack
+        </button>
+
+        <button mat-button class="card-button" (click)="openDialog(release.name)">
+          <mat-icon>
+            <img src="/assets/images/auto_delete.svg" alt="Download Icon">
+          </mat-icon>
+          Delete
+        </button>
+      </div>
+
+    </div>
+    <mat-card-content >
+
+      <div *ngIf="selectedReleaseStatus">
+        <pre>{{ selectedReleaseStatus  }}</pre>
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+</div>
+

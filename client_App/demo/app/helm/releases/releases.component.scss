@@ -1,0 +1,149 @@
+.search-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #00aa9b;
+  padding: 20px;
+
+}
+
+.logo {
+  max-width: 150px;
+  margin-bottom: 20px;
+}
+
+.search-bar-wrapper {
+  width: 100%;
+  max-width: 600px;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.search-bar {
+  width: 100%;
+}
+
+.icon {
+  color: white;
+}
+
+.search-results {
+  background-color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.card-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  box-shadow: black;
+}
+
+.example-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px;
+  border: 1px solid black; /* Add black border */
+  margin-bottom: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0); /* Initial box-shadow */
+  transition: box-shadow 0.3s ease; /* Smooth transition effect */
+
+  &:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Black box-shadow on hover */
+  }
+}
+
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.card-button {
+  height: 30px;
+  color:white;
+  background-color: #005573;
+  width: 100%; /* Ensure buttons take full width */
+  margin-top: 10px; /* Add spacing between buttons */
+  text-align: center; /* Center button text */
+  display: inline-block; /* Ensure inline display for consistent sizing */
+  line-height: 30px; /* Vertically center button text */
+}
+.spinner {
+  position: absolute; /* Example positioning */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+.column-right {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.mat-card-content {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.header-aligned {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-title-group {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.mat-form-field {
+  color: white;
+}
+
+.card-image{
+  height: 40px;
+  width: 40px;
+}
+@media (max-width: 768px) {
+  .search-container {
+    padding: 10px;
+  }
+
+  .example-card {
+    max-width: 100%;
+  }
+}
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.content-item {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 8px; /* Adjust spacing as needed */
+
+}
+
+.content-item h4 {
+  margin: 0;
+  margin-right: 8px; /* Adjust spacing as needed */
+  font-weight: bold;
+  line-height: 1.2;
+}
+.content-item p {
+  margin: 0;
+  line-height: 1.2;
+}

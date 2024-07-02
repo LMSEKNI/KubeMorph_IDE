@@ -2,11 +2,17 @@ package com.example.Helm.Controller;
 
 import com.example.Helm.Service.chart;
 import com.marcnuri.helm.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.Path;
 import java.util.List;
+
+@CrossOrigin(origins = "http://localhost:4200")
+
 
 @RestController
 @RequestMapping("/api/helm")
@@ -42,6 +48,10 @@ public class ChartController {
             @RequestParam(required = false) String[] flags) {
         // Invoke the showChart function with the provided parameters
         return chartService.showChart(chartPath, chartName, flags != null ? flags : new String[0]);
+    }
+    @GetMapping("/helm-search")
+    public List<String> searchHub(@RequestParam String keyword) {
+        return chartService.searchHub(keyword);
     }
     @GetMapping("/search")
     public List<SearchResult> searchRepo( @RequestParam String keyword) {
@@ -155,18 +165,27 @@ public class ChartController {
     public VersionCommand getVersion() {
         return chartService.getVersion();
     }
+    private static final Logger logger = LoggerFactory.getLogger(ChartController.class);
 
     @GetMapping("/rollback-release")
-    public String rollbackRelease(
+    public ResponseEntity<String> rollbackRelease(
             @RequestParam String releaseName,
             @RequestParam(required = false) Integer version) {
-        chartService.rollbackRelease(releaseName, version);
-        return "Rollback initiated for release: " + releaseName;
+        logger.info("Received rollback request for release: {}, version: {}", releaseName, version);
+        try {
+            String result = chartService.rollbackRelease(releaseName, version);
+            logger.info("Rollback response: {}", result);
+            return ResponseEntity.ok(result);
+        } catch (RuntimeException e) {
+            logger.error("Error during rollback: {}", e.getMessage());
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
     }
 
     @GetMapping("/status")
-    public String getStatus(@RequestParam String releaseName) {
-        return chartService.getStatus(releaseName);
+    public ResponseEntity<String> getStatus(@RequestParam String releaseName) {
+        String status = chartService.getStatus(releaseName);
+        return ResponseEntity.ok().body(status);
     }
 
 }

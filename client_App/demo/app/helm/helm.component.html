@@ -1,36 +1,86 @@
+
 <demo></demo>
+<div class="header-bar">
+  <button mat-icon-button (click)="goBack()" aria-label="Go Back" >
+    <img src="assets/images/arrow_back_.svg" alt="Go Back Icon">
+  </button>
+  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+    <img src="assets/images/3pt.svg" alt="Go Back Icon">
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item >
+      <mat-icon>home</mat-icon>
+      <span>List Resource</span>
+    </button>
+    <button mat-menu-item routerLink="/monitoring">
+      <mat-icon>settings_heart</mat-icon>
+      <span>Monotoring</span>
+    </button>
+    <button mat-menu-item [matMenuTriggerFor]="helm" #menuTrigger>
+      <mat-icon>notifications_off</mat-icon>
+      <span>Helm</span>
+    </button>
+    <mat-menu #helm="matMenu">
+      <button mat-menu-item routerLink="/helm">Artifact Hub</button>
+      <button mat-menu-item routerLink="/helm-release">Releases </button>
+    </mat-menu>
+  </mat-menu>
+
+</div>
+
 
 <div class="search-container">
+
   <img src="/assets/images/artifact.png" alt="Logo" class="logo">
+
   <div class="search-bar-wrapper">
     <mat-form-field appearance="standard" class="search-bar">
-      <input matInput placeholder="Search" >
-      <button mat-icon-button matSuffix>
+      <input matInput placeholder="Search" #searchInput>
+      <button mat-icon-button matSuffix (click)="search(searchInput.value)">
         <mat-icon class="icon">search</mat-icon>
       </button>
     </mat-form-field>
   </div>
-
-
-  <mat-card class="example-card" appearance="outlined" (click)="navigateToDetail()">
-    <div class="header-aligned">
-      <div class="card-header">
-        <img mat-card-sm-image src="/assets/images/promotheus.png" alt="Image" class="card-image">
-        <div class="card-title-group">
-          <mat-card-title>Chart Name</mat-card-title>
-        </div>
-        <div class="column-right">
-          <button mat-button class="card-button">Helm Chart</button>
-          <span class="label">Version</span>
-        </div>
-      </div>
-      <mat-card-content>
-        <div class="content-wrapper">
-          {{ longText }}
-        </div>
-      </mat-card-content>
-    </div>
-  </mat-card>
-
 </div>
- <router-outlet></router-outlet>
+
+<div class="search-results">
+  <mat-progress-spinner *ngIf="loading" class="spinner" mode="indeterminate"></mat-progress-spinner>
+
+  <div *ngIf="searchResults && searchResults.length > 0; else noResults">
+    <div class="card-container">
+      <mat-card *ngFor="let chart of pagedSearchResults; let i = index" class="example-card" appearance="outlined" (click)="navigateToDetail(chart)">
+        <div class="header-aligned">
+          <div class="card-header">
+            <img mat-card-sm-image [src]="getImage(i)" alt="Image" class="card-image">
+            <div class="card-title-group">
+              <mat-card-title>{{ chart.name }}</mat-card-title>
+            </div>
+            <div class="column-right">
+              <button mat-button class="card-button">Helm Chart</button>
+              <button mat-button class="card-button">Version {{ chart.chartVersion }}</button>
+            </div>
+          </div>
+          <mat-card-content>
+            <div class="content-wrapper">
+              {{ chart.description }}
+            </div>
+          </mat-card-content>
+        </div>
+      </mat-card>
+    </div>
+
+    <mat-paginator [length]="searchResults.length"
+                   [pageSize]="pageSize"
+                   [pageSizeOptions]="pageSizeOptions"
+                   (page)="onPageChange($event)"
+                   aria-label="Select page"
+                   *ngIf="searchResults && searchResults.length > 0">
+    </mat-paginator>
+  </div>
+
+  <ng-template #noResults>
+    <p>No results found.</p>
+  </ng-template>
+</div>
+
+<router-outlet></router-outlet>

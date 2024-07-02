@@ -12,7 +12,7 @@ export class DesccComponent implements OnInit {
 
   resourceDetails: { title: string, description: string }[] = [];
   errorMessage = '';
-  isFrameOpen: boolean = false;
+  isFrameOpen = false;
 
   constructor(private descServiceService: DesccService) { }
 

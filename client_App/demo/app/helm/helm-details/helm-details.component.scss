@@ -120,3 +120,25 @@ a {
 a:hover {
   text-decoration: underline;
 }
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.content-item {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 8px; /* Adjust spacing as needed */
+}
+
+.content-item h4 {
+  margin: 0;
+  margin-right: 8px; /* Adjust spacing as needed */
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+.content-item p {
+  margin: 0;
+  line-height: 1.2;
+}

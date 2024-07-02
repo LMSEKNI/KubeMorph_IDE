@@ -9,8 +9,16 @@
 
 .container {
   display: flex;
+  background-color: #005573;
+  overflow-y: auto;
+  width: 100%;
   //transition: width 0.3s ease;
 //  height: 100vh;
+}
+.flex-container{
+  overflow-y: auto;
+  width: 100%;
+  height: auto;
 }
 
 .container.frame-open {
@@ -45,15 +53,31 @@
   overflow-y: auto;
   transition: width 0.3s ease;
 }
-
 .log-container,
 .terminal-container {
   position: fixed;
   bottom: 0;
+  max-height: 40%; /* Adjust height as necessary */
+
   width: 100%;
   background-color: #fff;
   transition: transform 0.3s ease;
 }
+
+.log-header,
+.terminal-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 6px;
+  background-color: #000000;
+}
+
+.close-button {
+  margin-left: auto;
+  color: #00aa9b;
+}
+
+
 
 .open {
   transform: translateY(0);
@@ -64,6 +88,7 @@
 }
 
 .iconn {
+  height : 35px;
   display: flex;
   justify-content: flex-end; /* Align icons to the right */
 }

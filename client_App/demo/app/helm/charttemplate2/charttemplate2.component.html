@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="dialog-header">
+    <h2 mat-dialog-title>Template</h2>
+    <button mat-icon-button mat-dialog-close class="close-button">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="header-divider"></div>
+  <mat-dialog-content class="mat-typography">
+    <div class="content">
+      <div class="left-side">
+        <button mat-button (click)="showCode('code1')" class="vertical-align">
+          <span>Template: deployment.yaml</span>
+          <br>
+          <span>Resource: deployment</span>
+        </button>
+        <button mat-button (click)="showCode('code2')" class="vertical-align">
+          <span>Template: service.yaml</span>
+          <br>
+          <span>Resource: service</span>
+        </button>
+      </div>
+      <div class="right-side">
+        <div class="header">
+          <button mat-icon-button (click)="copyCode()">
+            <mat-icon>content_copy</mat-icon>
+          </button>
+        </div>
+        <pre class="code-block">
+          <code [textContent]="code"></code>
+        </pre>
+      </div>
+    </div>
+  </mat-dialog-content>
+</div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import {  Network } from 'vis-network';
 import { DataSet } from 'vis-data';
 import { ListtService } from '../service/list.service';
@@ -12,6 +12,9 @@ import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { DeleteComponent} from '../delete/delete.component';
+import { AngularSplitModule } from 'angular-split';
+
+
 
 @Component({
   selector: 'app-list',
@@ -75,7 +78,6 @@ export class ListComponent implements OnInit {
 
     resetOption = true;
     showChecklist = false;
-    ///////////////////new list selection
     selectedResources = new FormControl([]);
 
     resourceList: string[] = [
@@ -83,6 +85,7 @@ export class ListComponent implements OnInit {
       'Jobs', 'Nodes', 'Endpoints', 'ConfigMaps', 'Ingress',
       'DaemonSets', 'PVC', 'SC', 'Stateful', 'PV'
     ];
+  showRightPanel = false;
 
 ///////////
   isDialogOpen = false;
@@ -115,19 +118,22 @@ export class ListComponent implements OnInit {
   toppings = new FormControl('');
   toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
 
+  showVerticalSplitter = false;
+
   toggleSearch() {
     this.isSearchOpen = !this.isSearchOpen;
   }
 
 
   toggleTerminal(): void {
+    this.showVerticalSplitter = !this.showVerticalSplitter;
     this.showTerminal = !this.showTerminal;
     this.showTerminalContent = !this.showTerminalContent;
     if (this.showTerminal) {
       this.showLogs = false;
       this.showLogsContent = false;
     }
-    this.closeFrame();
+    // this.closeFrame();
   }
 
   toggleLog(): void {
@@ -137,7 +143,7 @@ export class ListComponent implements OnInit {
       this.showTerminal = false;
       this.showTerminalContent = false;
     }
-    this.closeFrame();
+    // this.closeFrame();
   }
 
 
@@ -153,19 +159,34 @@ export class ListComponent implements OnInit {
       }
     }
   closeFrame(): void {
-    this.isFrameOpen = false;
+    this.showRightPanel = false;
     this.selectedComponent = 'desc';
   }
     onVisibleChange(eventValue: boolean) {
       this.visible = eventValue;
     }
   openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
+    if (!this.selectedResource) {
+      console.error('No resource selected to delete.');
+      return;
+    }
     this.dialog.open(DeleteComponent, {
       width: '400px',
       enterAnimationDuration,
       exitAnimationDuration,
+      data: {  resourceName: this.selectedResource }
     });
   }
+  closeTerminal(): void {
+    this.showTerminal = false;
+    this.showTerminalContent = false;
+
+  }
+  closeLogs(): void {
+    this.showLogs = false;
+    this.showLogsContent = false;
+  }
+
     onDelete(): void {
       const dialogRef = this.dialog.open(this.dialogContentTemplate, {
         width: '250px'
@@ -536,40 +557,41 @@ export class ListComponent implements OnInit {
     if (selectedNodes.length === 0) {
       return;
     }
-    this.isFrameOpen = true;
+    this.showRightPanel = true;
 
     selectedNodes.forEach((nodeId: string) => {
-        const node = this.network.body.nodes[nodeId];
-        this.selectedResource = node.options.title;
-        // const labelParts = node.options.label.split(':');
-        // const resourceType = labelParts[0].trim().toLowerCase(); // Extracted resource type
-      console.log("nifhemmmm", node.options.nodes);
+      const node = this.network.body.nodes[nodeId];
+      this.selectedResource = node.options.title;
+      // const labelParts = node.options.label.split(':');
+      // const resourceType = labelParts[0].trim().toLowerCase(); // Extracted resource type
+      console.log('nifhemmmm', node.options.nodes);
 
       const labelParts = node.options.label.split(':');
-        if (labelParts.length !== 2) {
-            console.error('Invalid label format:', node.options.value);
-            return;
-        }
+      if (labelParts.length !== 2) {
+        console.error('Invalid label format:', node.options.value);
+        return;
+      }
 
-        const resourceType = labelParts[0].trim().toLowerCase(); // Extracted resource type
-        const resourceName = labelParts[1].trim(); // Extracted resource name
+      const resourceType = labelParts[0].trim().toLowerCase(); // Extracted resource type
+      const resourceName = labelParts[1].trim(); // Extracted resource name
 
-        this.selectedType = resourceType;
+      this.selectedType = resourceType;
 
-        console.log('Resource Type:', resourceType);
-        console.log('Resource Name:', resourceName);
-        this.DescService.getResourceDescriptions(resourceType, resourceName)
+      console.log('Resource Type:', resourceType);
+      console.log('Resource Name:', resourceName);
+      this.DescService.getResourceDescriptions(resourceType, resourceName)
         .subscribe(
-            (description: string) => {
-                console.log('Resource Description:', description);
-            },
-            (error) => {
-                console.error('Error fetching resource description:', error);
-            }
+          (description: string) => {
+            console.log('Resource Description:', description);
+          },
+          (error) => {
+            console.error('Error fetching resource description:', error);
+          }
         );
     });
-    }
-    toggleCheckboxList(): void {
+  }
+
+  toggleCheckboxList(): void {
       this.showCheckboxes = !this.showCheckboxes;
     }
 
@@ -578,11 +600,13 @@ export class ListComponent implements OnInit {
       this.podConnections.forEach(connection => {
           this.edges.add({ from: connection.source, to: connection.target });
       });
-      this.renderVisualization();
+      this.network.setData({ nodes: this.nodes, edges: this.edges });
     }
     toggleChecklist() {
       this.showChecklist = !this.showChecklist;
     }
+
+
 
 
 

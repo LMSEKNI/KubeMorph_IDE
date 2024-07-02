@@ -40,11 +40,11 @@ public class PrometheusMetricsService {
 
             runCommand("kubectl create namespace monitoring ");
             //Add the Dashboard configmap
-            runCommand("kubectl create configmap -n monitoring grafana-dashboard-configmap --from-file=/home/msakni/Desktop/KubeMorph_IDE/monitoring/src/main/resources/grafanaDashboard.json");
+            runCommand("kubectl create configmap -n monitoring grafana-dashboard-configmap --from-file=monitoring/src/main/resources/grafanaDashboard.json");
             // Install Prometheus with custom values
             runCommand("helm install -n monitoring prometheus prometheus-community/prometheus -f monitoring/src/main/resources/prometheus-values.yaml");
             // Install Grafana with custom values
-            runCommand("helm install -n monitoring grafana grafana/grafana -f /home/msakni/Desktop/KubeMorph_IDE/monitoring/src/main/resources/grafana/values.yaml");
+            runCommand("helm install -n monitoring grafana grafana/grafana -f monitoring/src/main/resources/grafana/values.yaml");
 
             return(getGrafanaAdminPassword());
 

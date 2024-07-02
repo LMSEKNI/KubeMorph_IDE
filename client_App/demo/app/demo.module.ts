@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule , CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule , ReactiveFormsModule} from '@angular/forms';
@@ -25,6 +25,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { ListComponent } from './workload-details/list/list.component';
 import { DesccComponent } from './workload-details/descc/descc.component';
 import { DynamicFormComponent } from './addressource/dynamic-form/component/dynamic-form.component';
+// tslint:disable-next-line:max-line-length
 import { YmlFileUpdateComponent } from './updateressource/yml-file-update/yml-file-update.component';
 import { DynamicFormUpdateComponent } from './updateressource/dynamic-form-update/dynamic-form-update.component';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -43,17 +44,22 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import {NgTerminalModule} from 'ng-terminal';
 import { HelmComponent } from './helm/helm.component';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
-import {MatChipsModule} from '@angular/material/chips';
 import { HelmDetailsComponent } from './helm/helm-details/helm-details.component';
 import { CharttemplateComponent } from './helm/charttemplate/charttemplate.component';
 import { DeleteComponent } from './workload-details/delete/delete.component';
-import {NgTerminalModule} from 'ng-terminal';
 import { MonitoringComponent } from './monitoring/components/monitoring.component';
 import {EChartsDirective} from './monitoring/Directives/EChartsDirective';
 import { GrafanaDialogComponent } from './monitoring/components/grafana-dialog/grafana-dialog.component';
+import { AngularSplitModule } from 'angular-split';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ReleasesComponent } from './helm/releases/releases.component';
+import { ReleaseDetailsComponent } from './helm/releases/release-details/release-details.component';
+import { DeleteReleaseComponent } from './helm/releases/delete-release/delete-release.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { Charttemplate2Component } from './helm/charttemplate2/charttemplate2.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
-
-
+// @ts-ignore
 @NgModule({
   declarations: [ MonitoringComponent,
                   GrafanaDialogComponent,
@@ -80,17 +86,22 @@ import { GrafanaDialogComponent } from './monitoring/components/grafana-dialog/g
                   DeleteComponent,
                   MonitoringComponent,
                   GrafanaDialogComponent,
+                  ReleasesComponent,
+                  ReleaseDetailsComponent,
+                  DeleteReleaseComponent,
+                  Charttemplate2Component,
 
                   ],
     imports: [
+        AngularSplitModule,
         BrowserModule, BrowserAnimationsModule, FlexLayoutModule, FormsModule, MatChipsModule,
         HttpClientModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule,
         MatIconModule, MatMenuModule, MatSelectModule, MatToolbarModule,
-        RouterModule.forRoot(routes, {relativeLinkResolution: 'legacy'}),MatCardModule,
-        Bootstrap4FrameworkModule,MatFormFieldModule,MatProgressBarModule,
-        Bootstrap3FrameworkModule,MatInputModule,
-        MaterialDesignFrameworkModule,
-        JsonSchemaFormModule,
+        RouterModule.forRoot(routes, {relativeLinkResolution: 'legacy'}), MatCardModule,
+        Bootstrap4FrameworkModule, MatFormFieldModule, MatProgressBarModule,
+        Bootstrap3FrameworkModule, MatInputModule, MatProgressSpinnerModule,
+        MaterialDesignFrameworkModule, MatPaginatorModule,
+        JsonSchemaFormModule, MatSnackBarModule,
         ReactiveFormsModule, MatSidenavModule, NgTerminalModule, MatTabsModule
     ],
   bootstrap: [DemoRootComponent]

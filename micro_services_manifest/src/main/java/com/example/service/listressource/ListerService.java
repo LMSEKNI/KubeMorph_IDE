@@ -6,12 +6,13 @@ import java.util.List;
 
 
 import io.kubernetes.client.openapi.ApiException;
+import io.kubernetes.client.openapi.models.*;
 
 public interface ListerService {
-    public List<String> getAllPods() throws FileNotFoundException, IOException, ApiException;
+    public V1PodList getAllPods() throws FileNotFoundException, IOException, ApiException;
     public List<String> getAllNamespaces() throws FileNotFoundException, IOException, ApiException;
-    public List<String> getAllServices() throws FileNotFoundException, IOException, ApiException ;
-    public List<String> getAllDeployments() throws IOException, ApiException;
+    public V1ServiceList getAllServices() throws IOException, ApiException ;
+    public V1DeploymentList listAllDeployments() throws IOException, ApiException ;
     public List<String> getAllReplicaSets() throws IOException, ApiException ;
     public List<String> getAllJobs() throws IOException, ApiException ;
     public List<String> getAllNodes() throws IOException, ApiException ;

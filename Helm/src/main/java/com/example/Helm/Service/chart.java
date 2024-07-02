@@ -103,13 +103,39 @@ public class chart {
 /*by  having this keyword in postman as param */
     public List<SearchResult> searchRepo( String keyword) {
         try {
-            return Helm.search()
+            List<SearchResult> results = Helm.search()
                     .repo()
                     .withKeyword(keyword)
                     .call();
+            return results ;
         } catch (Exception e) {
             throw new RuntimeException("Failed to execute 'helm search' command", e);
         }
+    }
+    ///////////////////////////////////////////////////////////////////////////
+    public List<String> searchHub(String keyword) {
+        List<String> searchResults = new ArrayList<>();
+        ProcessBuilder processBuilder = new ProcessBuilder("helm", "search", "hub", keyword);
+        try {
+            Process process = processBuilder.start();
+
+            // Read output from the command
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                searchResults.add(line);
+            }
+
+            // Wait for the command to complete
+            int exitCode = process.waitFor();
+            if (exitCode != 0) {
+                throw new RuntimeException("Failed to execute 'helm search hub " + keyword + "'. Exit code: " + exitCode);
+            }
+
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException("Failed to execute 'helm search hub " + keyword + "'", e);
+        }
+        return searchResults;
     }
 ///////////////////////////////////////////////adding repo from artifacthub/////////////////////////////////
     /*
@@ -234,7 +260,7 @@ public class chart {
         }
     }
 
-    ///////////////////////////////////////////////////////install chartt /////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////// install chartt /////////////////////////////////////////////////////////////////////
 
     /*  test inpostmen : chartReference : /home/asus/Bureau/Intedrnship_KubMorph/testpostmen
     *     and  releaseName :testpostmenrelease  give as output helm install releasename chartpath
@@ -465,7 +491,7 @@ public class chart {
         }
     }
     /////////////////////////////////////helm rollback //////////////////////////////////////////
-    public void rollbackRelease(String releaseName, Integer version) {
+    public String rollbackRelease(String releaseName, Integer version) {
         try {
             logger.info("Performing rollback for release: {}", releaseName);
 
@@ -481,17 +507,31 @@ public class chart {
             Process process = processBuilder.start();
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+            StringBuilder output = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
                 logger.info(line);
+                output.append(line);
+            }
+            while ((line = errorReader.readLine()) != null) {
+                logger.error(line);
+                output.append(line);
             }
 
             int exitCode = process.waitFor();
+            logger.info("Rollback exit code: {}", exitCode);
+
             if (exitCode != 0) {
-                throw new RuntimeException("Failed to execute 'helm rollback' command");
+                String errorMessage = output.toString();
+                if (errorMessage.contains("release has no")) {
+                    return "Error: release has no previous version to rollback to.";
+                }
+                throw new RuntimeException("Failed to execute 'helm rollback' command: " + errorMessage);
             }
 
             logger.info("Rollback was successful for release: {}", releaseName);
+            return "Rollback initiated for release: " + releaseName;
         } catch (Exception e) {
             logger.error("Failed to execute 'helm rollback' command", e);
             throw new RuntimeException("Failed to execute 'helm rollback' command", e);
