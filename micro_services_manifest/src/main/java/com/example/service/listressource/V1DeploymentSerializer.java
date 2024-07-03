@@ -59,24 +59,25 @@ public class V1DeploymentSerializer extends StdSerializer<V1Deployment> {
                 jsonGenerator.writeStringField("imagePullPolicy", container.getImagePullPolicy());
                 jsonGenerator.writeStringField("name", container.getName());
 
-                // Serialize environment variables
-                jsonGenerator.writeArrayFieldStart("env");
-                container.getEnv().forEach(envVar -> {
-                    try {
-                        jsonGenerator.writeStartObject();
-                        jsonGenerator.writeStringField("name", envVar.getName());
-                        // Handle valueFrom or value as needed
-                        if (envVar.getValueFrom() != null) {
-                            jsonGenerator.writeObjectField("valueFrom", envVar.getValueFrom());
-                        } else {
-                            jsonGenerator.writeStringField("value", envVar.getValue());
+                if (container.getEnv() != null) {
+                    jsonGenerator.writeArrayFieldStart("env");
+                    container.getEnv().forEach(envVar -> {
+                        try {
+                            jsonGenerator.writeStartObject();
+                            jsonGenerator.writeStringField("name", envVar.getName());
+                            // Handle valueFrom or value as needed
+                            if (envVar.getValueFrom() != null) {
+                                jsonGenerator.writeObjectField("valueFrom", envVar.getValueFrom());
+                            } else {
+                                jsonGenerator.writeStringField("value", envVar.getValue());
+                            }
+                            jsonGenerator.writeEndObject();
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                        jsonGenerator.writeEndObject();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
-                jsonGenerator.writeEndArray(); // End env
+                    });
+                    jsonGenerator.writeEndArray(); // End env
+                }
 
                 // Serialize ports
                 jsonGenerator.writeArrayFieldStart("ports");

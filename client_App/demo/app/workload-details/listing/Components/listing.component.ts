@@ -38,7 +38,7 @@ export class ListingComponent implements OnInit, AfterViewInit {
     };
     this.network = new Network(container, data, visOptions);
 
-    // Add click event listener
+    // Click event listener
     this.network.on('click', (params) => {
       if (params.nodes.length > 0) {
         const nodeId = params.nodes[0];
@@ -50,10 +50,17 @@ export class ListingComponent implements OnInit, AfterViewInit {
   async fetchResources() {
     const nodesArray = [];
     const edgesArray = [];
-    const [pods, namespaces, deployments] = await Promise.all([
+    const [pods, namespaces, deployments, services, replicasets, statefulsets, configmaps, ingresses, persistentvolumeclaims, endpoints ] = await Promise.all([
       this.fetchResourceByType('pods'),
       this.fetchResourceByType('namespaces'),
-      this.fetchResourceByType('deployments')
+      this.fetchResourceByType('deployments'),
+      this.fetchResourceByType('services'),
+      this.fetchResourceByType('replicasets'),
+      this.fetchResourceByType('statefulsets'),
+      this.fetchResourceByType('configmaps'),
+      this.fetchResourceByType('ingresses'),
+      this.fetchResourceByType('persistentvolumeclaims'),
+      this.fetchResourceByType('endpoints'),
     ]);
 
     for (const resourceType of this.selectedResourceTypes) {
@@ -62,9 +69,16 @@ export class ListingComponent implements OnInit, AfterViewInit {
 
         nodesArray.push(...this.mapResourcesToNodes(resources, resourceType));
 
-        // Generate edges for the current resource type
         this.generateEdges(edgesArray, pods, 'pods', namespaces);
         this.generateEdges(edgesArray, deployments, 'deployments', namespaces);
+        this.generateEdges(edgesArray, services, 'services', namespaces);
+        this.generateEdges(edgesArray, replicasets, 'replicasets', namespaces);
+        this.generateEdges(edgesArray, replicasets, 'replicasets', namespaces);
+        this.generateEdges(edgesArray, statefulsets, 'statefulsets', namespaces);
+        this.generateEdges(edgesArray, configmaps, 'configmaps', namespaces);
+        this.generateEdges(edgesArray, ingresses, 'ingresses', namespaces);
+        this.generateEdges(edgesArray, persistentvolumeclaims, 'persistentvolumeclaims', namespaces);
+        this.generateEdges(edgesArray, endpoints, 'endpoints', namespaces);
         const nodes = new DataSet(nodesArray);
         const edges = new DataSet(edgesArray);
         const data = {
@@ -72,9 +86,7 @@ export class ListingComponent implements OnInit, AfterViewInit {
           edges
         };
 
-        // Update the network data
         this.network.setData(data);
-
         console.log(`Nodes Array after fetching ${resourceType}:`, nodesArray);
         console.log(`Edges Array after generating ${resourceType} edges:`, edgesArray);
 
@@ -101,12 +113,70 @@ export class ListingComponent implements OnInit, AfterViewInit {
         case 'deployments':
           this.addEdgesForDeployment(edges, resource, relatedResources);
           break;
+        case 'services':
+          this.addEdgesForServices(edges, resource, relatedResources);
+          break;
+        case 'replicasets':
+          this.addEdgesForReplicasets(edges, resource, relatedResources);
+          break;
+        case 'configmaps':
+          this.addEdgesForConfigmaps(edges, resource, relatedResources);
+          break;
+        case 'ingresses':
+          this.addEdgesForIngresses(edges, resource, relatedResources);
+          break;
+        case 'statefulsets':
+          this.addEdgesForStatefulsets(edges, resource, relatedResources);
+          break;
+        case 'persistentvolumeclaims':
+          this.addEdgesForPersistentvolumeclaims(edges, resource, relatedResources);
+          break;
+        case 'endpoints':
+          this.addEdgesForEndpoints(edges, resource, relatedResources);
+          break;
         default:
           break;
       }
     });
   }
+  addEdgesForEndpoints(edges: any[], endpoint: any, namespaces: any[]) {
+    const namespace = namespaces.find(ns => ns.metadata.name === endpoint.metadata.namespace);
+    if (namespace) {
+      edges.push({ from: endpoint.metadata.uid, to: namespace.metadata.uid, arrows: 'to' });
+    }
+    if (endpoint.spec && endpoint.spec.serviceName) {
+      edges.push({ from: endpoint.metadata.uid, to: endpoint.spec.serviceName, arrows: 'to' });
+    }
+  }
+  addEdgesForPersistentvolumeclaims(edges: any[], persistentvolumeclaim: any, namespaces: any[]) {
+    const namespace = namespaces.find(ns => ns.metadata.name === persistentvolumeclaim.metadata.namespace);
+    if (namespace) {
+      edges.push({ from: persistentvolumeclaim.metadata.uid, to: namespace.metadata.uid, arrows: 'to' });
+    }
+    if (persistentvolumeclaim.spec && persistentvolumeclaim.spec.serviceName) {
+      edges.push({ from: persistentvolumeclaim.metadata.uid, to: persistentvolumeclaim.spec.serviceName, arrows: 'to' });
+    }
+  }
+  addEdgesForIngresses(edges: any[], ingresse: any, namespaces: any[]) {
+    const namespace = namespaces.find(ns => ns.metadata.name === ingresse.metadata.namespace);
+    if (namespace) {
+      edges.push({ from: ingresse.metadata.uid, to: namespace.metadata.uid, arrows: 'to' });
+    }
 
+    if (ingresse.spec && ingresse.spec.serviceName) {
+      edges.push({ from: ingresse.metadata.uid, to: ingresse.spec.serviceName, arrows: 'to' });
+    }
+  }
+  addEdgesForConfigmaps(edges: any[], configmap: any, namespaces: any[]) {
+    const namespace = namespaces.find(ns => ns.metadata.name === configmap.metadata.namespace);
+    if (namespace) {
+      edges.push({ from: configmap.metadata.uid, to: namespace.metadata.uid, arrows: 'to' });
+    }
+
+    if (configmap.spec && configmap.spec.serviceName) {
+      edges.push({ from: configmap.metadata.uid, to: configmap.spec.serviceName, arrows: 'to' });
+    }
+  }
   addEdgesForPod(edges: any[], pod: any, namespaces: any[]) {
     const namespace = namespaces.find(ns => ns.metadata.name === pod.metadata.namespace);
     if (namespace) {
@@ -128,13 +198,35 @@ export class ListingComponent implements OnInit, AfterViewInit {
       edges.push({ from: deployment.metadata.uid, to: deployment.spec.serviceName, arrows: 'to' });
     }
   }
+  addEdgesForServices(edges: any[], service: any, namespaces: any[]) {
+    const namespace = namespaces.find(ns => ns.metadata.name === service.metadata.namespace);
+    if (namespace) {
+      edges.push({ from: service.metadata.uid, to: namespace.metadata.uid, arrows: 'to' });
+    }
 
-  addEdgesForNamespacePod(edges: any[], namespace: any, pods: any[]) {
-    pods.forEach(pod => {
-      if (pod.metadata.namespace === namespace.metadata.name) {
-        edges.push({ from: namespace.metadata.uid, to: pod.metadata.uid, arrows: 'to' });
-      }
-    });
+    if (service.spec && service.spec.serviceName) {
+      edges.push({ from: service.metadata.uid, to: service.spec.serviceName, arrows: 'to' });
+    }
+  }
+  addEdgesForReplicasets(edges: any[], replicaset: any, namespaces: any[]) {
+    const namespace = namespaces.find(ns => ns.metadata.name === replicaset.metadata.namespace);
+    if (namespace) {
+      edges.push({ from: replicaset.metadata.uid, to: namespace.metadata.uid, arrows: 'to' });
+    }
+
+    if (replicaset.spec && replicaset.spec.serviceName) {
+      edges.push({ from: replicaset.metadata.uid, to: replicaset.spec.serviceName, arrows: 'to' });
+    }
+  }
+  addEdgesForStatefulsets(edges: any[], statefulset: any, namespaces: any[]) {
+    const namespace = namespaces.find(ns => ns.metadata.name === statefulset.metadata.namespace);
+    if (namespace) {
+      edges.push({ from: statefulset.metadata.uid, to: namespace.metadata.uid, arrows: 'to' });
+    }
+
+    if (statefulset.spec && statefulset.spec.serviceName) {
+      edges.push({ from: statefulset.metadata.uid, to: statefulset.spec.serviceName, arrows: 'to' });
+    }
   }
   fetchResourceByType(resourceType: string): Promise<any[]> {
     // Implement fetching logic for each resource type
