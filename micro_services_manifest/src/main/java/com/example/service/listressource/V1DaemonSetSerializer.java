@@ -11,7 +11,6 @@ public class V1DaemonSetSerializer extends StdSerializer<V1DaemonSet> {
     public V1DaemonSetSerializer() {
         this(null);
     }
-
     public V1DaemonSetSerializer(Class<V1DaemonSet> t) {
         super(t);
     }
@@ -28,6 +27,7 @@ public class V1DaemonSetSerializer extends StdSerializer<V1DaemonSet> {
         jsonGenerator.writeObjectFieldStart("metadata");
         jsonGenerator.writeStringField("name", daemonSet.getMetadata().getName());
         jsonGenerator.writeStringField("namespace", daemonSet.getMetadata().getNamespace());
+        jsonGenerator.writeStringField("uid", daemonSet.getMetadata().getUid());
         jsonGenerator.writeStringField("creationTimestamp", String.valueOf(daemonSet.getMetadata().getCreationTimestamp()));
         jsonGenerator.writeObjectField("annotations", daemonSet.getMetadata().getAnnotations()); // Serialize annotations
         // Add other metadata fields as needed

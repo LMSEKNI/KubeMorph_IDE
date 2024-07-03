@@ -29,6 +29,7 @@ public class V1ServiceSerializer extends StdSerializer<V1Service> {
         jsonGenerator.writeObjectFieldStart("metadata");
         jsonGenerator.writeStringField("name", service.getMetadata().getName());
         jsonGenerator.writeStringField("namespace", service.getMetadata().getNamespace());
+        jsonGenerator.writeStringField("uid", service.getMetadata().getUid()); // Serialize UID
         jsonGenerator.writeStringField("creationTimestamp", String.valueOf(service.getMetadata().getCreationTimestamp()));
         jsonGenerator.writeObjectField("annotations", service.getMetadata().getAnnotations()); // Serialize annotations
         // Add other metadata fields as needed

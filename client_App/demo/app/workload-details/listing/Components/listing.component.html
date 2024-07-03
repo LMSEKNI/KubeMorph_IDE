@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <demo></demo>
 <div>
   <div>
@@ -10,7 +11,17 @@
         <mat-checkbox id="namespaces" value="namespaces" (change)="onResourceTypeChange($event, 'namespaces')" [checked]="isSelected('namespaces')">Namespaces</mat-checkbox>
       </div>
       <div>
+        <mat-checkbox id="deployments" value="deployments" (change)="onResourceTypeChange($event, 'deployments')" [checked]="isSelected('deployments')">Deployments</mat-checkbox>
+      </div>
+      <div>
+        <mat-checkbox id="services" value="services" (change)="onResourceTypeChange($event, 'services')" [checked]="isSelected('services')">Services</mat-checkbox>
+      </div>
+      <div>
         <mat-checkbox id="replicasets" value="replicasets" (change)="onResourceTypeChange($event, 'replicasets')" [checked]="isSelected('replicasets')">ReplicaSets</mat-checkbox>
+      </div>
+
+      <div>
+        <mat-checkbox id="statefulsets" value="statefulsets" (change)="onResourceTypeChange($event, 'statefulsets')" [checked]="isSelected('statefulsets')">Statefulsets</mat-checkbox>
       </div>
       <div>
         <mat-checkbox id="jobs" value="jobs" (change)="onResourceTypeChange($event, 'jobs')" [checked]="isSelected('jobs')">Jobs</mat-checkbox>
@@ -35,6 +46,9 @@
       </div>
       <div>
         <mat-checkbox id="persistentvolumes" value="persistentvolumes" (change)="onResourceTypeChange($event, 'persistentvolumes')" [checked]="isSelected('persistentvolumes')">PersistentVolumes</mat-checkbox>
+      </div>
+      <div>
+        <mat-checkbox id="daemonsets" value="daemonsets" (change)="onResourceTypeChange($event, 'daemonsets')" [checked]="isSelected('daemonsets')">Daemonsets</mat-checkbox>
       </div>
     </div>
   </div>

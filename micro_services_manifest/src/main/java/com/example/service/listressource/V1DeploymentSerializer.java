@@ -28,6 +28,7 @@ public class V1DeploymentSerializer extends StdSerializer<V1Deployment> {
         jsonGenerator.writeObjectFieldStart("metadata");
         jsonGenerator.writeStringField("name", deployment.getMetadata().getName());
         jsonGenerator.writeStringField("namespace", deployment.getMetadata().getNamespace());
+        jsonGenerator.writeStringField("uid", deployment.getMetadata().getUid()); // Serialize UID
         jsonGenerator.writeStringField("creationTimestamp", String.valueOf(deployment.getMetadata().getCreationTimestamp()));
 
         // Serialize annotations

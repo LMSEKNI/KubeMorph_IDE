@@ -29,6 +29,7 @@ public class V1ReplicaSetSerializer extends StdSerializer<V1ReplicaSet> {
         jsonGenerator.writeObjectFieldStart("metadata");
         jsonGenerator.writeStringField("name", replicaSet.getMetadata().getName());
         jsonGenerator.writeStringField("namespace", replicaSet.getMetadata().getNamespace());
+        jsonGenerator.writeStringField("uid", replicaSet.getMetadata().getUid()); // Serialize UID
         jsonGenerator.writeStringField("creationTimestamp", String.valueOf(replicaSet.getMetadata().getCreationTimestamp()));
         jsonGenerator.writeObjectField("annotations", replicaSet.getMetadata().getAnnotations()); // Serialize annotations
         // Add other metadata fields as needed

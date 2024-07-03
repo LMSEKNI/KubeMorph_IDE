@@ -4,6 +4,7 @@ import { DataSet } from 'vis-data/peer/esm/vis-data';
 import { visOptions } from '../Vis Interface/vis-options.const';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { ListService } from '../Services/list.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-kubernetes-visualization',
@@ -18,7 +19,7 @@ export class ListingComponent implements OnInit, AfterViewInit {
 
   private network: Network; // Store the network instance
 
-  constructor(private listService: ListService) {}
+  constructor(private listService: ListService, private router: Router) {}
 
   ngOnInit() {
     this.fetchResources();
@@ -36,40 +37,34 @@ export class ListingComponent implements OnInit, AfterViewInit {
       edges: new DataSet([])
     };
     this.network = new Network(container, data, visOptions);
+
+    // Add click event listener
+    this.network.on('click', (params) => {
+      if (params.nodes.length > 0) {
+        const nodeId = params.nodes[0];
+        this.router.navigate(['/descressource']);
+      }
+    });
   }
 
   async fetchResources() {
     const nodesArray = [];
     const edgesArray = [];
-    let relatedResources: any[];
-    const [pods, namespaces] = await Promise.all([
+    const [pods, namespaces, deployments] = await Promise.all([
       this.fetchResourceByType('pods'),
-      this.fetchResourceByType('namespaces')
+      this.fetchResourceByType('namespaces'),
+      this.fetchResourceByType('deployments')
     ]);
 
     for (const resourceType of this.selectedResourceTypes) {
       try {
         const resources = await this.fetchResourceByType(resourceType);
 
-        // Set related resources based on resource type
-        switch (resourceType) {
-          case 'pods':
-            relatedResources = this.resources.filter(r => r.kind === 'namespaces');
-            break;
-          case 'namespaces':
-            relatedResources = this.resources.filter(r => r.kind === 'pods');
-            break;
-          // Handle other resource types similarly
-          default:
-            relatedResources = [];
-            break;
-        }
-
         nodesArray.push(...this.mapResourcesToNodes(resources, resourceType));
 
         // Generate edges for the current resource type
         this.generateEdges(edgesArray, pods, 'pods', namespaces);
-        this.generateEdges(edgesArray, namespaces, 'namespaces', pods);
+        this.generateEdges(edgesArray, deployments, 'deployments', namespaces);
         const nodes = new DataSet(nodesArray);
         const edges = new DataSet(edgesArray);
         const data = {
@@ -87,10 +82,6 @@ export class ListingComponent implements OnInit, AfterViewInit {
         console.error(`Error fetching ${resourceType}:`, error);
       }
     }
-
-
-
-
   }
 
   mapResourcesToNodes(resources: any[], resourceType: string): any[] {
@@ -107,8 +98,8 @@ export class ListingComponent implements OnInit, AfterViewInit {
         case 'pods':
           this.addEdgesForPod(edges, resource, relatedResources);
           break;
-        case 'namespaces':
-          this.addEdgesForNamespace(edges, resource, relatedResources);
+        case 'deployments':
+          this.addEdgesForDeployment(edges, resource, relatedResources);
           break;
         default:
           break;
@@ -127,14 +118,24 @@ export class ListingComponent implements OnInit, AfterViewInit {
     }
   }
 
-  addEdgesForNamespace(edges: any[], namespace: any, pods: any[]) {
+  addEdgesForDeployment(edges: any[], deployment: any, namespaces: any[]) {
+    const namespace = namespaces.find(ns => ns.metadata.name === deployment.metadata.namespace);
+    if (namespace) {
+      edges.push({ from: deployment.metadata.uid, to: namespace.metadata.uid, arrows: 'to' });
+    }
+
+    if (deployment.spec && deployment.spec.serviceName) {
+      edges.push({ from: deployment.metadata.uid, to: deployment.spec.serviceName, arrows: 'to' });
+    }
+  }
+
+  addEdgesForNamespacePod(edges: any[], namespace: any, pods: any[]) {
     pods.forEach(pod => {
       if (pod.metadata.namespace === namespace.metadata.name) {
         edges.push({ from: namespace.metadata.uid, to: pod.metadata.uid, arrows: 'to' });
       }
     });
   }
-
   fetchResourceByType(resourceType: string): Promise<any[]> {
     // Implement fetching logic for each resource type
     switch (resourceType) {
@@ -164,6 +165,10 @@ export class ListingComponent implements OnInit, AfterViewInit {
         return this.listService.getAllStorageClasses().toPromise();
       case 'persistentvolumes':
         return this.listService.getAllPersistentVolumes().toPromise();
+      case 'statefulsets':
+        return this.listService.getAllStatefulSets().toPromise();
+      case 'daemonsets':
+        return this.listService.getAllDaemonSets().toPromise();
       default:
         return Promise.resolve([]);
     }

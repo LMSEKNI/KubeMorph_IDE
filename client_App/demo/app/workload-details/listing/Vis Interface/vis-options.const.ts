@@ -57,79 +57,119 @@ export const visOptions: Options = {
       shape: 'icon',
       icon: {
         face: 'FontAwesome',
-        code: '\uf1b3', // cube icon, representing a Pod
-        color: '#FF9900'
+        code: '\uf1b3', // server
+        color: '#FF5733'
+      }
+    },
+    nodes: {
+      shape: 'icon',
+      icon: {
+        face: 'FontAwesome',
+        code: '\uf015', // home icon
+        color: '#5d2caf'
+      }
+    },
+    endpoints: {
+      shape: 'icon',
+      icon: {
+        face: 'FontAwesome',
+        code: '\uf11c', // endpoints icon
+        color: '#5d2caf'
+      }
+    },
+    daemonsets: {
+      shape: 'icon',
+      icon: {
+        face: 'FontAwesome',
+        code: '\uf0c2', // server
+        color: '#01e8f3'
       }
     },
     services: {
       shape: 'icon',
       icon: {
         face: 'FontAwesome',
-        code: '\uf0c0', // users icon, symbolically representing a Service
-        color: '#2B7CE9'
+        code: '\uf233', // sitemap
+        color: '#3498DB'
       },
     },
     deployments: {
       shape: 'icon',
       icon: {
         face: 'FontAwesome',
-        code: '\uf013', // cog icon, representing a Deployment
-        color: '#4CAF50',
+        code: '\uf1ad', // cogs
+        color: '#2ECC71',
+      }
+    },
+    statefulsets: {
+      shape: 'icon',
+      icon: {
+        face: 'FontAwesome',
+        code: '\uf013', // cogs
+        color: '#d6bc56',
       }
     },
     namespaces: {
       shape: 'icon',
       icon: {
         face: 'FontAwesome',
-        code: '\uf013', // cog icon, representing a Deployment
-        color: '#4a348a',
+        code: '\uf24d', // folder-open
+        color: '#8E44AD',
       }
     },
-    Ingress: {
+    replicasets: {
       shape: 'icon',
       icon: {
         face: 'FontAwesome',
-        code: '\uf0e8', // random icon, as an example to represent an Ingress
-        color: '#795548'
+        code: '\uf085', // gears
+        color: '#F39C12',
+      }
+    },
+    ingresses: {
+      shape: 'icon',
+      icon: {
+        face: 'FontAwesome',
+        code: '\uf1c0', // sitemap
+        color: '#D35400'
       }
     },
     configmaps: {
       shape: 'icon',
       icon: {
         face: 'FontAwesome',
-        code: '\uf24d', // file-code-o icon, for ConfigMaps
-        color: '#9C27B0'
+        code: '\uf0ae', // tasks
+        color: '#9B59B6'
       }
     },
-    Secret: {
+    storageclasses: {
       shape: 'icon',
       icon: {
         face: 'FontAwesome',
-        code: '\uf084', // key icon, representing a Secret
-        color: '#009688'
+        code: '\uf1c0', // database
+        color: '#1ABC9C'
       }
     },
-    Node: {
+    jobs: {
       shape: 'icon',
       icon: {
         face: 'FontAwesome',
-        code: '\uf233', // server icon, for Nodes
-        color: '#3F51B5'
+        code: '\uf0c7', // save
+        color: '#2980B9'
       }
     },
-    PersistentVolume: {
+    persistentvolumes: {
       shape: 'icon',
       icon: {
         face: 'FontAwesome',
-        code: '\uf0a0', // hdd icon, symbolically representing a PersistentVolume
-        color: '#607D8B'
+        code: '\uf0a0', // hdd
+        color: '#34495E'
       }
     },
-    PersistentVolumeClaim: {
+    persistentvolumeclaims: {
       shape: 'icon',
       icon: {
         face: 'FontAwesome',
-        code: '\uf0a0', // hdd icon, can also represent a PersistentVolumeClaim
+        code: '\uf0a0', // hdd
         color: '#00BCD4'
       }
     }
