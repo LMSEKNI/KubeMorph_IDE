@@ -1,39 +1,32 @@
-@use '@angular/material' as mat;
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500&display=swap');
-@include mat.core();
-$demo-app-primary: mat.define-palette(mat.$blue-grey-palette);
-$demo-app-accent: mat.define-palette(mat.$amber-palette, A200, A100, A400);
-$demo-app-warn: mat.define-palette(mat.$red-palette);
-$demo-app-theme: mat.define-light-theme($demo-app-primary, $demo-app-accent, $demo-app-warn);
-@include mat.all-component-themes($demo-app-theme);
-
-$font-family: 'Poppins', sans-serif;
-$row-height: 56px;
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: $font-family;
+#custom-toolbar {
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: #f5f5f5;
 }
 
+.header-content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+
 .container {
-  max-width: 650px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50%;
+}
+
+.fileContainer {
+  max-width: 400px; /* Adjust width as needed */
   width: 100%;
   padding: 30px;
   background: #fff;
   border-radius: 20px;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-}
-
-.fileContainer {
-  height: 400px;
-  border: 3px dashed #e0eafc;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  margin: 10px auto;
+  text-align: center;
 }
 
 .fileContainer h3 {
@@ -42,122 +35,43 @@ $row-height: 56px;
   color: #8a0f0f;
 }
 
-.fileContainer .header {
-  font-size: 20px;
-  font-weight: 500;
-  color: #34495e;
-}
-
-#submitButton {
-  background-color: #1683ff;
-  color: #fff;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-#submitButton:hover {
-  background-color: #11bb44;
-}
-
-.fileContainer .support {
-  font-size: 12px;
-  color: gray;
-  margin: 10px 0 15px 0;
-}
-
-#fileInputAlt {
-  color: gray;
-  margin: 10px 0 15px 0;
-}
-
-#custom-toolbar {
-  color: black;
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
-  background: #f5f5f5;
-  height: 100px;
-}
-
-.header-content {
-  justify-content: space-between;
-  align-items: center;
-  display: flex;
-  width: 100%;
-}
-
-.left-button {
-  margin-right: auto;
-}
-
-.icons-container {
-  display: flex;
-  align-items: center;
-}
-
-.menu-label {
-  margin: 0 16px;
-}
-
-.mat-card {
-  margin: 16px 0;
-  padding: 16px;
-}
-
-.default-cursor {
-  cursor: pointer;
-}
-
-.json-schema-form {
-  padding: 16px 0;
-}
-
-.data-good {
-  color: green;
-}
-
-.data-bad {
-  color: red;
-}
-
-.search-icon {
-  display: flex;
-  align-items: center;
-  margin-right: 16px;
-}
-
-.search-field {
-  width: 200px;
-  transition: width 0.3s ease;
-}
-
-.search-field[hidden] {
-  width: 0;
-}
-
-.add-icon {
-  margin-right: 16px;
-}
-
 .drag-area {
   border: 2px dashed #ccc;
   padding: 20px;
-  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
 
 .icon {
   font-size: 48px;
-  color: #005573;
+  color: #00aa9b;
 }
 
 .header {
   font-size: 24px;
+  margin-top: 10px;
+  color: #34495e;
 }
 
-.support {
-  font-size: 14px;
-  color: #777;
+.hidden-input {
+  display: none;
+}
+
+#submitButton {
+  margin-top: 20px;
+  background-color: #00aa9b;
+  color: white;
+}
+
+
+
+.spacer {
+  flex: 1; /* Takes up remaining space */
+}
+
+.mat-button {
+  margin-left: 10px; /* Adjust spacing between buttons */
 }

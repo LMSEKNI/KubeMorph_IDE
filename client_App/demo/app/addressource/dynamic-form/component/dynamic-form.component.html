@@ -1,31 +1,47 @@
 <demo></demo>
 <mat-toolbar id="custom-toolbar">
   <div class="header-content">
-    <button mat-raised-button color="primary" [matMenuTriggerFor]="addResourceMenu" class="left-button">Form</button>
-    <mat-menu #addResourceMenu="matMenu">
-      <button mat-menu-item [routerLink]="['/create-ymlfile']">Yaml</button>
-      <!-- Add more options here if needed -->
-    </mat-menu>
-    <span class="menu-label">Current Resource:</span>
-    <button mat-raised-button color="primary" id="resources" [matMenuTriggerFor]="exampleMenu">
-      <mat-icon>menu</mat-icon> {{selectedSetName}} {{selectedExampleName}}
+    <button mat-icon-button (click)="goBack()" aria-label="Go Back" >
+      <img src="assets/images/arrow_back_.svg" alt="Go Back Icon">
+    </button>
+
+    <button class="butt" mat-raised-button  id="resources" [matMenuTriggerFor]="exampleMenu">
+      <mat-icon>menu</mat-icon> {{ selectedSetName }} {{ selectedExampleName }}
     </button>
     <mat-menu #exampleMenu="matMenu" class="example-menu">
       <button mat-menu-item class="mat-medium" *ngFor="let example of examples['ng-jsf'].schemas" (click)="loadSelectedExample('ng-jsf', '', example.file, example.name)">
-        {{example.name}}
+        {{ example.name }}
       </button>
       <button mat-menu-item class="mat-medium" *ngFor="let example of examples['asf'].schemas" (click)="loadSelectedExample('asf', '', example.file, example.name)">
-        {{example.name}}
+        {{ example.name }}
       </button>
     </mat-menu>
 
-    <div class="icons-container">
 
-      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-        <mat-icon>more_vert</mat-icon>
+    <div class="spacer"></div>
+
+    <div class="add-icon">
+      <button mat-icon-button [matMenuTriggerFor]="add" aria-label="Example icon-button with a menu">
+        <img src="assets/images/add_circle_.svg" alt="Go Back Icon">
       </button>
-      <mat-menu #menu="matMenu" routerLink=" ">
-        <button mat-menu-item routerLink="/">
+      <mat-menu #add="matMenu">
+        <button mat-menu-item [routerLink]="['/create-dynamicform']">
+          <span>Form</span>
+        </button>
+        <button mat-menu-item [routerLink]="['/create-ymlfile']">
+          <span>Yaml</span>
+        </button>
+      </mat-menu>
+    </div>
+
+
+
+    <div class="icons-container">
+      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+        <img src="assets/images/3pt.svg" alt="Three Dots Icon">
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>
           <mat-icon>home</mat-icon>
           <span>List Resource</span>
         </button>
@@ -33,10 +49,14 @@
           <mat-icon>settings_heart</mat-icon>
           <span>Monitoring</span>
         </button>
-        <button mat-menu-item>
+        <button mat-menu-item [matMenuTriggerFor]="helm" #menuTrigger>
           <mat-icon>notifications_off</mat-icon>
           <span>Helm</span>
         </button>
+        <mat-menu #helm="matMenu">
+          <button mat-menu-item routerLink="/helm">Artifact Hub</button>
+          <button mat-menu-item routerLink="/helm-release">Releases</button>
+        </mat-menu>
       </mat-menu>
     </div>
   </div>

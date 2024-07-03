@@ -5,7 +5,8 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { ActivatedRoute } from '@angular/router';
 import { Examples } from './example-schemas.model';
 import { CreateressourceformService } from '../service/createressourceform.service';
-import yaml from 'js-yaml'; // Import YAML library
+import yaml from 'js-yaml';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-dynamic-form',
@@ -58,13 +59,17 @@ export class DynamicFormComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
+    private location: Location,
     private route: ActivatedRoute,
     private CreateResourceService: CreateressourceformService // Inject the CreateResourceService
   ) { }
-  showRouteSelection: boolean = false;
+  showRouteSelection = false;
 
   toggleRouteSelection() {
     this.showRouteSelection = !this.showRouteSelection;
+  }
+  goBack(): void {
+    this.location.back();
   }
   ngOnInit() {
     // Subscribe to query string to detect schema to load
@@ -167,10 +172,6 @@ export class DynamicFormComponent implements OnInit {
         this.generateForm(this.jsonFormSchema);
       });
   }
-
-  //loadSelectedLanguage() {
-  // window.location.href = `${window.location.pathname}?set=${this.selectedSet}&example=${this.selectedExample}&framework=${this.selectedFramework}&language=${this.selectedLanguage}`;
-  // }
 
   generateForm(newFormString: string) {
     if (!newFormString) { return; }
