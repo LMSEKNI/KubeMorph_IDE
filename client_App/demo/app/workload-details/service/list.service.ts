@@ -53,7 +53,7 @@ export class ListtService {
     return this.http.get<string[]>(`${this.baseUrl}/sc`);
   }
   getAllStateful(): Observable<string[]> {
-    return this.http.get<string[]>(`${this.baseUrl}/stateful`);
+    return this.http.get<string[]>(`${this.baseUrl}/statefulsets`);
   }
   getAllPersistentVolumes(): Observable<string[]> {
     return this.http.get<string[]>(`${this.baseUrl}/persistentvolume`);

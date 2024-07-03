@@ -248,15 +248,7 @@ export class ListComponent implements OnInit {
       this.selectedResource = resourceName;
       this.selectedType = resourceType;
     }
-  closeTerminal(): void {
-    this.showTerminal = false;
-    this.showTerminalContent = false;
 
-  }
-  closeLogs(): void {
-    this.showLogs = false;
-    this.showLogsContent = false;
-  }
   updateNodess(selected: string[]): void {
     this.nodes.clear();
 
