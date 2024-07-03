@@ -105,13 +105,13 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatIconModule, MatMenuModule, MatSelectModule, MatToolbarModule,
     RouterModule.forRoot(routes, {relativeLinkResolution: 'legacy'}),
     Bootstrap4FrameworkModule,
-    Bootstrap3FrameworkModule,
+    Bootstrap3FrameworkModule, MatSnackBarModule,
     MatInputModule, MatFormFieldModule, MatProgressBarModule, MatCardModule,
     MaterialDesignFrameworkModule,
     JsonSchemaFormModule,
     ReactiveFormsModule, MatSidenavModule, NgTerminalModule, MatTabsModule,
     NgxJsonViewerModule,
-    AngularSplitModule, MatProgressSpinnerModule
+    AngularSplitModule, MatProgressSpinnerModule, MatPaginatorModule
 
   ],
   bootstrap: [DemoRootComponent]

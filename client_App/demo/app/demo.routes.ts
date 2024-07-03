@@ -34,7 +34,7 @@ export const routes: Route[] = [
   { path: 'config-monitoring' , component: MonitoringChoiceComponent},
   { path: 'prometheus' , component: MonitoringPrometheusComponent},
   { path: 'helm' , component: HelmComponent },
-  { path: 'helm/helmdetails' , component: HelmDetailsComponent},
+  { path: 'helm-details' , component: HelmDetailsComponent},
   { path: 'monitoring' , component: MonitoringComponent},
   { path: 'helm-release' , component: ReleasesComponent},
   { path: 'release-details' , component: ReleaseDetailsComponent},

@@ -32,8 +32,8 @@ export class ReleaseDetailsComponent implements OnInit {
   }
   getReleaseStatus(release: string) {
     this.releaseService.getReleaseStatus(release).subscribe(data => {
-      this.selectedReleaseStatus = data;
-      console.log('Release Status:', this.selectedReleaseStatus);
+        this.selectedReleaseStatus = data;
+        console.log('Release Status:', this.selectedReleaseStatus);
       }, error => {
         console.error('Error fetching release status', error);
       }

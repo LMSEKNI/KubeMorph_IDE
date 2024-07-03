@@ -16,7 +16,6 @@ export class ListingComponent implements OnInit, AfterViewInit {
   selectedResourceTypes: string[] = ['pods']; // Default to pods
   showResourceOptions = false; // Flag for showing resource options
 
-
   private network: Network; // Store the network instance
 
   constructor(private listService: ListService) {}
@@ -42,27 +41,56 @@ export class ListingComponent implements OnInit, AfterViewInit {
   async fetchResources() {
     const nodesArray = [];
     const edgesArray = [];
-
+    let relatedResources: any[];
     const [pods, namespaces] = await Promise.all([
       this.fetchResourceByType('pods'),
       this.fetchResourceByType('namespaces')
     ]);
 
-    nodesArray.push(...this.mapResourcesToNodes(pods, 'pods'));
-    nodesArray.push(...this.mapResourcesToNodes(namespaces, 'namespaces'));
+    for (const resourceType of this.selectedResourceTypes) {
+      try {
+        const resources = await this.fetchResourceByType(resourceType);
 
-    this.generateEdges(edgesArray, pods, 'pods', namespaces);
-    this.generateEdges(edgesArray, namespaces, 'namespaces', pods);
+        // Set related resources based on resource type
+        switch (resourceType) {
+          case 'pods':
+            relatedResources = this.resources.filter(r => r.kind === 'namespaces');
+            break;
+          case 'namespaces':
+            relatedResources = this.resources.filter(r => r.kind === 'pods');
+            break;
+          // Handle other resource types similarly
+          default:
+            relatedResources = [];
+            break;
+        }
 
-    const nodes = new DataSet(nodesArray);
-    const edges = new DataSet(edgesArray);
-    const data = {
-      nodes,
-      edges
-    };
+        nodesArray.push(...this.mapResourcesToNodes(resources, resourceType));
 
-    // Update the network data
-    this.network.setData(data);
+        // Generate edges for the current resource type
+        this.generateEdges(edgesArray, pods, 'pods', namespaces);
+        this.generateEdges(edgesArray, namespaces, 'namespaces', pods);
+        const nodes = new DataSet(nodesArray);
+        const edges = new DataSet(edgesArray);
+        const data = {
+          nodes,
+          edges
+        };
+
+        // Update the network data
+        this.network.setData(data);
+
+        console.log(`Nodes Array after fetching ${resourceType}:`, nodesArray);
+        console.log(`Edges Array after generating ${resourceType} edges:`, edgesArray);
+
+      } catch (error) {
+        console.error(`Error fetching ${resourceType}:`, error);
+      }
+    }
+
+
+
+
   }
 
   mapResourcesToNodes(resources: any[], resourceType: string): any[] {
@@ -75,27 +103,17 @@ export class ListingComponent implements OnInit, AfterViewInit {
 
   generateEdges(edges: any[], resources: any[], resourceType: string, relatedResources: any[]) {
     resources.forEach(resource => {
-      this.processEdgesForNode(edges, resource, resourceType, relatedResources);
+      switch (resourceType) {
+        case 'pods':
+          this.addEdgesForPod(edges, resource, relatedResources);
+          break;
+        case 'namespaces':
+          this.addEdgesForNamespace(edges, resource, relatedResources);
+          break;
+        default:
+          break;
+      }
     });
-  }
-
-  processEdgesForNode(edges: any[], resource: any, resourceType: string, relatedResources: any[]) {
-    switch (resourceType) {
-      case 'pods':
-        this.addEdgesForPod(edges, resource, relatedResources);
-        break;
-      case 'namespaces':
-        this.addEdgesForNamespace(edges, resource, relatedResources);
-        break;
-      case 'services':
-        this.addEdgesForService(edges, resource);
-        break;
-      case 'deployments':
-        this.addEdgesForDeployment(edges, resource);
-        break;
-      default:
-        break;
-    }
   }
 
   addEdgesForPod(edges: any[], pod: any, namespaces: any[]) {
@@ -117,19 +135,8 @@ export class ListingComponent implements OnInit, AfterViewInit {
     });
   }
 
-  addEdgesForService(edges: any[], service: any) {
-    if (service.spec && service.spec.selector) {
-      edges.push({ from: service.metadata.uid, to: 'related_deployment_uid' });
-    }
-  }
-
-  addEdgesForDeployment(edges: any[], deployment: any) {
-    if (deployment.metadata.uid) {
-      edges.push({ from: deployment.metadata.uid, to: 'related_pod_uid' });
-    }
-  }
-
   fetchResourceByType(resourceType: string): Promise<any[]> {
+    // Implement fetching logic for each resource type
     switch (resourceType) {
       case 'pods':
         return this.listService.getAllPods().toPromise();
@@ -151,14 +158,10 @@ export class ListingComponent implements OnInit, AfterViewInit {
         return this.listService.getAllConfigMaps().toPromise();
       case 'ingresses':
         return this.listService.getAllIngress().toPromise();
-      case 'daemonsets':
-        return this.listService.getAllDaemonSets().toPromise();
       case 'persistentvolumeclaims':
         return this.listService.getAllPersistentVolumeClaims().toPromise();
       case 'storageclasses':
         return this.listService.getAllStorageClasses().toPromise();
-      case 'statefulsets':
-        return this.listService.getAllStatefulSets().toPromise();
       case 'persistentvolumes':
         return this.listService.getAllPersistentVolumes().toPromise();
       default:
@@ -173,6 +176,10 @@ export class ListingComponent implements OnInit, AfterViewInit {
       this.selectedResourceTypes = this.selectedResourceTypes.filter(type => type !== resourceType);
     }
     this.fetchResources();
+  }
+
+  isSelected(resourceType: string): boolean {
+    return this.selectedResourceTypes.includes(resourceType);
   }
 
   toggleResourceOptions() {

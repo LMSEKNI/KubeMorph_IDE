@@ -11,10 +11,10 @@ import {Location} from '@angular/common';
 export class ReleasesComponent implements OnInit {
 
   constructor(
-              private releaseService: ReleaseServiceService,
-              private router: Router,
-              private route: ActivatedRoute,
-              private location: Location
+    private releaseService: ReleaseServiceService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private location: Location
   ) { }
 
 

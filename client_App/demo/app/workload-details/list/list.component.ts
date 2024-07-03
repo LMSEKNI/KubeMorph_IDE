@@ -172,6 +172,15 @@ export class ListComponent implements OnInit {
       exitAnimationDuration,
     });
   }
+    closeTerminal(): void {
+      this.showTerminal = false;
+      this.showTerminalContent = false;
+
+    }
+    closeLogs(): void {
+      this.showLogs = false;
+      this.showLogsContent = false;
+    }
     onDelete(): void {
       const dialogRef = this.dialog.open(this.dialogContentTemplate, {
         width: '250px'
