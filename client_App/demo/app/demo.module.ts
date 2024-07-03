@@ -53,6 +53,7 @@ import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { MessageDialogComponent } from './workload-details/updateressource/dynamic-form-update/message-dialog/message-dialog.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {ListingComponent} from './workload-details/listing/Components/listing.component';
+// @ts-ignore
 
 
 import { AngularSplitModule } from 'angular-split';
@@ -104,14 +105,14 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     HttpClientModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule,
     MatIconModule, MatMenuModule, MatSelectModule, MatToolbarModule,
     RouterModule.forRoot(routes, {relativeLinkResolution: 'legacy'}),
-    Bootstrap4FrameworkModule,
+    Bootstrap4FrameworkModule, MatSnackBarModule,
     Bootstrap3FrameworkModule,
     MatInputModule, MatFormFieldModule, MatProgressBarModule, MatCardModule,
     MaterialDesignFrameworkModule,
     JsonSchemaFormModule,
     ReactiveFormsModule, MatSidenavModule, NgTerminalModule, MatTabsModule,
     NgxJsonViewerModule,
-    AngularSplitModule, MatProgressSpinnerModule
+    AngularSplitModule, MatProgressSpinnerModule, MatPaginatorModule
 
   ],
   bootstrap: [DemoRootComponent]

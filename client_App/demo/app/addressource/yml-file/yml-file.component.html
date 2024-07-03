@@ -1,18 +1,32 @@
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <demo></demo>
-<mat-toolbar id="custom-toolbar">
-  <div class="header-content">
-    <button mat-raised-button color="primary" [matMenuTriggerFor]="addResourceMenu" class="left-button">Yaml</button>
-    <mat-menu #addResourceMenu="matMenu">
-      <button mat-menu-item [routerLink]="['/create-dynamicform']">Form</button>
-    </mat-menu>
 
+<mat-toolbar color="primary" id="custom-toolbar">
+  <div class="header-content">
+    <button mat-icon-button (click)="goBack()" aria-label="Go Back" >
+      <img src="assets/images/arrow_back_.svg" alt="Go Back Icon">
+    </button>
+
+    <div class="spacer"></div>
+
+    <div class="add-icon">
+      <button mat-icon-button [matMenuTriggerFor]="add" aria-label="Example icon-button with a menu">
+        <img src="assets/images/add_circle_.svg" alt="Go Back Icon">
+      </button>
+      <mat-menu #add="matMenu">
+        <button mat-menu-item [routerLink]="['/create-dynamicform']">
+          <span>Form</span>
+        </button>
+        <button mat-menu-item [routerLink]="['/create-ymlfile']">
+          <span>Yaml</span>
+        </button>
+      </mat-menu>
+    </div>
     <div class="icons-container">
       <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-        <mat-icon>more_vert</mat-icon>
+        <img src="assets/images/3pt.svg" alt="Three Dots Icon">
       </button>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item routerLink="/">
+        <button mat-menu-item>
           <mat-icon>home</mat-icon>
           <span>List Resource</span>
         </button>
@@ -20,31 +34,32 @@
           <mat-icon>settings_heart</mat-icon>
           <span>Monitoring</span>
         </button>
-        <button mat-menu-item>
+        <button mat-menu-item [matMenuTriggerFor]="helm" #menuTrigger>
           <mat-icon>notifications_off</mat-icon>
           <span>Helm</span>
         </button>
+        <mat-menu #helm="matMenu">
+          <button mat-menu-item routerLink="/helm">Artifact Hub</button>
+          <button mat-menu-item routerLink="/helm-release">Releases</button>
+        </mat-menu>
       </mat-menu>
     </div>
   </div>
 </mat-toolbar>
 
-<body>
-<div class="fileContainer">
-  <h3>Upload your File :</h3>
-  <div class="drag-area">
-    <div class="icon">
-      <i class="fas fa-images"></i>
-    </div>
-    <span class="header">Drag & Drop</span>
-    <span class="support">Supports: Yaml files</span>
-  </div>
-  <div>
-    <input type="file" id="fileInputAlt" />
-  </div>
-  <div style="margin-bottom: 20px;"></div>
 
-  <div *ngIf="successMessage" style="color: green;">{{ successMessage }}</div>
-  <button id="submitButton" (click)="onSubmit()">Submit</button>
+
+<div class="container">
+  <div class="fileContainer">
+    <div class="drag-area" (click)="triggerFileInput()">
+      <div class="icon">
+        <mat-icon>cloud_upload</mat-icon>
+      </div>
+      <span class="header">Upload your YAML File</span>
+      <input type="file" id="fileInputAlt" class="hidden-input" (change)="onFileSelected($event)" />
+    </div>
+
+    <div *ngIf="successMessage" class="data-good">{{ successMessage }}</div>
+    <button mat-raised-button  id="submitButton" (click)="onSubmit()">Create</button>
+  </div>
 </div>
-</body>

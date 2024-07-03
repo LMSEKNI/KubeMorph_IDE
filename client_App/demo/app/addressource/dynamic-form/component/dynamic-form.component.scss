@@ -1,27 +1,33 @@
 #custom-toolbar {
-  color: black;
-  display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 10px;
   background: #f5f5f5;
-  height: 100px;
 }
 #resources{
-  margin-right: auto;
+  margin-left: auto;
 
+}
+.spacer {
+  flex: 1; /* Takes up remaining space */
 }
 
 .header-content {
-  justify-content: space-between;
-  align-items: center;
   display: flex;
+  align-items: center;
   width: 100%;
 }
 
 .left-button {
   margin-right: 650px;
 }
-
+.butt{
+  background-color: #00aa9b;
+  color: white;
+}
+.example-menu{
+  overflow-y: auto;
+}
 .menu-label {
   margin: 0 16px;
 }
@@ -68,5 +74,5 @@
 }
 
 .add-icon {
-  margin-right: 16px;
+  margin-left: auto;
 }

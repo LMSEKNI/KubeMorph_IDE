@@ -44,7 +44,7 @@ export class ListtService {
     return this.http.get<string[]>(`${this.baseUrl}/ingress`);
   }
   getAllDeamonsets(): Observable<string[]> {
-    return this.http.get<string[]>(`${this.baseUrl}/deamonsets`);
+    return this.http.get<string[]>(`${this.baseUrl}/daemonsets`);
   }
   getAllPVC(): Observable<string[]> {
     return this.http.get<string[]>(`${this.baseUrl}/pvc`);

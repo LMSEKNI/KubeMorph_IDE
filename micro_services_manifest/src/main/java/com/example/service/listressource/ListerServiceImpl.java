@@ -40,27 +40,63 @@ public class ListerServiceImpl implements ListerService {
     }
 
     @Override
-    public List<V1Service> getAllServices() throws FileNotFoundException, IOException, ApiException {
+    public List<V1Service> getAllServices() throws IOException, ApiException {
         kubernetesConfigService.configureKubernetesAccess();
         CoreV1Api api = new CoreV1Api();
-        V1ServiceList serviceList = api.listServiceForAllNamespaces(null, null, null, null, null, null, null, null, null, null);
-        return serviceList.getItems();
+
+        try {
+            V1ServiceList serviceList = api.listServiceForAllNamespaces(null,null, null, null, null, null, null, null, null, null);
+            return serviceList.getItems();
+        } catch (ApiException e) {
+            System.err.println("Exception fetching services: " + e.getMessage());
+            throw e;
+        }
     }
 
     @Override
     public List<V1Deployment> getAllDeployments() throws IOException, ApiException {
         ApiClient client = kubernetesConfigService.configureKubernetesAccess();
         AppsV1Api api = new AppsV1Api(client);
-        V1DeploymentList deploymentList = api.listDeploymentForAllNamespaces(null, null, null, null, null, null, null, null, null, null);
-        return deploymentList.getItems();
+
+        try {
+            V1DeploymentList deploymentList = api.listDeploymentForAllNamespaces(null, null, null, null, null, null, null, null, null, null);
+            List<V1Deployment> deployments = deploymentList.getItems();
+
+            deployments.forEach(deployment -> {
+                System.out.println("Deployment: " + deployment.toString());
+            });
+
+            return deployments;
+        } catch (ApiException e) {
+            System.err.println("Exception fetching deployments: " + e.getMessage());
+            throw e;
+        }
+    }
+    @Override
+    public List<V1DaemonSet> getAllDaemonSets() throws IOException, ApiException {
+        ApiClient client = kubernetesConfigService.configureKubernetesAccess();
+        AppsV1Api api = new AppsV1Api(client);
+
+        try {
+            V1DaemonSetList daemonSetList = api.listDaemonSetForAllNamespaces(null, null, null, null, null, null, null, null, null, null);
+            return daemonSetList.getItems();
+        } catch (ApiException e) {
+            System.err.println("Exception fetching daemon sets: " + e.getMessage());
+            throw e;
+        }
     }
 
-    @Override
     public List<V1ReplicaSet> getAllReplicaSets() throws IOException, ApiException {
         ApiClient client = kubernetesConfigService.configureKubernetesAccess();
         AppsV1Api api = new AppsV1Api(client);
-        V1ReplicaSetList replicaSetList = api.listReplicaSetForAllNamespaces(null, null, null, null, null, null, null, null, null, null);
-        return replicaSetList.getItems();
+
+        try {
+            V1ReplicaSetList replicaSetList = api.listReplicaSetForAllNamespaces(null, null, null, null, null, null, null, null, null, null);
+            return replicaSetList.getItems();
+        } catch (ApiException e) {
+            System.err.println("Exception fetching replica sets: " + e.getMessage());
+            throw e;
+        }
     }
 
     @Override
@@ -103,13 +139,7 @@ public class ListerServiceImpl implements ListerService {
         return endpointsList.getItems();
     }
 
-    @Override
-    public List<V1DaemonSet> getAllDaemonSets() throws IOException, ApiException {
-        ApiClient client = kubernetesConfigService.configureKubernetesAccess();
-        AppsV1Api api = new AppsV1Api(client);
-        V1DaemonSetList daemonSetList = api.listDaemonSetForAllNamespaces(null, null, null, null, null, null, null, null, null, null);
-        return daemonSetList.getItems();
-    }
+
 
     @Override
     public List<V1PersistentVolumeClaim> getAllPersistentVolumeClaims() throws IOException, ApiException {

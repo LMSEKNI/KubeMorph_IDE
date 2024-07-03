@@ -2,16 +2,42 @@ import { Component, OnInit } from '@angular/core';
 import { CreateressourceService } from './service/createressource.service';
 import {Examples} from '../dynamic-form/component/example-schemas.model';
 
+import { Location } from '@angular/common';
 
+interface Breadcrumb {
+  label: string;
+  url: string;
+}
 @Component({
   selector: 'app-yml-file',
   templateUrl: './yml-file.component.html',
   styleUrls: ['./yml-file.component.scss']
 })
 export class YmlFileComponent {
-  successMessage: string;
+  constructor( private location: Location,
+               private createressourceService: CreateressourceService) { }
 
-  constructor(private createressourceService: CreateressourceService) { }
+  successMessage: string;
+  goBack(): void {
+    this.location.back();
+  }
+  triggerFileInput() {
+    const fileInput = document.getElementById('fileInputAlt') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.click();
+    }
+  }
+
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      // Handle the file selection
+      this.successMessage = `File ${file.name} selected successfully.`;
+    }
+  }
+
+
 
   onSubmit() {
     const fileInput = document.getElementById('fileInputAlt') as HTMLInputElement;
