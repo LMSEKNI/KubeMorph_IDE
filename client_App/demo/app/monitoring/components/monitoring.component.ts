@@ -3,6 +3,7 @@ import { MonitoringService } from '../services/monitoring.service';
 import { EChartsOption } from 'echarts';
 import { GrafanaDialogComponent } from './grafana-dialog/grafana-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-monitoring',
@@ -20,12 +21,17 @@ export class MonitoringComponent implements OnInit {
 
   constructor(
     private monitoringService: MonitoringService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private location: Location
   ) { }
 
   ngOnInit(): void {
     this.fetchNodeMetrics();
     this.fetchPodMetrics();
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 
   redirectToGrafana(): void {

@@ -15,8 +15,7 @@ export class HelmDetailsComponent implements OnInit {
   image: string;
 
   constructor(public dialog: MatDialog,
-              private route : ActivatedRoute,
-              private router : Router,
+              private router: Router,
               private location: Location) {}
 
   ngOnInit(): void {

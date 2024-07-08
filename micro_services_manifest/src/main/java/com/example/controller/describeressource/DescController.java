@@ -7,6 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 
+import com.example.service.describeressource.DescService;
 import io.kubernetes.client.openapi.models.V1Pod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,11 +28,11 @@ import io.kubernetes.client.openapi.ApiException;
 @RequestMapping("/api/desc")
 public class DescController {
     @Autowired
-    private DescServiceImpl DescService;
+    private DescService descService;
 
     @GetMapping("/{resourceType}/{ressourceName}")
     public ResponseEntity<String> getResourceDescriptions(@PathVariable String ressourceName, @PathVariable String resourceType) throws IOException, ApiException {
-        String description = DescService.getResourceDescriptions(ressourceName, resourceType);
+        String description = descService.getResourceDescriptions(ressourceName, resourceType);
         return ResponseEntity.ok(description);
     }
 

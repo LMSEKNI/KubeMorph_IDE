@@ -3,6 +3,7 @@ package com.example.runtimeManagement.Controller;
 import com.example.runtimeManagement.K8sConfig.KubernetesConfig;
 //import com.example.runtimeManagement.K8sConfig.KubernetesConfigurationImpl;
 import com.example.runtimeManagement.Services.Exec.ExecImpl;
+import com.example.runtimeManagement.Services.Exec.ExecTerminal;
 import com.example.runtimeManagement.Services.Logs.LogsImpl;
 import io.kubernetes.client.Exec;
 import io.kubernetes.client.openapi.ApiClient;
@@ -34,14 +35,14 @@ import java.util.concurrent.*;
 public class ExecController {
 
     @Autowired
-    private ExecImpl execImpl;
+    private ExecTerminal execterminal;
 
     private static final Logger logger = LoggerFactory.getLogger(ExecController.class);
 
     @GetMapping("/getpod")
     public String getPod(@RequestParam String namespace, @RequestParam String podName) {
         try {
-            V1Pod pod = execImpl.getPod(namespace, podName);
+            V1Pod pod = execterminal.getPod(namespace, podName);
             if (pod != null) {
                 return pod.toString();
             } else {
@@ -61,13 +62,8 @@ public class ExecController {
             String command = request.get("command");
             try {
                 System.out.println("Command executed successfully");
-
-                return execImpl.podexec( podName, command);
-                // Read the output of the process
-                // You can implement your own logic to read and process the output here
-
-
-            } catch (ApiException | IOException e) {
+                return execterminal.podexec( podName, command);
+                          } catch (ApiException | IOException e) {
                 e.printStackTrace();
                 System.out.println("Error executing command: " + e.getMessage());
             }

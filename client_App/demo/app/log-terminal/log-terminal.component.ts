@@ -13,7 +13,7 @@ import {LogService} from './service/log.service';
 export class LogTerminalComponent implements OnInit {
   @Input() resourceName: string | null = null;
   @Input() resourceType: string | null = null;
-
+  @Input() resource: any;
   private terminal: Terminal;
   private commandQueue: string[] = [];
   private commandInProgress = false;
@@ -33,7 +33,6 @@ export class LogTerminalComponent implements OnInit {
     });
     this.terminal.open(document.getElementById('terminal'));
     this.getPodLogs();
-    //this.terminal.onData(e => this.handleTerminalInput(e)); // Attach listener for user input
   }
 
   ngOnDestroy(): void {
@@ -44,9 +43,8 @@ export class LogTerminalComponent implements OnInit {
   }
 
   getPodLogs(): void {
-    //const { resourceName } = this.execForm.value;
-    console.log("ressourceeeeeeeeeeeLogggggggggggg", this.resourceName);
-    this.logService.getPodLogs(this.resourceName).subscribe(
+    console.log('ressourceeeeeeeeeeeLogggggggggggg', this.resource.metadata?.name);
+    this.logService.getPodLogs(this.resource.metadata?.name).subscribe(
       (response) => {
         const lines = response.split('\n');
         lines.forEach(line => {

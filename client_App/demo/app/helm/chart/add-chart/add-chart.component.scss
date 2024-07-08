@@ -1,0 +1,32 @@
+/* add-chart.component.scss */
+:host {
+  .dialog-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px; /* Adjust margin between title and divider */
+  }
+
+  .close-button {
+    margin-left: auto; /* Align close button to the right */
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid #ccc; /* Define styling for the divider line */
+    margin: 16px 0; /* Adjust margin above and below the divider */
+  }
+
+  .form-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mat-form-field {
+    margin-bottom: 16px; /* Adjust margin between form fields */
+  }
+
+  .mat-dialog-content {
+    padding-bottom: 16px; /* Adjust padding at the bottom of the content */
+  }
+}

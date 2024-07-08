@@ -82,6 +82,18 @@ public class ResourceUpdateServiceImpl implements ResourceUpdateService {
                 V1ServiceAccount updatedServiceAccount = Yaml.loadAs(updatedYaml, V1ServiceAccount.class);
                 coreV1Api.replaceNamespacedServiceAccount(name, namespace, updatedServiceAccount, null, null, null, null);
                 break;
+            case "replicaset":
+                V1ReplicaSet updatedReplicaSet = Yaml.loadAs(updatedYaml, V1ReplicaSet.class);
+                appsV1Api.replaceNamespacedReplicaSet(name, namespace, updatedReplicaSet, null, null, null, null);
+                break;
+            case "endpoint":
+                V1Endpoints updatedEndpoint = Yaml.loadAs(updatedYaml, V1Endpoints.class);
+                coreV1Api.replaceNamespacedEndpoints(name, namespace, updatedEndpoint, null, null, null, null);
+                break;
+            case "node":
+                V1Node updatedNode = Yaml.loadAs(updatedYaml, V1Node.class);
+                coreV1Api.replaceNode(name, updatedNode, null, null, null, null);
+                break;
             default:
                 throw new ApiException(400, "Unsupported resource kind: " + kind);
         }
@@ -133,6 +145,12 @@ public class ResourceUpdateServiceImpl implements ResourceUpdateService {
                 return networkingV1Api.readNamespacedNetworkPolicy(name, namespace, null);
             case "serviceaccount":
                 return coreV1Api.readNamespacedServiceAccount(name, namespace, null);
+            case "replicaset":
+                return appsV1Api.readNamespacedReplicaSet(name, namespace, null);
+            case "endpoint":
+                return coreV1Api.readNamespacedEndpoints(name, namespace, null);
+            case "node":
+                return coreV1Api.readNode(name, null);
             default:
                 throw new ApiException(400, "Unsupported resource kind: " + kind);
 

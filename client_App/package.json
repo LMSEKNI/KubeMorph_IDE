@@ -108,6 +108,7 @@
     "echarts": "^5.5.0",
     "lodash-es": "~4.17.21",
     "ng-terminal": "^6.1.1",
+    "ngx-file-drop": "^16.0.0",
     "ngx-json-viewer": "^3.2.1",
     "rxjs": "^7.0.0",
     "vis-data": "^7.1.9",

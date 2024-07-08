@@ -40,7 +40,7 @@ public class ExecImpl implements ExecTerminal {
 
     private static final Logger logger = LoggerFactory.getLogger(LogsImpl.class);
 
-
+    @Override
     public V1Pod getPod(String namespace, String podName) throws ApiException, IOException, UnrecoverableKeyException, CertificateException, KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
 
         ApiClient client = kubeconfig.configureKubernetesAccess();
@@ -54,7 +54,7 @@ public class ExecImpl implements ExecTerminal {
         }
         return null; // Pod not found
     }
-
+    @Override
     public String podexec(String podName, String command) throws ApiException, IOException {
         // Configure Kubernetes access
         ApiClient client = kubeconfig.configureKubernetesAccess();
@@ -100,11 +100,7 @@ public class ExecImpl implements ExecTerminal {
 
         return output.toString();
     }
-
-
-
-
-    /////////////////////
+    @Override
     public String podexecit(String namespace, String podName, String container, String command) throws ApiException, IOException {
         ApiClient client = kubeconfig.configureKubernetesAccess();
         CoreV1Api api = new CoreV1Api(client);

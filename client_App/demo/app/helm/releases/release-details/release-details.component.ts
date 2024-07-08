@@ -1,10 +1,11 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
-import {CharttemplateComponent} from '../../charttemplate/charttemplate.component';
+import {CharttemplateComponent} from '../../chart/charttemplate/charttemplate.component';
 import {ReleaseServiceService} from '../services/release-service.service';
 import { DeleteReleaseComponent} from '../delete-release/delete-release.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {Location} from "@angular/common";
 
 @Component({
   selector: 'app-release-details',
@@ -18,7 +19,8 @@ export class ReleaseDetailsComponent implements OnInit {
               private route: ActivatedRoute,
               private router: Router,
               private releaseService: ReleaseServiceService,
-              private snackBar: MatSnackBar) {}
+              private snackBar: MatSnackBar,
+              private location: Location) {}
 
   release: any;
   image: string;
@@ -29,6 +31,9 @@ export class ReleaseDetailsComponent implements OnInit {
     this.release = history.state.release;
     this.image = history.state.image;
     this.getReleaseStatus(this.release.name);
+  }
+  goBack(): void {
+    this.location.back();
   }
   getReleaseStatus(release: string) {
     this.releaseService.getReleaseStatus(release).subscribe(data => {

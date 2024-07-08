@@ -1,56 +1,124 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <demo></demo>
-<div>
-  <div>
-    <button mat-raised-button color="primary" (click)="toggleResourceOptions()">Select Resources</button>
-    <div *ngIf="showResourceOptions" class="resource-options">
-      <div>
-        <mat-checkbox id="pods" value="pods" (change)="onResourceTypeChange($event, 'pods')" [checked]="isSelected('pods')">Pods</mat-checkbox>
-      </div>
-      <div>
-        <mat-checkbox id="namespaces" value="namespaces" (change)="onResourceTypeChange($event, 'namespaces')" [checked]="isSelected('namespaces')">Namespaces</mat-checkbox>
-      </div>
-      <div>
-        <mat-checkbox id="deployments" value="deployments" (change)="onResourceTypeChange($event, 'deployments')" [checked]="isSelected('deployments')">Deployments</mat-checkbox>
-      </div>
-      <div>
-        <mat-checkbox id="services" value="services" (change)="onResourceTypeChange($event, 'services')" [checked]="isSelected('services')">Services</mat-checkbox>
-      </div>
-      <div>
-        <mat-checkbox id="replicasets" value="replicasets" (change)="onResourceTypeChange($event, 'replicasets')" [checked]="isSelected('replicasets')">ReplicaSets</mat-checkbox>
-      </div>
+<div class="search-container">
+  <mat-form-field appearance="fill">
+    <mat-label>Select Resource Type</mat-label>
+    <mat-select [formControl]="selectedResources" multiple>
+      <mat-option *ngFor="let resourceType of ['Pod', 'Namespace', 'Deployment', 'Service', 'Replicaset', 'Statefulset', 'Configmap', 'Daemonset', 'Job', 'Node','Ingresse', 'Persistentvolumeclaim','Persistentvolume', 'Storageclasse',  'Endpoint']" [value]="resourceType">
+        {{ resourceType }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 
-      <div>
-        <mat-checkbox id="statefulsets" value="statefulsets" (change)="onResourceTypeChange($event, 'statefulsets')" [checked]="isSelected('statefulsets')">Statefulsets</mat-checkbox>
-      </div>
-      <div>
-        <mat-checkbox id="jobs" value="jobs" (change)="onResourceTypeChange($event, 'jobs')" [checked]="isSelected('jobs')">Jobs</mat-checkbox>
-      </div>
-      <div>
-        <mat-checkbox id="nodes" value="nodes" (change)="onResourceTypeChange($event, 'nodes')" [checked]="isSelected('nodes')">Nodes</mat-checkbox>
-      </div>
-      <div>
-        <mat-checkbox id="endpoints" value="endpoints" (change)="onResourceTypeChange($event, 'endpoints')" [checked]="isSelected('endpoints')">Endpoints</mat-checkbox>
-      </div>
-      <div>
-        <mat-checkbox id="configmaps" value="configmaps" (change)="onResourceTypeChange($event, 'configmaps')" [checked]="isSelected('configmaps')">ConfigMaps</mat-checkbox>
-      </div>
-      <div>
-        <mat-checkbox id="ingresses" value="ingresses" (change)="onResourceTypeChange($event, 'ingresses')" [checked]="isSelected('ingresses')">Ingress</mat-checkbox>
-      </div>
-      <div>
-        <mat-checkbox id="persistentvolumeclaims" value="persistentvolumeclaims" (change)="onResourceTypeChange($event, 'persistentvolumeclaims')" [checked]="isSelected('persistentvolumeclaims')">PersistentVolumeClaims</mat-checkbox>
-      </div>
-      <div>
-        <mat-checkbox id="storageclasses" value="storageclasses" (change)="onResourceTypeChange($event, 'storageclasses')" [checked]="isSelected('storageclasses')">StorageClasses</mat-checkbox>
-      </div>
-      <div>
-        <mat-checkbox id="persistentvolumes" value="persistentvolumes" (change)="onResourceTypeChange($event, 'persistentvolumes')" [checked]="isSelected('persistentvolumes')">PersistentVolumes</mat-checkbox>
-      </div>
-      <div>
-        <mat-checkbox id="daemonsets" value="daemonsets" (change)="onResourceTypeChange($event, 'daemonsets')" [checked]="isSelected('daemonsets')">Daemonsets</mat-checkbox>
-      </div>
+  <div class="icons-container">
+    <div class="search-icon">
+      <mat-form-field appearance="fill" class="search-field" [@toggleSearch]="isSearchOpen ? 'open' : 'closed'">
+        <mat-label>Search</mat-label>
+        <input matInput placeholder="Search">
+      </mat-form-field>
+      <button mat-icon-button (click)="toggleSearch()">
+        <img src="assets/images/search_24dp_FILL0_wght300_GRAD0_opsz24.svg" alt="Search Icon">
+      </button>
     </div>
+
+    <!--add ressources -->
+    <div class="add-icon">
+      <button mat-icon-button [matMenuTriggerFor]="add" aria-label="Example icon-button with a menu">
+        <img src="assets/images/add_circle_.svg" alt="Go Back Icon">
+
+      </button>
+      <mat-menu #add="matMenu">
+        <button mat-menu-item [routerLink]="['/create-dynamicform']">
+          <span>Form</span>
+        </button>
+        <button mat-menu-item [routerLink]="['/create-ymlfile']">
+          <span>Yaml</span>
+        </button>
+      </mat-menu>
+    </div>
+
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+      <img src="assets/images/3pt.svg" alt="Go Back Icon">
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item  routerLink="/">
+        <mat-icon>home</mat-icon>
+        <span>List Resource</span>
+      </button>
+      <button mat-menu-item routerLink="/monitoring">
+        <mat-icon>settings_heart</mat-icon>
+        <span>Monotoring</span>
+      </button>
+      <button mat-menu-item [matMenuTriggerFor]="helm" #menuTrigger>
+        <mat-icon>notifications_off</mat-icon>
+        <span>Helm</span>
+      </button>
+      <mat-menu #helm="matMenu">
+        <button mat-menu-item routerLink="/helm">Artifact Hub</button>
+        <button mat-menu-item routerLink="/helm-release">Releases </button>
+      </mat-menu>
+    </mat-menu>
   </div>
 </div>
-<div #networkContainer style="width: 100%; height: 800px; border: 7px solid lightgray;"></div>
+
+
+<div style="width: 100%; height: 1000px; ">
+  <as-split>
+    <as-split-area>
+      <as-split  direction="vertical">
+        <as-split-area>
+          <div #networkContainer style="width: 100%; height: 800px; border: 7px solid lightgray;"></div>
+        </as-split-area>
+        <as-split-area *ngIf="showLogsContent">
+          <div class="log-header">
+            <button mat-icon-button class="close-button" (click)="closeLogs()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+          <app-log-terminal *ngIf="showLogs" [resource]="selectedResource"></app-log-terminal>
+        </as-split-area>
+
+        <as-split-area *ngIf="showTerminalContent">
+          <div class="log-header">
+            <button mat-icon-button class="close-button" (click)="closeTerminal()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+          <app-exec-terminal *ngIf="showTerminal" [resource]="selectedResource" ></app-exec-terminal>
+        </as-split-area>
+      </as-split>
+    </as-split-area>
+    <as-split-area *ngIf="showRightPanel">
+      <as-split>
+        <div class="container">
+          <div class="flex-container">
+            <!-- Left side content -->
+            <div class="left-content">
+              <div class="iconn flex items-center justify-between">
+                <img src="assets/images/deletee.svg" alt="Delete Icon" (click)="openDeleteDialog(selectedResources.value[0], selectedResource)" >
+                <img src="assets/images/edit.svg" alt="Edit Icon" (click)="toggleDropdown()">
+                <img src="assets/images/terminal.svg" alt="Terminal Icon" (click)="toggleTerminal()">
+                <img src="assets/images/log.svg" alt="Log Icon" (click)="toggleLog()">
+                <img src="assets/images/close.svg" alt="Close Icon" (click)="closeFrame()">
+                <div *ngIf="dropdownOpen" class="dropdown-menu absolute bg-white shadow-lg border mt-2">
+                  <button (click)="selectOption('form')" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Form</button>
+                  <button (click)="selectOption('yaml')" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">YAML</button>
+                </div>
+              </div>
+              <ng-container *ngIf="selectedComponent === 'desc'">
+                <app-descc *ngIf="selectedResources" [resource]="selectedResource"></app-descc>
+              </ng-container>
+              <ng-container *ngIf="selectedComponent === 'form'">
+                <app-dynamic-form-update *ngIf="selectedResources" [resourceType]="selectedResources.value[0]" [resource]="selectedResource"></app-dynamic-form-update>
+              </ng-container>
+              <ng-container *ngIf="selectedComponent === 'yaml'">
+                <app-yml-file-update *ngIf="selectedResources" [resourceType]="selectedResources.value[0]" [resource]="selectedResource"></app-yml-file-update>
+              </ng-container>
+            </div>
+          </div>
+          <div class="dialog-frame" *ngIf="isDialogOpen"></div>
+        </div>
+      </as-split>
+    </as-split-area>
+  </as-split>
+</div>

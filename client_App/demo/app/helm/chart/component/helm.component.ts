@@ -1,8 +1,10 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {MatTabsModule} from '@angular/material/tabs';
 import {ActivatedRoute, Router} from '@angular/router';
-import {HelmServicesService} from './services/helm-services.service';
+import {HelmServicesService} from '../services/helm-services.service';
 import { Location } from '@angular/common';
+import {MatDialog} from '@angular/material/dialog';
+import {AddChartComponent} from '../add-chart/add-chart.component';
 
 @Component({
   selector: 'app-helm',
@@ -35,9 +37,10 @@ export class HelmComponent implements OnInit {
   }
 
   constructor(private  router: Router,
-              private route : ActivatedRoute,
+              private route: ActivatedRoute,
               private helmService: HelmServicesService,
-              private location: Location) { }
+              private location: Location,
+              public dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -50,7 +53,14 @@ export class HelmComponent implements OnInit {
       }
     });
   }
-
+  openAddChartDialog(): void {
+    const dialogRef = this.dialog.open(AddChartComponent, {
+      width: '500px'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
   goBack(): void {
     this.location.back();
   }

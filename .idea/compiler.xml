@@ -28,6 +28,7 @@
       <module name="config-server" options="-parameters" />
       <module name="configServer" options="-parameters" />
       <module name="discovery" options="-parameters" />
+      <module name="discovry" options="-parameters" />
       <module name="gateway" options="-parameters" />
       <module name="micro_services_kube" options="-parameters" />
       <module name="monitoring" options="-parameters" />

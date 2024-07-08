@@ -1,0 +1,89 @@
+<demo></demo>
+<mat-toolbar class="header">
+  <div class="header-left">
+    <button mat-icon-button (click)="goBack()" aria-label="Go Back">
+      <img src="../../../../assets/images/arrow_back_.svg" alt="Go Back Icon">
+    </button>
+  </div>
+
+  <div class="header-right">
+    <mat-form-field appearance="standard" class="search-bar">
+      <input matInput placeholder="Search" #searchInput>
+      <button mat-icon-button matSuffix (click)="searchAndNavigate(searchInput.value)">
+        <mat-icon class="icon">search</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+      <img src="../../../../assets/images/3pt.svg" alt="Three Points Icon">
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>
+        <mat-icon>home</mat-icon>
+        <span>List Resource</span>
+      </button>
+      <button mat-menu-item routerLink="/monitoring">
+        <mat-icon>settings_heart</mat-icon>
+        <span>Monitoring</span>
+      </button>
+      <button mat-menu-item [matMenuTriggerFor]="helm">
+        <mat-icon>notifications_off</mat-icon>
+        <span>Helm</span>
+      </button>
+      <mat-menu #helm="matMenu">
+        <button mat-menu-item routerLink="/helm">Artifact Hub</button>
+        <button mat-menu-item routerLink="/helm-release">Releases</button>
+      </mat-menu>
+    </mat-menu>
+  </div>
+</mat-toolbar>
+
+<div class="center-container" *ngIf="chart">
+  <mat-card class="detail-card" appearance="outlined">
+    <div class="header-aligned">
+      <img mat-card-sm-image [src]="image" alt="Image" class="card-image">
+      <div class="card-title-group">
+        <mat-card-title>{{ chart.name }}</mat-card-title>
+      </div>
+      <div class="butt">
+        <button mat-button class="card-button" (click)="openDialog(chart.name)">
+          <mat-icon>
+            <img src="/client_App/demo/assets/images/download.svg" alt="Download Icon">
+          </mat-icon>
+          Helm Chart
+        </button>
+
+        <button mat-button class="card-button" (click)="openDialogTemplate()">
+          <mat-icon>
+            <img src="/client_App/demo/assets/images/template.svg" alt="Template Icon">
+          </mat-icon>
+          Template
+        </button>
+      </div>
+    </div>
+
+    <mat-card-content>
+      <div class="content-wrapper">
+        <div class="content-item">
+          <h4>Description:</h4>
+          <p>{{ chart.description }}</p>
+        </div>
+        <div class="content-item">
+          <h4>Keywords:</h4>
+          <p>{{ chart.keywords }}</p>
+        </div>
+        <div class="content-item">
+          <h4>Chart Version:</h4>
+          <p>{{ chart.chartVersion }}</p>
+        </div>
+        <div class="content-item">
+          <h4>App Version:</h4>
+          <p>{{ chart.appVersion }}</p>
+        </div>
+      </div>
+
+      <!-- Other content sections as per your design -->
+
+    </mat-card-content>
+  </mat-card>
+</div>

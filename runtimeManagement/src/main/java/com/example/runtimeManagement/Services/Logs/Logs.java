@@ -12,7 +12,6 @@ import java.security.cert.CertificateException;
 import java.util.List;
 
 public interface Logs {
-    public List<V1Pod> getPods(String namespace) throws ApiException, IOException, UnrecoverableKeyException, CertificateException, KeyStoreException, NoSuchAlgorithmException, KeyManagementException;
-    public String getPodLogs(String namespace, String podName) throws Exception ;
+    public String getPodLogs14(String podName) throws ApiException, IOException ;
 
     }

@@ -1,6 +1,6 @@
 import {Component, Inject, Input, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {ReleaseServiceService} from '../releases/services/release-service.service';
+import {ReleaseServiceService} from '../../releases/services/release-service.service';
 
 @Component({
   selector: 'app-charttemplate',

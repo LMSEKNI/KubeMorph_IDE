@@ -11,6 +11,7 @@ export class YmlFileUpdateComponent implements OnInit {
   @Input() namespace: string;
   @Input() resourceType: string;
   @Input() resourceName: string;
+  @Input() resource: any;
   ResourceYaml: string;
   errorMessage: string;
   successMessage: string;
@@ -19,10 +20,16 @@ export class YmlFileUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.getResourceDetails();
+    // tslint:disable-next-line:no-unused-expression
+    console.log(this.resourceType);
+    console.log(this.resource);
+    console.log(this.resource.metadata?.namespace);
   }
 
   getResourceDetails(): void {
-    this.updateressourceService.getResourceAsYaml(this.namespace, this.resourceType, this.resourceName)
+    this.updateressourceService.getResourceAsYaml(this.resource.metadata?.namespace,
+                                                  this.resourceType,
+                                                  this.resource.metadata?.name)
       .subscribe(
         (yaml: string) => {
           this.ResourceYaml = yaml;
@@ -35,7 +42,10 @@ export class YmlFileUpdateComponent implements OnInit {
   }
 
   saveUpdates(): void {
-    this.updateressourceService.updateResource(this.namespace, this.resourceType, this.resourceName, this.ResourceYaml)
+    this.updateressourceService.updateResource(this.resource.metadata?.namespace,
+                                               this.resourceType,
+                                               this.resource.metadata?.name,
+                                               this.ResourceYaml)
       .subscribe(
         (response: string) => {
           console.log('Resource updated successfully:', response);

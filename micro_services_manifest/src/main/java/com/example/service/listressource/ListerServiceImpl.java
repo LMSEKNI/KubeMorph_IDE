@@ -24,12 +24,24 @@ public class ListerServiceImpl implements ListerService {
     private KubernetesConfigService kubernetesConfigService;
 
     @Override
-    public List<V1Pod> getAllPods() throws FileNotFoundException, IOException, ApiException {
-        kubernetesConfigService.configureKubernetesAccess();
-        CoreV1Api api = new CoreV1Api();
-        V1PodList podList = api.listPodForAllNamespaces(null, null, null, null, null, null, null, null, null, null);
-        return podList.getItems();
+    public List<V1Pod> getAllPods() throws IOException, ApiException {
+        CoreV1Api api = new CoreV1Api(kubernetesConfigService.configureKubernetesAccess());
+
+        try {
+            V1PodList podList = api.listPodForAllNamespaces(null, null, null, null, null, null, null, null, null, null);
+            List<V1Pod> pods = podList.getItems();
+
+            pods.forEach(pod -> {
+                System.out.println("Pod: " + pods.toString());
+            });
+
+            return pods;
+        } catch (ApiException e) {
+            System.err.println("Exception fetching pods: " + e.getMessage());
+            throw e;
+        }
     }
+
 
     @Override
     public List<V1Namespace> getAllNamespaces() throws ApiException, FileNotFoundException, IOException {

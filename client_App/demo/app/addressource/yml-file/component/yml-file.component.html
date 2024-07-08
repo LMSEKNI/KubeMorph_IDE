@@ -3,14 +3,14 @@
 <mat-toolbar color="primary" id="custom-toolbar">
   <div class="header-content">
     <button mat-icon-button (click)="goBack()" aria-label="Go Back" >
-      <img src="assets/images/arrow_back_.svg" alt="Go Back Icon">
+      <img src="../../../../assets/images/arrow_back_.svg" alt="Go Back Icon">
     </button>
 
     <div class="spacer"></div>
 
     <div class="add-icon">
       <button mat-icon-button [matMenuTriggerFor]="add" aria-label="Example icon-button with a menu">
-        <img src="assets/images/add_circle_.svg" alt="Go Back Icon">
+        <img src="../../../../assets/images/add_circle_.svg" alt="Go Back Icon">
       </button>
       <mat-menu #add="matMenu">
         <button mat-menu-item [routerLink]="['/create-dynamicform']">
@@ -23,10 +23,10 @@
     </div>
     <div class="icons-container">
       <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-        <img src="assets/images/3pt.svg" alt="Three Dots Icon">
+        <img src="../../../../assets/images/3pt.svg" alt="Three Dots Icon">
       </button>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item>
+        <button mat-menu-item routerLink="/">
           <mat-icon>home</mat-icon>
           <span>List Resource</span>
         </button>

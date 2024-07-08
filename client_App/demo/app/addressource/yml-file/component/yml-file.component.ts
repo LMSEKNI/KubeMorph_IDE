@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { CreateressourceService } from './service/createressource.service';
-import {Examples} from '../dynamic-form/component/example-schemas.model';
+import { CreateressourceService } from '../service/createressource.service';
+import {Examples} from '../../dynamic-form/component/example-schemas.model';
 
 import { Location } from '@angular/common';
 

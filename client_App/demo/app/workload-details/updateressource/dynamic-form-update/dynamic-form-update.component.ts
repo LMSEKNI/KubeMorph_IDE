@@ -15,6 +15,7 @@ export class DynamicFormUpdateComponent implements OnInit {
   @Input() namespace: string;
   @Input() resourceType: string;
   @Input() resourceName: string;
+  @Input() resource: any;
   resourceJson: any;
   editedResourceJson: string;
   errorMessage: string;
@@ -35,7 +36,9 @@ export class DynamicFormUpdateComponent implements OnInit {
   }
 
   getResourceDetails(): void {
-    this.updateressourceService.getResourceAsJson(this.namespace, this.resourceType, this.resourceName)
+    this.updateressourceService.getResourceAsJson(this.resource.metadata?.namespace,
+                                                  this.resourceType,
+                                                  this.resource.metadata?.name)
       .subscribe(
         (description) => {
           this.resourceJson = description;
@@ -125,7 +128,10 @@ export class DynamicFormUpdateComponent implements OnInit {
 
     try {
       const updatedJson = JSON.parse(this.editedResourceJson);
-      this.updateressourceService.updateResource(this.namespace, this.resourceType, this.resourceName, updatedJson)
+      this.updateressourceService.updateResource(this.resource.metadata?.namespace,
+                                                 this.resourceType,
+                                                 this.resource.metadata?.name,
+                                                 updatedJson)
         .subscribe(
           (response) => {
             this.showMessageDialog('Success', 'Resource updated successfully.');

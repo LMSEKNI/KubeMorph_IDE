@@ -30,17 +30,13 @@ public class LogsImpl implements Logs {
 
     private static final Logger logger = LoggerFactory.getLogger(LogsImpl.class);
 
-    @Override
     public List<V1Pod> getPods(String namespace) throws ApiException, IOException{
         kubeconfig.configureKubernetesAccess();
         CoreV1Api coreApi = new CoreV1Api();
 
         return coreApi.listNamespacedPod(namespace, null, null, null, null, null, null, null, null, null, null).getItems();
     }
-    @Override
-    public String getPodLogs(String namespace, String podName) throws Exception {
-        return "";
-    }
+
     public String getPodLogs14(String podName) throws ApiException, IOException {
         ApiClient client = kubeconfig.configureKubernetesAccess();
         CoreV1Api api = new CoreV1Api(client);
@@ -75,7 +71,6 @@ public class LogsImpl implements Logs {
                 null, // tailLines
                 false // timestamps
         );
-
         return log;
     }
 

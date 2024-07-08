@@ -2,6 +2,7 @@ package com.example.controller.deleteressource;
 
 import java.io.IOException;
 
+import com.example.service.deleteressource.DeleteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,12 +21,12 @@ import io.kubernetes.client.openapi.ApiException;
 public class DeleteController {
 
     @Autowired
-    private DeleteServiceImpl deleteServiceImpl;
+    private DeleteService deleteService;
     
     @DeleteMapping("/{resourceType}/{resourceName}")
     public String deleteService(@PathVariable String resourceType, @PathVariable String resourceName) {
         try {
-            return deleteServiceImpl.deleteService(resourceType,resourceName).toString();
+            return deleteService.deleteService(resourceType,resourceName).toString();
         } catch (Exception e) {
             e.printStackTrace();
             return "Error occurred: " + e.getMessage();

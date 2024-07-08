@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { DesccService } from '../service/descc.service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-descc',
@@ -9,14 +10,23 @@ import { DesccService } from '../service/descc.service';
 export class DesccComponent implements OnInit {
   @Input() resourceName: string | null = null;
   @Input() resourceType: string | null = null;
+  @Input() resource: any;
 
   resourceJson: any;
   errorMessage = '';
   isFrameOpen = false;
-
-  constructor(private descServiceService: DesccService) { }
+  constructor(private descServiceService: DesccService,
+              private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    console.log(this.resource);
+    this.route.queryParams.subscribe(params => {
+      if (params && params['resource']) {
+        this.resource = JSON.parse(params['resource']);
+        console.log('Resource details:', this.resource);
+      }
+    });
+
     if (this.resourceName && this.resourceType) {
       this.getResourceDetails();
     }
@@ -24,12 +34,6 @@ export class DesccComponent implements OnInit {
 
   closeFrame(): void {
     this.isFrameOpen = false;
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.resourceName && changes.resourceName.currentValue) {
-      this.getResourceDetails();
-    }
   }
 
   getResourceDetails(): void {
@@ -70,7 +74,6 @@ export class DesccComponent implements OnInit {
         currentLevel = currentLevel[key.trim()];
       }
     });
-
     return result;
   }
 }

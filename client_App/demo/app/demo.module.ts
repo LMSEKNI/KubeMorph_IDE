@@ -19,7 +19,7 @@ import { JsonSchemaFormModule } from '@ajsf/core';
 import { Bootstrap4FrameworkModule } from '@ajsf/bootstrap4';
 import { Bootstrap3FrameworkModule } from '@ajsf/bootstrap3';
 import { MaterialDesignFrameworkModule } from '@ajsf/material';
-import { YmlFileComponent } from './addressource/yml-file/yml-file.component';
+import { YmlFileComponent } from './addressource/yml-file/component/yml-file.component';
 // import { MatDrawerModule } from '@angular/material/drawer';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { ListComponent } from './workload-details/list/list.component';
@@ -41,10 +41,10 @@ import {MatTabsModule} from '@angular/material/tabs';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {NgTerminalModule} from 'ng-terminal';
-import { HelmComponent } from './helm/helm.component';
+import { HelmComponent } from './helm/chart/component/helm.component';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
-import { HelmDetailsComponent } from './helm/helm-details/helm-details.component';
-import { CharttemplateComponent } from './helm/charttemplate/charttemplate.component';
+import { HelmDetailsComponent } from './helm/chart/helm-details/helm-details.component';
+import { CharttemplateComponent } from './helm/chart/charttemplate/charttemplate.component';
 import { DeleteComponent } from './workload-details/delete/delete.component';
 import { MonitoringComponent } from './monitoring/components/monitoring.component';
 import {EChartsDirective} from './monitoring/Directives/EChartsDirective';
@@ -56,12 +56,13 @@ import {ListingComponent} from './workload-details/listing/Components/listing.co
 
 
 import { AngularSplitModule } from 'angular-split';
-import { ReleasesComponent } from './helm/releases/releases.component';
+import { ReleasesComponent } from './helm/releases/component/releases.component';
 import { ReleaseDetailsComponent } from './helm/releases/release-details/release-details.component';
 import { DeleteReleaseComponent } from './helm/releases/delete-release/delete-release.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { Charttemplate2Component } from './helm/charttemplate2/charttemplate2.component';
+import { Charttemplate2Component } from './helm/chart/charttemplate2/charttemplate2.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { AddChartComponent } from './helm/chart/add-chart/add-chart.component';
 
 
 @NgModule({
@@ -95,7 +96,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
                   DeleteReleaseComponent,
                   Charttemplate2Component,
                   MessageDialogComponent,
-                  ListingComponent
+                  ListingComponent,
+                  AddChartComponent
 
 
                   ],

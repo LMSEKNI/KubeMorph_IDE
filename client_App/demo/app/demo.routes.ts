@@ -3,7 +3,7 @@ import { DemoComponent } from './demo.component';
 import { Component } from '@angular/core';
 import { ListComponent } from './workload-details/list/list.component';
 import { DesccComponent } from './workload-details/descc/descc.component';
-import { YmlFileComponent } from './addressource/yml-file/yml-file.component';
+import { YmlFileComponent } from './addressource/yml-file/component/yml-file.component';
 import { DynamicFormComponent } from './addressource/dynamic-form/component/dynamic-form.component';
 import {WelcomeInterfaceComponent} from './welcome-interface/welcome-interface.component';
 import {MonitoringConfigComponent} from './monitoring-validate/monitoring-config.component';
@@ -12,17 +12,17 @@ import {MonitoringPrometheusComponent} from './monitoring-prometheus/monitoring-
 import { ExecTerminalComponent} from './exec-terminal/exec-terminal.component';
 import { LogTerminalComponent} from './log-terminal/log-terminal.component';
 import { TerminalTabManagerComponent} from './terminal-tab-manager/terminal-tab-manager.component';
-import { HelmComponent} from './helm/helm.component';
-import { HelmDetailsComponent} from './helm/helm-details/helm-details.component';
+import { HelmComponent} from './helm/chart/component/helm.component';
+import { HelmDetailsComponent} from './helm/chart/helm-details/helm-details.component';
 import {MonitoringComponent} from './monitoring/components/monitoring.component';
 import {ListingComponent} from './workload-details/listing/Components/listing.component';
 
-import { ReleasesComponent} from './helm/releases/releases.component';
+import { ReleasesComponent} from './helm/releases/component/releases.component';
 import { ReleaseDetailsComponent} from './helm/releases/release-details/release-details.component';
 
 export const routes: Route[] = [
-  { path: '' , component: ListComponent},
-  { path: 'test' , component: ListingComponent},
+  { path: 'old' , component: ListComponent},
+  { path: '' , component: ListingComponent},
   { path: 'descressource', component: DesccComponent},
   { path: 'create-ymlfile' , component: YmlFileComponent},
   { path: 'create-dynamicform' , component: DynamicFormComponent},

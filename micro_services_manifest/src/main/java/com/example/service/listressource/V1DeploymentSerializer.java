@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import io.kubernetes.client.openapi.models.*;
 
 import java.io.IOException;
+import java.util.Map;
 
 public class V1DeploymentSerializer extends StdSerializer<V1Deployment> {
 
@@ -33,13 +34,17 @@ public class V1DeploymentSerializer extends StdSerializer<V1Deployment> {
 
         // Serialize annotations
         jsonGenerator.writeObjectFieldStart("annotations");
-        deployment.getMetadata().getAnnotations().forEach((key, value) -> {
-            try {
-                jsonGenerator.writeStringField(key, value);
-            } catch (IOException e) {
-                e.printStackTrace();
+        if (deployment.getMetadata().getAnnotations() != null) {
+            for (Map.Entry<String, String> entry : deployment.getMetadata().getAnnotations().entrySet()) {
+                jsonGenerator.writeStringField(entry.getKey(), entry.getValue());
             }
-        });
+        }
+
+        // Serialize the specific annotation "kubectl.kubernetes.io/last-applied-configuration"
+        String lastAppliedConfiguration = deployment.getMetadata().getAnnotations().get("kubectl.kubernetes.io/last-applied-configuration");
+        if (lastAppliedConfiguration != null) {
+            jsonGenerator.writeStringField("kubectl.kubernetes.io/last-applied-configuration", lastAppliedConfiguration);
+        }
         jsonGenerator.writeEndObject(); // End annotations
 
         jsonGenerator.writeEndObject(); // End metadata
@@ -59,24 +64,25 @@ public class V1DeploymentSerializer extends StdSerializer<V1Deployment> {
                 jsonGenerator.writeStringField("imagePullPolicy", container.getImagePullPolicy());
                 jsonGenerator.writeStringField("name", container.getName());
 
-                // Serialize environment variables
-                jsonGenerator.writeArrayFieldStart("env");
-                container.getEnv().forEach(envVar -> {
-                    try {
-                        jsonGenerator.writeStartObject();
-                        jsonGenerator.writeStringField("name", envVar.getName());
-                        // Handle valueFrom or value as needed
-                        if (envVar.getValueFrom() != null) {
-                            jsonGenerator.writeObjectField("valueFrom", envVar.getValueFrom());
-                        } else {
-                            jsonGenerator.writeStringField("value", envVar.getValue());
+                if (container.getEnv() != null) {
+                    jsonGenerator.writeArrayFieldStart("env");
+                    container.getEnv().forEach(envVar -> {
+                        try {
+                            jsonGenerator.writeStartObject();
+                            jsonGenerator.writeStringField("name", envVar.getName());
+                            // Handle valueFrom or value as needed
+                            if (envVar.getValueFrom() != null) {
+                                jsonGenerator.writeObjectField("valueFrom", envVar.getValueFrom());
+                            } else {
+                                jsonGenerator.writeStringField("value", envVar.getValue());
+                            }
+                            jsonGenerator.writeEndObject();
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                        jsonGenerator.writeEndObject();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
-                jsonGenerator.writeEndArray(); // End env
+                    });
+                    jsonGenerator.writeEndArray(); // End env
+                }
 
                 // Serialize ports
                 jsonGenerator.writeArrayFieldStart("ports");

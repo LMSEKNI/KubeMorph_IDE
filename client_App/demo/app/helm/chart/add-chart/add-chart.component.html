@@ -1,0 +1,28 @@
+<h2 mat-dialog-title class="dialog-title">
+  Add Chart
+  <button mat-icon-button mat-dialog-close aria-label="Close" class="close-button">
+    <mat-icon>close</mat-icon>
+  </button>
+</h2>
+
+<hr class="divider">
+
+<form (ngSubmit)="onSubmit()">
+  <mat-dialog-content>
+    <div class="form-container">
+      <mat-form-field appearance="fill">
+        <mat-label>Release Name</mat-label>
+        <input matInput [(ngModel)]="releaseName" name="releaseName" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Chart Folder Path</mat-label>
+        <input matInput [(ngModel)]="chartFolderPath" name="chartFolderPath" required>
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button mat-raised-button color="primary" type="submit">Add Chart</button>
+  </mat-dialog-actions>
+</form>

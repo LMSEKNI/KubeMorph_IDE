@@ -18,8 +18,9 @@ import {Terminal} from 'xterm';
   styleUrls: ['./exec-terminal.component.scss']
 })
 export class ExecTerminalComponent implements OnInit, OnDestroy,AfterViewInit {
-  @Input() resourceName: string | null = null;
   @Input() resourceType: string | null = null;
+  @Input() resourceName: string | null = null;
+  @Input() resource: any;
   @ViewChild('terminalElement', { static: true }) terminalElement!: ElementRef;
 
   protected terminal: Terminal;
@@ -46,7 +47,6 @@ export class ExecTerminalComponent implements OnInit, OnDestroy,AfterViewInit {
         foreground: '#ffffff'
       }
     });
-    //this.terminal.open(this.terminalElement?.nativeElement);
     this.displayResourceName();
     this.terminal.onData(e => this.handleTerminalInput(e));
   }
@@ -60,9 +60,8 @@ export class ExecTerminalComponent implements OnInit, OnDestroy,AfterViewInit {
 
   executeCommand(command: string): void {
     if (!command) return;
-    //console.log(`Command to execute: ${command}`);
-    this.commandQueue.push(command);
-    this.sendCommand(this.resourceName, command);
+      this.commandQueue.push(command);
+      this.sendCommand(this.resource.metadata?.name, command);
   }
 
   handleTerminalInput(data: string): void {
@@ -70,7 +69,7 @@ export class ExecTerminalComponent implements OnInit, OnDestroy,AfterViewInit {
       const fullCommand = this.commandQueue.join('');
       this.commandQueue = [];
       this.terminal.write('\r\n'); // Move to a new line
-      this.sendCommand(this.resourceName, fullCommand);
+      this.sendCommand(this.resource.metadata?.name, fullCommand);
     } else if (data === '\u007F' || data === '\u0008') {
       if (this.commandQueue.length > 0) {
         this.terminal.write('\b \b');
@@ -83,8 +82,8 @@ export class ExecTerminalComponent implements OnInit, OnDestroy,AfterViewInit {
   }
 
   displayResourceName(): void {
-    if (this.resourceName) {
-      this.terminal.write(`\x1b[32m${this.resourceName}\x1b[0m $ `);
+    if (this.resource.metadata?.name) {
+      this.terminal.write(`\x1b[32m${this.resource.metadata?.name}\x1b[0m $ `);
     }
   }
 
@@ -98,10 +97,10 @@ export class ExecTerminalComponent implements OnInit, OnDestroy,AfterViewInit {
       return;
     }
 
-    console.log(`Sending command: ${command} to resource: ${resourceName}`);
+    console.log(`Sending command: ${command} to resource: ${this.resource.metadata?.name}`);
 
     this.commandInProgress = true;
-    this.outputSubscription = this.execService.executeCommand(resourceName, command).subscribe(
+    this.outputSubscription = this.execService.executeCommand(this.resource.metadata?.name, command).subscribe(
       (response) => {
         console.log(`Received response: ${response}`);
         //@ts-ignore

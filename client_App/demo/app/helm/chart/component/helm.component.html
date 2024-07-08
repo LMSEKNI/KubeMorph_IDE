@@ -2,13 +2,21 @@
 <demo></demo>
 <div class="header-bar">
   <button mat-icon-button (click)="goBack()" aria-label="Go Back" >
-    <img src="assets/images/arrow_back_.svg" alt="Go Back Icon">
+    <img src="../../../assets/images/arrow_back_.svg" alt="Go Back Icon">
   </button>
-  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-    <img src="assets/images/3pt.svg" alt="Go Back Icon">
+  <span class="spacer"></span> <!-- Spacer to push buttons to the right -->
+
+  <button mat-menu-icon (click)="openAddChartDialog()" class="add-button">
+    <mat-icon>add</mat-icon>
+    <span>Install Chart</span>
   </button>
+
+  <button  mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+    <img src="../../../assets/images/3pt.svg" alt="Go Back Icon">
+  </button>
+
   <mat-menu #menu="matMenu">
-    <button mat-menu-item >
+    <button mat-menu-item routerLink="/">
       <mat-icon>home</mat-icon>
       <span>List Resource</span>
     </button>
@@ -25,6 +33,8 @@
       <button mat-menu-item routerLink="/helm-release">Releases </button>
     </mat-menu>
   </mat-menu>
+
+
 
 </div>
 

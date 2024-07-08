@@ -5,6 +5,7 @@ import com.example.Helm.Kubeconfig.KubernetesConfigServiceImpl;
 import com.marcnuri.helm.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -19,76 +20,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class chart {
+public class ChartServImpl implements ChartServ{
     private  Helm helm;
-    private KubernetesConfigServiceImpl kubernetesConfigService;
+
 
     /////////////////////////////////configurer helm with k8s////////////////////////////////
-    public void HelmService() {
-        // Provide the path to the Kubernetes configuration file
+    public void HelmConfiguration() {
         String kubeConfigPath = System.getenv("HOME") + "/.kube/config";
         this.helm = new Helm(Paths.get(kubeConfigPath));
     }
-    /////////////////////////////////lister releases////////////////////////////////
-    public ListCommand listCharts() {
-        try {
-            return helm.list();
-        } catch (Exception e) {
-            // Handle exceptions
-            throw new RuntimeException("Failed to list Helm charts", e);
-        }
-    }
-    public List<Release> listReleases(
-            boolean all,
-            boolean allNamespaces,
-            boolean deployed,
-            boolean failed,
-            boolean superseded,
-            boolean pending,
-            boolean uninstalled,
-            boolean uninstalling) {
-        try {
-            ListCommand listCommand = helm.list();
 
-            if (all) {
-                listCommand.all();
-            }
-            if (allNamespaces) {
-                listCommand.allNamespaces();
-            }
 
-            if (deployed) {
-                listCommand.deployed();
-            }
-            if (failed) {
-                listCommand.failed();
-            }
-
-            if (pending) {
-                listCommand.pending();
-            }
-            if (superseded) {
-                listCommand.superseded();
-            }
-            if (uninstalled) {
-                listCommand.superseded();
-            }
-            if (uninstalling) {
-                listCommand.superseded();
-            }
-
-            return listCommand.call();
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to list Helm releases", e);
-        }
-    }
-    /////////////////////////////////show all info of specific  chart helm with k8s////////////////////////////////
+    /////////////////////////////////show all info of specific  ChartServImpl helm with k8s////////////////////////////////
     /*
     * will be test it via postman by giving chartPath and chartName
     * */
+    @Override
     public ShowCommand.ShowSubcommand showChart(String chartPath, String chartName, String[] flags) {
         try {
-            // Construct the full path to the chart
+            // Construct the full path to the ChartServImpl
             Path fullPath = Path.of(chartPath, chartName);
             ShowCommand showCommand = helm.show(fullPath.toString());
 
@@ -101,6 +51,7 @@ public class chart {
 
     //////////////////////search for repo from artifacthub///////////////////////////////////////
 /*by  having this keyword in postman as param */
+    @Override
     public List<SearchResult> searchRepo( String keyword) {
         try {
             List<SearchResult> results = Helm.search()
@@ -113,6 +64,7 @@ public class chart {
         }
     }
     ///////////////////////////////////////////////////////////////////////////
+    @Override
     public List<String> searchHub(String keyword) {
         List<String> searchResults = new ArrayList<>();
         ProcessBuilder processBuilder = new ProcessBuilder("helm", "search", "hub", keyword);
@@ -140,6 +92,7 @@ public class chart {
 ///////////////////////////////////////////////adding repo from artifacthub/////////////////////////////////
     /*
     * giving as params in postman : name , url */
+    @Override
     public void addRepo(String namerepo, String url) {
         try {
             Helm.repo()
@@ -152,6 +105,7 @@ public class chart {
         }
     }
 ///////////////////////////////////////////////listing repo downloaded in local /////////////////////////////////
+    @Override
     public List<Repository> listRepo() {
         try {
             List<Repository> repo = Helm.repo()
@@ -163,6 +117,7 @@ public class chart {
         }
     }
 ///////////////////////////////////////////////remove repo downloaded in local /////////////////////////////////
+    @Override
     public void removeRepo(String namerepo) {
         try {
            Helm.repo()
@@ -175,7 +130,7 @@ public class chart {
         }
     }
 ///////////////////////////////////////////////update repo downloaded in local /////////////////////////////////
-
+    @Override
     public String updateRepo() {
         StringBuilder output = new StringBuilder();
         try {
@@ -202,11 +157,12 @@ public class chart {
         }
         return output.toString();
     }
-    ///////////////////////////////////////////////create  chart downloaded in local /////////////////////////////////
-    private static final Logger logger = LoggerFactory.getLogger(chart.class);
+    ///////////////////////////////////////////////create  ChartServImpl downloaded in local /////////////////////////////////
 
+    private static final Logger logger = LoggerFactory.getLogger(ChartServImpl.class);
+    @Override
     public void createChart(String chartName, String directoryPath) {
-        logger.info("Attempting to create chart with name: {} in directory: {}", chartName, directoryPath);
+        logger.info("Attempting to create ChartServImpl with name: {} in directory: {}", chartName, directoryPath);
 
         try {
             // Trim the directory path to remove any leading or trailing spaces
@@ -225,7 +181,7 @@ public class chart {
                     .withDir(directory)
                     .call();
 
-            logger.info("Successfully created chart: {}", chartName);
+            logger.info("Successfully created ChartServImpl: {}", chartName);
         } catch (Exception e) {
             logger.error("Failed to execute 'helm create' command", e);
             throw new RuntimeException("Failed to execute 'helm create' command", e);
@@ -233,8 +189,9 @@ public class chart {
     }
 
     //////////////////////////////////////////// helm lint . /////////////////////////////////////////////////////////////
+    @Override
     public LintResult lintChart(String chartPath, boolean strict, boolean quiet) {
-        logger.info("Attempting to lint chart at path: {}", chartPath);
+        logger.info("Attempting to lint ChartServImpl at path: {}", chartPath);
 
         try {
             Path path = Paths.get(chartPath);
@@ -252,7 +209,7 @@ public class chart {
 
             LintResult result = lintCommand.call();
 
-            logger.info("Linting completed for chart: {}", chartPath);
+            logger.info("Linting completed for ChartServImpl: {}", chartPath);
             return result;
         } catch (Exception e) {
             logger.error("Failed to execute 'helm lint' command", e);
@@ -265,12 +222,13 @@ public class chart {
     /*  test inpostmen : chartReference : /home/asus/Bureau/Intedrnship_KubMorph/testpostmen
     *     and  releaseName :testpostmenrelease  give as output helm install releasename chartpath
     *  */
+    @Override
     public Release installChart(String chartReference, String releaseName, String namespace, Boolean createNamespace, Boolean dryRun) {
         try {
-            logger.info("Installing chart with parameters: chartReference={}, releaseName={}, namespace={}, createNamespace={}, dryRun={}",
+            logger.info("Installing ChartServImpl with parameters: chartReference={}, releaseName={}, namespace={}, createNamespace={}, dryRun={}",
                     chartReference, releaseName, namespace, createNamespace, dryRun);
 
-            // Validate chart reference format
+            // Validate ChartServImpl reference format
             if (!chartReference.contains("/")) {
                 throw new IllegalArgumentException("Chart reference should be in the form of repo_name/chart_name, got: " + chartReference);
             }
@@ -302,8 +260,8 @@ public class chart {
             logger.info("Chart installed successfully: {}", release.getName());
             return release;
         } catch (IllegalArgumentException e) {
-            logger.error("Invalid chart reference provided", e);
-            throw new RuntimeException("Invalid chart reference provided: " + chartReference, e);
+            logger.error("Invalid ChartServImpl reference provided", e);
+            throw new RuntimeException("Invalid ChartServImpl reference provided: " + chartReference, e);
         } catch (Exception e) {
             logger.error("Failed to execute 'helm install' command", e);
             throw new RuntimeException("Failed to execute 'helm install' command", e);
@@ -312,14 +270,14 @@ public class chart {
 
     //////////////////////////////////////////upgrade release //////////////////////////////////////////////////
 /*
-    * chartReference: The chart reference in the form repo_name/chart_name.
+    * chartReference: The ChartServImpl reference in the form repo_name/chart_name.
     releaseName: The name of the release.
     * exemple : chartReference : /home/asus/Bureau/Intedrnship_KubMorph/testpostmen
         *     and  releaseName :testpostmenrelease */
-
+    @Override
     public Release upgradeChart(String chartReference, String releaseName, String namespace, Boolean install, Boolean force, Boolean dryRun) {
         try {
-            logger.info("Upgrading chart with parameters: chartReference={}, releaseName={}, namespace={}, install={}, force={}, dryRun={}",
+            logger.info("Upgrading ChartServImpl with parameters: chartReference={}, releaseName={}, namespace={}, install={}, force={}, dryRun={}",
                     chartReference, releaseName, namespace, install, force, dryRun);
 
             UpgradeCommand upgradeCommand = Helm.upgrade(chartReference)
@@ -361,15 +319,15 @@ public class chart {
     }
     //////////////////////////////// helm dependency list //////////////////////////////////////*
 /*
-* will have path to chart directory as params in postman */
-
+* will have path to ChartServImpl directory as params in postman */
+    @Override
     public List<String> listDependencies(String path) {
         if (path == null || path.isEmpty()) {
             throw new IllegalArgumentException("Path is required");
         }
 
         try {
-            logger.info("Listing dependencies for chart at path: {}", path);
+            logger.info("Listing dependencies for ChartServImpl at path: {}", path);
 
             ProcessBuilder processBuilder = new ProcessBuilder("helm", "dependency", "list", path);
             processBuilder.directory(Paths.get(path).toFile());
@@ -397,6 +355,7 @@ public class chart {
 
 
     ///////////////////////
+    @Override
     public void updateDependencies(String chartPath) {
         try {
             // Create a ProcessBuilder to execute the 'helm dependency update' command
@@ -425,16 +384,17 @@ public class chart {
             e.printStackTrace();
         }
     }
-    ////////////////////////////////////// helm package chart//////////////////////////////////////
+    ////////////////////////////////////// helm package ChartServImpl//////////////////////////////////////
     /*postman didn't work this function ::
     * Failed to execute 'helm package' command: class com.marcnuri.helm.Helm cannot be cast to class java.nio.file.Path (com.marcnuri.helm.Helm is in unnamed module of loader 'app'; java.nio.file.Path is in module java.base of loader 'bootstrap')
      */
-    public static Path packageChart(String chartPath) {
+    @Override
+    public Path packageChart(String chartPath) {
         // Trim the chartPath and convert it to a Path object
         chartPath = chartPath.trim();
         Path chart = Paths.get(chartPath);
 
-        // Check if the chart directory exists
+        // Check if the ChartServImpl directory exists
         if (!Files.exists(chart)) {
             throw new IllegalArgumentException("Chart directory does not exist: " + chart.toAbsolutePath());
         }
@@ -448,7 +408,7 @@ public class chart {
             Path result = (Path) packageCommand.call();
 
             // Print success message
-            System.out.println("Successfully packaged chart and saved it to: " + result.toAbsolutePath());
+            System.out.println("Successfully packaged ChartServImpl and saved it to: " + result.toAbsolutePath());
 
             return result;
         } catch (Exception e) {
@@ -457,108 +417,15 @@ public class chart {
             throw new RuntimeException("Failed to execute 'helm package' command", e);
         }
     }
-    //////////////////////////////////unsintall ///////////////////////////////
-    public void uninstallRelease(String releaseName) {
-        try {
-            // Log the start of the function
-            logger.info("Uninstalling release: {}", releaseName);
 
-            // Execute the uninstall command without dry run
-            Helm.uninstall(releaseName)
-                    .noHooks()
-                    .ignoreNotFound()
-                    .keepHistory()
-                    .withCascade(UninstallCommand.Cascade.BACKGROUND)
-                    .withNamespace("default")
-                    .debug()
-                    .call();
-
-            // Log a success message
-            logger.info("Successfully uninstalled release: {}", releaseName);
-        } catch (Exception e) {
-            // Log any exceptions that occur during the uninstallation process
-            logger.error("Failed to uninstall release: {}", releaseName, e);
-            throw new RuntimeException("Failed to uninstall release: " + releaseName, e);
-        }
-    }
     ////////////////////////////////////version ///////////////////////////////
+    @Override
     public VersionCommand getVersion() {
         try {
             return Helm.version();
         } catch (Exception e) {
             // Log any exceptions that occur during the version retrieval process
             throw new RuntimeException("Failed to retrieve Helm version", e);
-        }
-    }
-    /////////////////////////////////////helm rollback //////////////////////////////////////////
-    public String rollbackRelease(String releaseName, Integer version) {
-        try {
-            logger.info("Performing rollback for release: {}", releaseName);
-
-            List<String> command = new ArrayList<>();
-            command.add("helm");
-            command.add("rollback");
-            command.add(releaseName);
-            if (version != null) {
-                command.add(version.toString());
-            }
-
-            ProcessBuilder processBuilder = new ProcessBuilder(command);
-            Process process = processBuilder.start();
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-            StringBuilder output = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                logger.info(line);
-                output.append(line);
-            }
-            while ((line = errorReader.readLine()) != null) {
-                logger.error(line);
-                output.append(line);
-            }
-
-            int exitCode = process.waitFor();
-            logger.info("Rollback exit code: {}", exitCode);
-
-            if (exitCode != 0) {
-                String errorMessage = output.toString();
-                if (errorMessage.contains("release has no")) {
-                    return "Error: release has no previous version to rollback to.";
-                }
-                throw new RuntimeException("Failed to execute 'helm rollback' command: " + errorMessage);
-            }
-
-            logger.info("Rollback was successful for release: {}", releaseName);
-            return "Rollback initiated for release: " + releaseName;
-        } catch (Exception e) {
-            logger.error("Failed to execute 'helm rollback' command", e);
-            throw new RuntimeException("Failed to execute 'helm rollback' command", e);
-        }
-    }
-
-    ///////////////////////////////////
-    public String getStatus(String releaseName) {
-        try {
-            Process process = new ProcessBuilder("helm", "status", releaseName).start();
-            StringBuilder output = new StringBuilder();
-
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    output.append(line).append("\n");
-                }
-            }
-
-            int exitCode = process.waitFor();
-            if (exitCode != 0) {
-                throw new RuntimeException("Failed to execute 'helm status' command");
-            }
-
-            return output.toString();
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException("Failed to execute 'helm status' command", e);
         }
     }
 

@@ -25,10 +25,13 @@ import io.kubernetes.client.util.Yaml;
 public class CreateController {
     @Autowired
     private CreateService CreateService;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public CreateController(CreateService CreateService) {
+    public CreateController(CreateService CreateService,
+                            ObjectMapper objectMapper) {
         this.CreateService = CreateService;
+        this.objectMapper = objectMapper;
     }
 
     @PostMapping("/resource")
@@ -39,7 +42,6 @@ public class CreateController {
             String yamlContent = new String(yamlFile.getBytes());
             Yaml yaml = new Yaml();
             Object obj = Yaml.load(yamlContent);
-            ObjectMapper objectMapper = new ObjectMapper();
             String jsonContent = objectMapper.writeValueAsString(obj);
             JsonNode rootNode = objectMapper.readTree(jsonContent);
             String kind = rootNode.get("kind").asText();

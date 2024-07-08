@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ReleaseServiceService} from './services/release-service.service';
+import {ReleaseServiceService} from '../services/release-service.service';
 import {Location} from '@angular/common';
 
 @Component({
@@ -32,7 +32,7 @@ export class ReleasesComponent implements OnInit {
   chart: string | null = null;
   releases: any;
   filteredReleases: any[] = [];
-  query: string = '';
+  query = '';
 
   ngOnInit() {
     this.fetchReleases();

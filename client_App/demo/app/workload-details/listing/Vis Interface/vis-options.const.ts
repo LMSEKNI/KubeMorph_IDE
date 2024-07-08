@@ -53,7 +53,7 @@ export const visOptions: Options = {
     zoomView: true,
   },
   groups: {
-    pods: {
+    Pod: {
       shape: 'icon',
       icon: {
         face: 'FontAwesome',
@@ -61,7 +61,7 @@ export const visOptions: Options = {
         color: '#FF5733'
       }
     },
-    nodes: {
+    Node: {
       shape: 'icon',
       icon: {
         face: 'FontAwesome',
@@ -69,7 +69,7 @@ export const visOptions: Options = {
         color: '#5d2caf'
       }
     },
-    endpoints: {
+    Endpoint: {
       shape: 'icon',
       icon: {
         face: 'FontAwesome',
@@ -77,7 +77,7 @@ export const visOptions: Options = {
         color: '#5d2caf'
       }
     },
-    daemonsets: {
+    Daemonset: {
       shape: 'icon',
       icon: {
         face: 'FontAwesome',
@@ -85,7 +85,7 @@ export const visOptions: Options = {
         color: '#01e8f3'
       }
     },
-    services: {
+    Service: {
       shape: 'icon',
       icon: {
         face: 'FontAwesome',
@@ -93,7 +93,7 @@ export const visOptions: Options = {
         color: '#3498DB'
       },
     },
-    deployments: {
+    Deployment: {
       shape: 'icon',
       icon: {
         face: 'FontAwesome',
@@ -101,7 +101,7 @@ export const visOptions: Options = {
         color: '#2ECC71',
       }
     },
-    statefulsets: {
+    Statefulset: {
       shape: 'icon',
       icon: {
         face: 'FontAwesome',
@@ -109,7 +109,7 @@ export const visOptions: Options = {
         color: '#d6bc56',
       }
     },
-    namespaces: {
+    Namespace: {
       shape: 'icon',
       icon: {
         face: 'FontAwesome',
@@ -117,7 +117,7 @@ export const visOptions: Options = {
         color: '#8E44AD',
       }
     },
-    replicasets: {
+    Replicaset: {
       shape: 'icon',
       icon: {
         face: 'FontAwesome',
@@ -125,7 +125,7 @@ export const visOptions: Options = {
         color: '#F39C12',
       }
     },
-    ingresses: {
+    Ingresse: {
       shape: 'icon',
       icon: {
         face: 'FontAwesome',
@@ -133,7 +133,7 @@ export const visOptions: Options = {
         color: '#D35400'
       }
     },
-    configmaps: {
+    Configmap: {
       shape: 'icon',
       icon: {
         face: 'FontAwesome',
@@ -141,7 +141,7 @@ export const visOptions: Options = {
         color: '#9B59B6'
       }
     },
-    storageclasses: {
+    Storageclasse: {
       shape: 'icon',
       icon: {
         face: 'FontAwesome',
@@ -149,7 +149,7 @@ export const visOptions: Options = {
         color: '#1ABC9C'
       }
     },
-    jobs: {
+    Job: {
       shape: 'icon',
       icon: {
         face: 'FontAwesome',
@@ -157,7 +157,7 @@ export const visOptions: Options = {
         color: '#2980B9'
       }
     },
-    persistentvolumes: {
+    Persistentvolume: {
       shape: 'icon',
       icon: {
         face: 'FontAwesome',
@@ -165,7 +165,7 @@ export const visOptions: Options = {
         color: '#34495E'
       }
     },
-    persistentvolumeclaims: {
+    Persistentvolumeclaim: {
       shape: 'icon',
       icon: {
         face: 'FontAwesome',

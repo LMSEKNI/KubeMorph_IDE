@@ -1,6 +1,7 @@
 package com.example.runtimeManagement.Controller;
 
 import com.example.runtimeManagement.Services.Exec.ExecImpl;
+import com.example.runtimeManagement.Services.Logs.Logs;
 import com.example.runtimeManagement.Services.Logs.LogsImpl;
 import io.kubernetes.client.openapi.ApiException;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,7 +26,7 @@ import java.util.Map;
 public class LogsController {
 
     @Autowired
-    private LogsImpl logs;
+    private Logs logs;
 
     @PostMapping("/podlogs")
     public ResponseEntity<String> getPodLogs(@RequestBody Map<String, String> request) {
@@ -38,10 +39,5 @@ public class LogsController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred: " + e.getMessage());
         }
-    }
-
-    @GetMapping("/pods")
-    public String getPods(@RequestParam String namespace) throws ApiException, IOException{
-        return logs.getPods(namespace).toString();
     }
 }

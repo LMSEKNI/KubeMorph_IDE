@@ -234,8 +234,6 @@ export class ListComponent implements OnInit {
       this.network = new Network(container, data, options);
       console.log('Nodes:', this.nodes);
     }
-
-
     ngOnInit(): void {
       this.nodes = new DataSet<any>();
       this.edges = new DataSet<any>();
@@ -248,7 +246,6 @@ export class ListComponent implements OnInit {
       this.selectedResource = resourceName;
       this.selectedType = resourceType;
     }
-
   updateNodess(selected: string[]): void {
     this.nodes.clear();
 
